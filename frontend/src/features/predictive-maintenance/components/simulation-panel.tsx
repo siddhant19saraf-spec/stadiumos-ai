@@ -3,9 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Play, TrendingDown, Clock, DollarSign, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Play, TrendingDown, Clock, DollarSign, CheckCircle2 } from "lucide-react";
 import type { ScenarioDefinition, SimulationResult } from "../types";
 
 interface SimulationPanelProps {

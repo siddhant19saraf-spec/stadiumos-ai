@@ -23,7 +23,6 @@ type EventPhase = (typeof eventPhases)[number];
 class SimulationEngine {
   private phase: EventPhase = "second_half";
   private totalCapacity = STADIUM_ZONES.reduce((s, z) => s + z.capacity, 0);
-  private baseOccupancy = 0.78;
   private tick = 0;
 
   private getPhaseMultiplier(phase: EventPhase): number {

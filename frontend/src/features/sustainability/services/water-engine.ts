@@ -90,7 +90,7 @@ export class MockWaterEngine implements IWaterEngine {
     ];
   }
 
-  private factors(type: string, m: WaterMetrics): string[] {
+  private factors(_type: string, m: WaterMetrics): string[] {
     const f = [`Asset type: ${m.assetId.split("-")[0]}`, `Usage: ${m.totalConsumptionL.toLocaleString()}L`];
     if (m.turbidity > 2) f.push("Elevated turbidity indicates potential contamination");
     if (m.pressureBar > 5.5) f.push("High pressure increases leak and pipe fatigue risk");

@@ -5,7 +5,7 @@ import { MockConflictEngine } from "../services/conflict-engine";
 import { MockAnalyticsEngine } from "../services/analytics-engine";
 import { MockRecommendationEngine } from "../services/recommendation-engine";
 import { MockOptimizationEngine } from "../services/optimization-engine";
-import type { Match, Venue, Conflict, ScheduleSlot } from "../types";
+import type { Match, Conflict, ScheduleSlot } from "../types";
 
 function makeMatch(overrides: Partial<Match> = {}): Match {
   return {

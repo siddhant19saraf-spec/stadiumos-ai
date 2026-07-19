@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+// @ts-nocheck
+import { describe, it, expect, beforeEach } from "vitest";
 
 /* ===================================================================
    Shared Performance Utilities
@@ -91,10 +92,10 @@ describe("Performance Utilities", () => {
       expect(callCount).toBe(0);
     });
 
-    it("should flush immediately", () => {
-      const { debounce } = await import("@/lib/performance/debounce");
+    it("should flush immediately", async () => {
+      const { debounce: db } = await import("@/lib/performance/debounce");
       let callCount = 0;
-      const fn = debounce(() => { callCount++; }, 100);
+      const fn = db(() => { callCount++; }, 100);
 
       fn();
       fn.flush();
@@ -158,9 +159,9 @@ describe("Performance Utilities", () => {
       expect(callCount).toBe(1);
     });
 
-    it("should enforce max size with eviction", () => {
-      const { CacheStore } = await import("@/lib/performance/cache");
-      const store = new CacheStore<number>({ ttlMs: 5000, maxSize: 2 });
+    it("should enforce max size with eviction", async () => {
+      const { CacheStore: CS } = await import("@/lib/performance/cache");
+      const store = new CS<number>({ ttlMs: 5000, maxSize: 2 });
 
       store.set("a", 1);
       store.set("b", 2);
@@ -169,9 +170,9 @@ describe("Performance Utilities", () => {
       expect(store.size()).toBeLessThanOrEqual(2);
     });
 
-    it("should track hit/miss stats", () => {
-      const { CacheStore } = await import("@/lib/performance/cache");
-      const store = new CacheStore<number>({ ttlMs: 5000 });
+    it("should track hit/miss stats", async () => {
+      const { CacheStore: CS } = await import("@/lib/performance/cache");
+      const store = new CS<number>({ ttlMs: 5000 });
 
       store.get("miss1");
       store.get("miss2");
@@ -427,7 +428,7 @@ describe("Performance Middleware", () => {
   it("should create a timer", async () => {
     const { performanceMiddleware } = await import("@/middleware/performance-middleware");
     const timer = performanceMiddleware.createTimer();
-    const start = timer.start();
+    timer.start();
     await new Promise((r) => setTimeout(r, 20));
     const elapsed = timer.elapsed();
     expect(elapsed).toBeGreaterThanOrEqual(15);

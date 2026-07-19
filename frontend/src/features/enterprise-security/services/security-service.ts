@@ -1,4 +1,4 @@
-import type { EnterpriseSecurityData, SecurityRole, SecurityUser, LoginRequest, LoginResult, SecurityPermission, SecurityContext, SecurityReport, AuditLog } from "../types";
+import type { EnterpriseSecurityData, SecurityRole, SecurityUser, LoginRequest, LoginResult, SecurityPermission, SecurityContext, SecurityReport, AuditLog, SecurityAnalytics } from "../types";
 import { authEngine } from "./auth-engine";
 import { rbacEngine } from "./rbac-engine";
 import { permissionEngine } from "./permission-engine";
@@ -29,6 +29,16 @@ export interface ISecurityService {
   refreshAnalytics(data: EnterpriseSecurityData): EnterpriseSecurityData;
 }
 
+function createDefaultAnalytics(): SecurityAnalytics {
+  return {
+    overallSecurityScore: 0, totalUsers: 0, activeSessions: 0,
+    failedLogins24h: 0, suspiciousActivities24h: 0, criticalAlerts: 0,
+    openAlerts: 0, avgResponseTimeMin: 0, uptimePercentage: 100,
+    threatTrends: [], loginSuccessRate: 100, permissionUsage: [],
+    auditActivity7d: [], topRisks: [], riskHeatmap: [],
+  };
+}
+
 export function createInitialState(): EnterpriseSecurityData {
   return {
     currentUser: null,
@@ -37,7 +47,7 @@ export function createInitialState(): EnterpriseSecurityData {
     auditLogs: [],
     alerts: [],
     complianceFrameworks: [],
-    analytics: null,
+    analytics: createDefaultAnalytics(),
     reports: [],
     roleDefinitions: ROLE_DEFINITIONS,
     selectedRole: null,
@@ -54,8 +64,6 @@ export const securityService: ISecurityService = {
     const auditLogs = auditEngine.getRecentLogs(200);
     const complianceFrameworks = complianceEngine.getAllFrameworks();
     const analytics = securityAnalyticsEngine.computeAnalytics(users, sessions, alerts, auditLogs);
-    const complianceScore = complianceEngine.getOverallComplianceScore();
-    const frameworkScores = complianceEngine.getFrameworkScores();
     const report = securityReportEngine.generateSecuritySummary(analytics, alerts, "system");
 
     return {

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Building2, CheckCircle, AlertTriangle, Clock } from "lucide-react";
+import { Building2, AlertTriangle, Clock } from "lucide-react";
 import type { Venue } from "../types";
 import { READINESS_CATEGORIES } from "../constants";
 

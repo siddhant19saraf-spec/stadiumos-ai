@@ -55,7 +55,7 @@ export class MockAnalyticsEngine implements IAnalyticsEngine {
     };
   }
 
-  computeTrends(healthMap: Map<string, AssetHealth>): TrendData[] {
+  computeTrends(_healthMap: Map<string, AssetHealth>): TrendData[] {
     const trends: TrendData[] = [];
     const dates: string[] = [];
     const now = new Date();

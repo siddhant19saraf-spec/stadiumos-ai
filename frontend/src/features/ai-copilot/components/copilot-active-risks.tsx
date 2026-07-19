@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, TrendingUp, TrendingDown, Minus, ArrowRight, Shield } from "lucide-react";
+import { AlertTriangle, TrendingUp, TrendingDown, Minus, Shield } from "lucide-react";
 import type { ActiveRisk, RiskLevel } from "../types";
 
 interface CopilotActiveRisksProps {

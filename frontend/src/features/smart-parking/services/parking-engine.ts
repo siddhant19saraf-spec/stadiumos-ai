@@ -1,5 +1,5 @@
 import type { ParkingLot, ParkingLotStatus, ParkingLotType } from "../types";
-import { PARKING_LOTS, LOT_CAPACITY_DETAILS, ALERT_THRESHOLDS } from "../constants";
+import { PARKING_LOTS } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,7 +17,6 @@ export interface IParkingEngine {
 
 export class MockParkingEngine implements IParkingEngine {
   private tick = 0;
-  private previousStatuses = new Map<string, ParkingLotStatus>();
 
   getLots(): ParkingLot[] {
     return PARKING_LOTS;
@@ -31,8 +30,6 @@ export class MockParkingEngine implements IParkingEngine {
     const hourFactor = this.hourFactor();
 
     for (const lot of lots) {
-      const detail = LOT_CAPACITY_DETAILS[lot.id];
-      const prev = this.previousStatuses.get(lot.id);
       const totalSlots = lot.capacity;
       const baseOcc = this.getBaseOccupancy(lot.type, isEventHour);
       const wave = Math.sin(this.tick * 0.06 + parseInt(lot.id.slice(-3), 36)) * 0.06;
@@ -63,7 +60,6 @@ export class MockParkingEngine implements IParkingEngine {
       map.set(lot.id, status);
     }
 
-    this.previousStatuses = map;
     return map;
   }
 
@@ -71,9 +67,9 @@ export class MockParkingEngine implements IParkingEngine {
     return PARKING_LOTS.find((l) => l.id === lotId);
   }
 
-  calculateOccupancyTrend(current: ParkingLotStatus, previous?: ParkingLotStatus): "rising" | "falling" | "stable" {
-    if (!previous) return "stable";
-    const diff = current.occupancyPercent - previous.occupancyPercent;
+  calculateOccupancyTrend(current: ParkingLotStatus, _previous?: ParkingLotStatus): "rising" | "falling" | "stable" {
+    if (!_previous) return "stable";
+    const diff = current.occupancyPercent - _previous.occupancyPercent;
     if (Math.abs(diff) < 3) return "stable";
     return diff > 0 ? "rising" : "falling";
   }

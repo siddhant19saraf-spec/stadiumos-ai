@@ -12,12 +12,12 @@ const teams = [
 
 export default function StaffAllocationPage() {
   return (
-    <Shell title="Staff Operations">
-      <ErrorBoundary module="Staff">
+    <Shell title="Stadium Staff Allocation">
+      <ErrorBoundary module="Stadium Staff Allocation">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Staff Operations</h2>
-            <p className="text-muted-foreground">Shift optimization, skills-based matching, and fatigue monitoring.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Stadium Staff Allocation</h2>
+            <p className="text-muted-foreground">Match-day staff shift optimization, skills-based role assignment, and real-time workforce deployment.</p>
           </div>
           <Card>
             <CardHeader><CardTitle>Staffing Gaps</CardTitle></CardHeader>

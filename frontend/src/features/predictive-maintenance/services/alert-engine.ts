@@ -12,7 +12,7 @@ export interface IAlertEngine {
 }
 
 export class MockAlertEngine implements IAlertEngine {
-  generate(healthMap: Map<string, AssetHealth>, predictions: FailurePrediction[], orders: WorkOrder[]): Alert[] {
+  generate(healthMap: Map<string, AssetHealth>, predictions: FailurePrediction[], _orders: WorkOrder[]): Alert[] {
     const alerts: Alert[] = [];
     const now = new Date().toISOString();
 
@@ -20,18 +20,18 @@ export class MockAlertEngine implements IAlertEngine {
       const severity = this.determineSeverity(h);
       if (severity === "none") continue;
 
-      const category = this.determineCategory(h);
       const isPredictionRelated = predictions.some((p) => p.assetId === h.assetId);
+      const cat = this.determineCategory(h);
 
       alerts.push({
         id: uid(),
         assetId: h.assetId,
         assetName: h.assetName,
         severity,
-        category,
-        title: this.generateTitle(severity, category, h.assetName),
+        category: cat,
+        title: this.generateTitle(severity, cat, h.assetName),
         message: this.generateMessage(severity, h),
-        suggestedAction: this.suggestedAction(severity, category, h),
+        suggestedAction: this.suggestedAction(severity, cat, h),
         requiresImmediateAction: severity === "critical" || severity === "severe",
         acknowledged: false,
         predictionRelated: isPredictionRelated,
@@ -71,7 +71,7 @@ export class MockAlertEngine implements IAlertEngine {
     return "system";
   }
 
-  private generateTitle(severity: AlertSeverity, category: AlertCategory, assetName: string): string {
+  private generateTitle(severity: AlertSeverity, _category: AlertCategory, assetName: string): string {
     const titles: Record<string, string> = {
       critical: `CRITICAL: ${assetName} at imminent failure risk`,
       severe: `SEVERE: ${assetName} requires immediate attention`,

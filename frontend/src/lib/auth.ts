@@ -1,4 +1,4 @@
-import { type AuthOptions, type Session } from "next-auth";
+import type { Session, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { logger } from "./logger";
 
@@ -26,7 +26,7 @@ export interface AuthSession extends Session {
   accessToken: string;
 }
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -69,7 +69,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = (user as AuthUser).id;
         token.role = (user as AuthUser).role;
         token.stadiumId = (user as AuthUser).stadiumId;
       }

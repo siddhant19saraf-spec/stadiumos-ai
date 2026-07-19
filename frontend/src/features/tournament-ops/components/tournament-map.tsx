@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Map as MapIcon, CheckCircle, AlertTriangle, Wrench } from "lucide-react";
+import { Map as MapIcon } from "lucide-react";
 import type { Venue } from "../types";
 
 interface TournamentMapProps {
@@ -18,15 +18,6 @@ const statusColors: Record<string, string> = {
   post_event_cleanup: "#3b82f6",
   inactive: "#6b7280",
 };
-const statusIcons: Record<string, React.ElementType> = {
-  ready: CheckCircle,
-  preparing: Wrench,
-  maintenance: AlertTriangle,
-  emergency: AlertTriangle,
-  post_event_cleanup: Wrench,
-  inactive: MapIcon,
-};
-
 export function TournamentMap({ venues, className }: TournamentMapProps) {
   return (
     <Card className={cn("", className)}>

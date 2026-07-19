@@ -32,7 +32,7 @@ export function SimulationControls({ active, activeScenario, onStart, onStop, cl
       </CardHeader>
       <CardContent className="space-y-2">
         {SIMULATION_SCENARIOS.map((scenario) => {
-          const isRunning = active && activeScenario?.id === scenario.id;
+          const isRunning = active && activeScenario === scenario.id;
           return (
             <div
               key={scenario.id}
@@ -57,7 +57,7 @@ export function SimulationControls({ active, activeScenario, onStart, onStop, cl
                   variant={isRunning ? "destructive" : "outline"}
                   size="icon"
                   className="h-6 w-6 shrink-0"
-                  onClick={(e) => { e.stopPropagation(); isRunning ? onStop() : onStart(scenario); }}
+                  onClick={(e) => { e.stopPropagation(); isRunning ? onStop() : onStart(scenario as unknown as SimulationScenario); }}
                   disabled={active && !isRunning}
                   aria-label={isRunning ? `Stop ${scenario.name}` : `Start ${scenario.name}`}
                 >

@@ -1,5 +1,5 @@
-import type { QueueRecommendation, QueuePointStatus, QueueAlert, InventoryItem, QueuePoint } from "../types";
-import { QUEUE_POINTS, ALERT_THRESHOLDS } from "../constants";
+import type { QueueRecommendation, QueuePointStatus, QueueAlert, InventoryItem } from "../types";
+
 
 function uid(): string {
   return `rec-${Date.now().toString(36)}-${Math.floor(Math.random() * 999)}`;
@@ -11,15 +11,13 @@ export interface IRecommendationEngine {
 
 export class MockRecommendationEngine implements IRecommendationEngine {
   generate(situation: { statuses: Map<string, QueuePointStatus>; alerts: QueueAlert[]; inventory: Map<string, InventoryItem> }): QueueRecommendation[] {
-    const { statuses, alerts, inventory } = situation;
+    const { statuses, inventory } = situation;
     const recs: QueueRecommendation[] = [];
-    const now = new Date().toISOString();
 
     const criticalQueues = Array.from(statuses.values()).filter((q) => q.status === "critical");
     const congestedQueues = Array.from(statuses.values()).filter((q) => q.status === "congested");
 
     for (const q of criticalQueues.slice(0, 2)) {
-      const point = QUEUE_POINTS.find((p) => p.id === q.queuePointId);
       const closedCounters = q.counterStatuses.filter((c) => c === "closed" || c === "breakdown").length;
       if (closedCounters > 0 && q.activeCounters < q.totalCounters) {
         recs.push(this.makeRec(

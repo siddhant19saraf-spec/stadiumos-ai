@@ -1,5 +1,4 @@
 import type { AssetHealth } from "../types";
-import { ALERT_THRESHOLDS } from "../constants";
 
 export interface IMaintenanceEngine {
   calculateDue(healthMap: Map<string, AssetHealth>): number;

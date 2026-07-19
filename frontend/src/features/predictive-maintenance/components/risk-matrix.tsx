@@ -1,17 +1,12 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 interface RiskMatrixProps {
   healthScores: number[];
   riskScores: number[];
   className?: string;
-}
-
-function countInRange(values: number[], min: number, max: number): number {
-  return values.filter((v) => v >= min && v <= max).length;
 }
 
 const quadrants = [
@@ -41,7 +36,7 @@ export function RiskMatrix({ healthScores, riskScores, className }: RiskMatrixPr
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {quadrants.map((q) => {
             const count = healthScores.reduce((acc, h, i) => {
-              if (h >= q.healthRange[0] && h <= q.healthRange[1] && riskScores[i] >= q.riskRange[0] && riskScores[i] <= q.riskRange[1]) {
+              if (h >= q.healthRange[0]! && h <= q.healthRange[1]! && riskScores[i]! >= q.riskRange[0]! && riskScores[i]! <= q.riskRange[1]!) {
                 return acc + 1;
               }
               return acc;

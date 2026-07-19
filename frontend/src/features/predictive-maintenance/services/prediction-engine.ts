@@ -1,5 +1,5 @@
-import type { FailurePrediction, MaintenanceAsset, AssetHealth, FailureMode } from "../types";
-import { ASSETS } from "../constants";
+import type { FailurePrediction, AssetHealth, FailureMode } from "../types";
+
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -18,7 +18,6 @@ export class MockPredictionEngine implements IPredictionEngine {
     for (const [, health] of healthMap) {
       if (health.healthScore > 65) continue;
 
-      const asset = ASSETS.find((a) => a.id === health.assetId);
       const failureMode = this.predictFailureMode(health);
       const probability = this.clamp(Math.round((100 - health.healthScore) * 0.85 + rand(-5, 10)), 10, 99);
       const predictedDays = Math.round((100 - health.healthScore) * 1.2 + rand(-5, 10));
@@ -50,13 +49,13 @@ export class MockPredictionEngine implements IPredictionEngine {
     return "<30 days";
   }
 
-  private predictFailureMode(health: AssetHealth): FailureMode {
+  private predictFailureMode(_health: AssetHealth): FailureMode {
     const modes: FailureMode[] = ["mechanical_wear", "electrical_fault", "component_failure", "battery_degradation", "sensor_drift", "cooling_failure", "power_instability", "network_failure", "performance_degradation", "overheating", "firmware_corruption", "physical_damage"];
     const idx = Math.floor(Math.random() * modes.length);
     return modes[idx]!;
   }
 
-  private reasoning(mode: FailureMode, health: AssetHealth): string[] {
+  private reasoning(_mode: FailureMode, health: AssetHealth): string[] {
     const base = [
       `Health score declined to ${health.healthScore} (threshold: 60)`,
       `Risk score elevated to ${health.riskScore}`,
@@ -77,7 +76,7 @@ export class MockPredictionEngine implements IPredictionEngine {
     return factors;
   }
 
-  private recommendedAction(mode: FailureMode, health: AssetHealth): string {
+  private recommendedAction(_mode: FailureMode, _health: AssetHealth): string {
     const actions: Record<string, string> = {
       mechanical_wear: "Schedule bearing replacement and lubrication service",
       electrical_fault: "Inspect wiring, test insulation resistance, replace faulty components",
@@ -92,10 +91,10 @@ export class MockPredictionEngine implements IPredictionEngine {
       firmware_corruption: "Re-flash firmware from verified backup, verify checksum",
       physical_damage: "Inspect for physical damage, replace housing, test operation",
     };
-    return actions[mode] ?? "Schedule detailed inspection and diagnostic testing";
+    return actions[_mode] ?? "Schedule detailed inspection and diagnostic testing";
   }
 
-  private costImpact(mode: FailureMode, health: AssetHealth): string {
+  private costImpact(_mode: FailureMode, health: AssetHealth): string {
     if (health.criticality === "critical") return "$8,000 - $15,000";
     if (health.criticality === "high") return "$4,000 - $8,000";
     return "$1,000 - $4,000";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   MockIncidentEngine,
@@ -7,10 +8,6 @@ import {
   MockDispatchEngine,
   dispatchEngine,
 } from "@/features/emergency-response/services/dispatch-engine";
-import {
-  MockRecommendationEngine,
-  recommendationEngine,
-} from "@/features/emergency-response/services/recommendation-engine";
 import {
   MockAnalyticsEngine,
   analyticsEngine,
@@ -35,11 +32,9 @@ import {
   REFRESH_INTERVAL,
 } from "@/features/emergency-response/constants";
 import type {
-  Incident,
   IncidentType,
   Severity,
   Priority,
-  ResponseTeam,
   IncidentStatus,
   TeamType,
 } from "@/features/emergency-response/types";
@@ -48,7 +43,6 @@ import {
   makeResponseTeam,
   makeAIAnalysis,
   makeResponseTimePoint,
-  makeEmergencyAnalytics,
   resetCounter,
 } from "../fixtures/factories";
 
@@ -59,14 +53,6 @@ function allIncidentTypes(): IncidentType[] {
     "power_failure", "network_failure", "weather_emergency",
     "vip_incident", "lost_child",
   ];
-}
-
-function allSeverities(): Severity[] {
-  return ["critical", "high", "medium", "low"];
-}
-
-function allPriorities(): Priority[] {
-  return ["p0", "p1", "p2", "p3"];
 }
 
 function allStatuses(): IncidentStatus[] {

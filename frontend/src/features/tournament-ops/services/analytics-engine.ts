@@ -14,7 +14,6 @@ export class MockAnalyticsEngine implements IAnalyticsEngine {
     const avgAttendance = matches.length > 0 ? Math.round(totalAttendance / matches.length) : 0;
     const delays = matches.filter((m) => m.delayMinutes > 0);
     const avgDelay = matches.length > 0 ? delays.reduce((s, m) => s + m.delayMinutes, 0) / matches.length : 0;
-    const totalDelay = matches.reduce((s, m) => s + (m.delayMinutes ?? 0), 0);
     const resolvedConflicts = conflicts.filter((c) => c.resolved).length;
 
     const perVenueStats: VenueStat[] = VENUES.map((v) => {

@@ -4,8 +4,8 @@ import { PredictiveDashboard } from "@/features/predictive-maintenance/component
 
 export default function PredictiveMaintenancePage() {
   return (
-    <Shell title="AI Predictive Maintenance">
-      <ErrorBoundary module="Predictive Maintenance">
+    <Shell title="Stadium Predictive Maintenance">
+      <ErrorBoundary module="Stadium Predictive Maintenance">
         <PredictiveDashboard />
       </ErrorBoundary>
     </Shell>

@@ -1,30 +1,5 @@
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message: string;
-  timestamp: string;
-  correlationId?: string;
-  pagination?: PaginationInfo;
-}
-
-export interface PaginationInfo {
-  page: number;
-  pageSize: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
-}
-
-export interface ApiError {
-  success: false;
-  error: string;
-  message: string;
-  statusCode: number;
-  timestamp: string;
-  correlationId?: string;
-  details?: Record<string, string[]>;
-}
+import type { ApiResponse, ApiError, PaginationInfo } from "@/types/api";
+export type { ApiResponse };
 
 export function isApiError<T>(response: ApiResponse<T> | ApiError): response is ApiError {
   return !response.success;

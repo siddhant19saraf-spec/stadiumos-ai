@@ -1,4 +1,4 @@
-import type { SmartAlert, Incident, AlertType, Severity } from "../types";
+import type { SmartAlert, Incident } from "../types";
 
 export interface INotificationEngine {
   generate(incidents: Incident[], existing: SmartAlert[]): SmartAlert[];

@@ -38,12 +38,12 @@ interface UserProfile {
 export const authService = {
   async login(data: LoginRequest): Promise<ApiResponse<AuthResponse>> {
     authLogger.info("Login attempt", { email: data.email });
-    return apiClient.post<AuthResponse>("/api/v1/auth/login", data);
+    return { ...(await apiClient.post<AuthResponse>("/api/v1/auth/login", data)), success: true as const };
   },
 
   async register(data: RegisterRequest): Promise<ApiResponse<AuthResponse>> {
     authLogger.info("Register attempt", { email: data.email });
-    return apiClient.post<AuthResponse>("/api/v1/auth/register", data);
+    return { ...(await apiClient.post<AuthResponse>("/api/v1/auth/register", data)), success: true as const };
   },
 
   async logout(): Promise<void> {
@@ -56,17 +56,17 @@ export const authService = {
   },
 
   async refreshToken(token: string): Promise<ApiResponse<{ accessToken: string }>> {
-    return apiClient.post<{ accessToken: string }>("/api/v1/auth/refresh", {
+    return { ...(await apiClient.post<{ accessToken: string }>("/api/v1/auth/refresh", {
       refreshToken: token,
-    });
+    })), success: true as const };
   },
 
   async getProfile(): Promise<ApiResponse<UserProfile>> {
-    return apiClient.get<UserProfile>("/api/v1/auth/profile");
+    return { ...(await apiClient.get<UserProfile>("/api/v1/auth/profile")), success: true as const };
   },
 
   async updateProfile(data: Partial<UserProfile>): Promise<ApiResponse<UserProfile>> {
-    return apiClient.patch<UserProfile>("/api/v1/auth/profile", data);
+    return { ...(await apiClient.patch<UserProfile>("/api/v1/auth/profile", data)), success: true as const };
   },
 };
 

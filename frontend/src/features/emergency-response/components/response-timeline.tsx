@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Clock, CheckCircle, AlertTriangle, Send, Search, Activity, Shield } from "lucide-react";
+import { Clock, CheckCircle, AlertTriangle, Send, Search, Activity } from "lucide-react";
 import type { Incident } from "../types";
 
 interface ResponseTimelineProps {

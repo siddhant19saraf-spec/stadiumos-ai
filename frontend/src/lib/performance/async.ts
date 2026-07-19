@@ -49,7 +49,7 @@ export function createBatchProcessor<T, R>(
     resolvers = [];
     try {
       const results = await batchFn(items);
-      for (let i = 0; i < results.length; i++) pending[i]?.resolve(results[i]);
+      for (let i = 0; i < results.length; i++) pending[i]?.resolve(results[i] as R);
     } catch (e) {
       for (const p of pending) p.reject(e);
     }

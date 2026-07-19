@@ -1,5 +1,5 @@
 import type { ParkingAlert, ParkingLotStatus, TrafficRoad, AlertType, AlertSeverity } from "../types";
-import { PARKING_LOTS, ALERT_THRESHOLDS } from "../constants";
+import { ALERT_THRESHOLDS } from "../constants";
 
 function uid(): string {
   return `alert-${Date.now().toString(36)}-${Math.floor(Math.random() * 999)}`;
@@ -16,8 +16,6 @@ export class MockAlertEngine implements IAlertEngine {
 
   evaluate(statuses: Map<string, ParkingLotStatus>, roads: TrafficRoad[]): ParkingAlert[] {
     const alerts: ParkingAlert[] = [];
-    const now = new Date().toISOString();
-
     for (const [, status] of statuses) {
       if (status.occupancyPercent >= ALERT_THRESHOLDS.PARKING_FULL && !this.acknowledged.has(`full-${status.lotId}`)) {
         alerts.push(this.createAlert("parking_full", `${status.lotName} at ${status.occupancyPercent}% capacity`, `Lot ${status.lotName} has ${status.available} spaces remaining. Consider redirecting incoming traffic.`, status.occupancyPercent >= 98 ? "critical" : "high", status.lotId, status.lotName));

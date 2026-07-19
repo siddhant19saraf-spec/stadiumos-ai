@@ -1,9 +1,6 @@
 import type { DecisionRecommendation, ExecutiveSummary, ExecutiveRole, ModuleSnapshot } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
-function rf(min: number, max: number, d = 1): number {
-  return parseFloat((Math.random() * (max - min) + min).toFixed(d));
-}
 function ri(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -16,9 +13,8 @@ export interface IDecisionEngine {
 }
 
 export class MockDecisionEngine implements IDecisionEngine {
-  generate(summary: ExecutiveSummary, moduleSnapshots: ModuleSnapshot[], role: ExecutiveRole): DecisionRecommendation[] {
+  generate(summary: ExecutiveSummary, _moduleSnapshots: ModuleSnapshot[], _role: ExecutiveRole): DecisionRecommendation[] {
     const decisions: DecisionRecommendation[] = [];
-    const now = new Date().toISOString();
 
     if (summary.crowdHealthScore < ALERT_THRESHOLDS.CROWD_HEALTH_MIN) {
       decisions.push(this.makeDecision({

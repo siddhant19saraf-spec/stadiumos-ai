@@ -1,5 +1,5 @@
-import type { AIRecommendation, Conflict, Match, Venue, TournamentAnalytics } from "../types";
-import { VENUES, TEAMS } from "../constants";
+import type { AIRecommendation, Conflict, Match, TournamentAnalytics } from "../types";
+import { VENUES } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -15,9 +15,9 @@ export interface IRecommendationEngine {
 const severityScores: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
 
 export class MockRecommendationEngine implements IRecommendationEngine {
-  generate(conflicts: Conflict[], matches: Match[], analytics: TournamentAnalytics): AIRecommendation[] {
+  generate(conflicts: Conflict[], _matches: Match[], analytics: TournamentAnalytics): AIRecommendation[] {
     const recs: AIRecommendation[] = [];
-    const unresolved = conflicts.filter((c) => !c.resolved).sort((a, b) => severityScores[a.severity] - severityScores[b.severity]);
+    const unresolved = conflicts.filter((c) => !c.resolved).sort((a, b) => (severityScores[a.severity] ?? 0) - (severityScores[b.severity] ?? 0));
 
     for (const conflict of unresolved.slice(0, 4)) {
       recs.push({
@@ -25,7 +25,7 @@ export class MockRecommendationEngine implements IRecommendationEngine {
         type: "reschedule",
         title: `Resolve Conflict: ${conflict.title}`,
         description: conflict.aiResolution,
-        priority: conflict.severity === "critical" ? "critical" : conflict.severity === "high" ? "high" : "medium",
+        priority: conflict.severity === "critical" ? "critical" : conflict.severity === "high" ? "high" : "medium" as const,
         confidence: conflict.aiConfidence,
         impact: "Resolves scheduling conflict, prevents operational disruption.",
         affectedMatchId: conflict.affectedIds[0] ?? null,
@@ -90,7 +90,7 @@ export class MockRecommendationEngine implements IRecommendationEngine {
       });
     }
 
-    return recs.sort((a, b) => severityScores[a.priority] - severityScores[b.priority]).slice(0, 8);
+    return recs.sort((a, b) => (severityScores[a.priority] ?? 0) - (severityScores[b.priority] ?? 0)).slice(0, 8);
   }
 }
 

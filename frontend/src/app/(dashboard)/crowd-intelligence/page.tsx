@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/crowd-intelligence/components/main-das
 
 export default function CrowdIntelligencePage() {
   return (
-    <Shell title="Crowd Intelligence">
-      <ErrorBoundary module="Crowd Intelligence">
+    <Shell title="Stadium Crowd Intelligence">
+      <ErrorBoundary module="Stadium Crowd Intelligence">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

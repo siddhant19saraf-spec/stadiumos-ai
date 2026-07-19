@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { parkingEngine, MockParkingEngine } from "@/features/smart-parking/services/parking-engine";
-import { trafficEngine, MockTrafficEngine } from "@/features/smart-parking/services/traffic-engine";
-import { predictionEngine, MockPredictionEngine } from "@/features/smart-parking/services/prediction-engine";
+import { parkingEngine } from "@/features/smart-parking/services/parking-engine";
+import { trafficEngine } from "@/features/smart-parking/services/traffic-engine";
+import { predictionEngine } from "@/features/smart-parking/services/prediction-engine";
 import { recommendationEngine } from "@/features/smart-parking/services/recommendation-engine";
 import { simulationEngine } from "@/features/smart-parking/services/simulation-engine";
 import { analyticsEngine } from "@/features/smart-parking/services/analytics-engine";
 import { alertEngine, MockAlertEngine } from "@/features/smart-parking/services/alert-engine";
 import { smartParkingService } from "@/features/smart-parking/services/smart-parking-service";
 import { PARKING_LOTS, TRAFFIC_ROADS, SCENARIO_CONFIGS, ALERT_THRESHOLDS, REFRESH_INTERVAL_MS, LOT_CAPACITY_DETAILS, SNAPSHOT_INTERVAL_MS, MAX_SNAPSHOTS } from "@/features/smart-parking/constants";
-import type { ParkingLot, ParkingLotStatus, TrafficRoad, ParkingAlert } from "@/features/smart-parking/types";
+import type { ParkingLot, ParkingLotStatus, TrafficRoad } from "@/features/smart-parking/types";
 
 describe("ParkingEngine", () => {
   it("should return 13 parking lots", () => {

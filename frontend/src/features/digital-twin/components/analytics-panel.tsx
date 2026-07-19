@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Activity, Users, AlertTriangle, Zap } from "lucide-react";
 import type { LiveAnalytics, ZoneLiveStatus } from "../types";
@@ -23,7 +22,6 @@ export function AnalyticsPanel({ analytics, zoneStatuses, className }: Analytics
   }, [zoneStatuses]);
 
   const occPct = analytics.totalCapacity > 0 ? (analytics.totalOccupancy / analytics.totalCapacity) * 100 : 0;
-  const totalZones = zoneStatuses.size;
 
   return (
     <Card className={cn("", className)}>

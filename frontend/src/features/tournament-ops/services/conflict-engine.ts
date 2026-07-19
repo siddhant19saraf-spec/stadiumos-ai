@@ -11,7 +11,7 @@ function uid(prefix: string): string {
 }
 
 export class MockConflictEngine implements IConflictEngine {
-  detectAll(slots: ScheduleSlot[], matches: Match[], venues: Venue[]): Conflict[] {
+  detectAll(slots: ScheduleSlot[], _matches: Match[], venues: Venue[]): Conflict[] {
     const conflicts: Conflict[] = [];
 
     for (const venue of venues) {

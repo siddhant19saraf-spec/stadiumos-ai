@@ -1,10 +1,10 @@
-import { CacheStore, cacheStoreManager } from "@/lib/performance/cache";
+import { cacheStoreManager } from "@/lib/performance/cache";
 
 /* ——— Types ——— */
 export interface PerformanceMetric {
   name: string;
   value: number;
-  unit: "ms" | "bytes" | "percent" | "count" | "score";
+  unit: "ms" | "bytes" | "percent" | "count" | "score" | "mb" | "kb";
   timestamp: string;
   tags: Record<string, string>;
 }
@@ -111,7 +111,7 @@ export class MockPerformanceMonitorEngine implements IPerformanceMonitorEngine {
       avgPageLoadMs,
       avgApiLatencyMs,
       avgAiResponseMs,
-      memoryUsageMb: Math.round(process.memoryUsage?.().heapUsed / 1024 / 1024) || 0,
+      memoryUsageMb: Math.round((process?.memoryUsage?.()?.heapUsed ?? 0) / 1024 / 1024) || 0,
       bundleSizeKb: 0,
       lcpMs: this.getLastMetric("lcp") ?? 0,
       inpMs: this.getLastMetric("inp") ?? 0,
@@ -148,8 +148,13 @@ export class MockPerformanceMonitorEngine implements IPerformanceMonitorEngine {
     };
   }
 
-  getCacheStats() {
-    return cacheStoreManager.getAllStats();
+  getCacheStats(): Record<string, { size: number; hits: number; misses: number; hitRate: number }> {
+    const raw = cacheStoreManager.getAllStats();
+    const result: Record<string, { size: number; hits: number; misses: number; hitRate: number }> = {};
+    for (const [key, val] of Object.entries(raw)) {
+      result[key] = { ...val, hitRate: val.hits + val.misses > 0 ? Math.round((val.hits / (val.hits + val.misses)) * 100) : 0 };
+    }
+    return result;
   }
 
   getSlowEndpoints(minRequests = 3): { path: string; avgMs: number; count: number }[] {
@@ -175,7 +180,7 @@ export class MockPerformanceMonitorEngine implements IPerformanceMonitorEngine {
 
   private getLastMetric(name: string): number | null {
     const items = this.metrics.filter((m) => m.name === name);
-    return items.length > 0 ? items[0].value : null;
+    return items.length > 0 ? items[0]!.value : null;
   }
 
   seedMockData(): void {
@@ -183,10 +188,10 @@ export class MockPerformanceMonitorEngine implements IPerformanceMonitorEngine {
     for (let i = 0; i < 100; i++) {
       const time = new Date(now - i * 60000);
       this.apiRecords.push({
-        path: ["/api/crowd", "/api/energy", "/api/parking", "/api/emergency", "/api/analytics"][i % 5],
+        path: ["/api/crowd", "/api/energy", "/api/parking", "/api/emergency", "/api/analytics"][i % 5]!,
         method: "GET",
         durationMs: Math.round(50 + Math.random() * 450),
-        statusCode: Math.random() > 0.1 ? 200 : [400, 401, 500][Math.floor(Math.random() * 3)],
+        statusCode: Math.random() > 0.1 ? 200 : [400, 401, 500][Math.floor(Math.random() * 3)]!,
         timestamp: time.toISOString(),
         correlationId: `corr-${time.getTime().toString(36)}`,
       });

@@ -1,5 +1,5 @@
 import type { ParkingPrediction, TrafficPrediction, ParkingLot, ParkingLotStatus, TrafficRoad, CongestionLevel } from "../types";
-import { PARKING_LOTS } from "../constants";
+
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;

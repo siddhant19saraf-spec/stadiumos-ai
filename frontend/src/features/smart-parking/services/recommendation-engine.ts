@@ -12,9 +12,8 @@ export interface IRecommendationEngine {
 
 export class MockRecommendationEngine implements IRecommendationEngine {
   generate(situation: { statuses: Map<string, ParkingLotStatus>; roads: TrafficRoad[]; alerts: ParkingAlert[] }): ParkingRecommendation[] {
-    const { statuses, roads, alerts } = situation;
+    const { statuses, roads, alerts: _alerts } = situation;
     const recommendations: ParkingRecommendation[] = [];
-    const now = new Date().toISOString();
 
     const nearFull = Array.from(statuses.values()).filter((s) => s.occupancyPercent >= ALERT_THRESHOLDS.PARKING_NEAR_FULL);
     const fullLots = Array.from(statuses.values()).filter((s) => s.occupancyPercent >= ALERT_THRESHOLDS.PARKING_FULL);
@@ -68,7 +67,7 @@ export class MockRecommendationEngine implements IRecommendationEngine {
     }
 
     if (highQueue.length >= 2) {
-      recommendations.push(this.makeRec("Delay Vehicle Entry", "Gate queue thresholds exceeded. Implement staggered entry for 15 minutes.", "high", highQueue[0].id, highQueue[0].name, [
+      recommendations.push(this.makeRec("Delay Vehicle Entry", "Gate queue thresholds exceeded. Implement staggered entry for 15 minutes.", "high", highQueue[0]!.id, highQueue[0]!.name, [
         `Queue lengths: ${highQueue.map((r) => `${r.name}: ${r.queueLengthMeters}m`).join(", ")}`,
         "Temporary hold reduces gate congestion by estimated 30%",
         "Broadcast delay via digital signage and mobile app",
@@ -110,8 +109,8 @@ export class MockRecommendationEngine implements IRecommendationEngine {
       ]));
     }
 
-    if (alerts.filter((a) => !a.acknowledged).length > 3) {
-      recommendations.push(this.makeRec("Acknowledge Pending Alerts", `${alerts.filter((a) => !a.acknowledged).length} unacknowledged alerts require review.`, "medium", "parking-system", "System", [
+    if (_alerts.filter((a) => !a.acknowledged).length > 3) {
+      recommendations.push(this.makeRec("Acknowledge Pending Alerts", `${_alerts.filter((a) => !a.acknowledged).length} unacknowledged alerts require review.`, "medium", "parking-system", "System", [
         "Unacknowledged alerts may indicate missed critical events",
         "Review and acknowledge to maintain situational awareness",
       ]));

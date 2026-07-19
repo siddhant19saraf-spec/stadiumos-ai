@@ -6,7 +6,6 @@ import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { StadiumZone, ZoneLiveStatus, LayerConfig, MapEntity } from "../types";
 import { visualizationEngine } from "../services/visualization-engine";
-import { ZONE_CAPACITIES } from "../constants";
 
 interface StadiumMapProps {
   zones: StadiumZone[];
@@ -109,7 +108,6 @@ export function StadiumMap({
           {zones.map((zone) => {
             const c = zoneColors[zone.id]!;
             const s = statuses.get(zone.id);
-            const cap = ZONE_CAPACITIES[zone.id] ?? 0;
             return (
               <g key={zone.id}>
                 <rect

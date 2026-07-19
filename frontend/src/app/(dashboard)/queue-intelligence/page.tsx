@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/queue-intelligence/components/main-das
 
 export default function QueueIntelligencePage() {
   return (
-    <Shell title="Queue Intelligence">
-      <ErrorBoundary module="Queue Intelligence">
+    <Shell title="Queue & Concourse Intelligence">
+      <ErrorBoundary module="Queue & Concourse Intelligence">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

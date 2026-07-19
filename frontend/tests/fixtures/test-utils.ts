@@ -1,4 +1,4 @@
-import { vi, type MockInstance } from "vitest";
+import { vi, expect, type MockInstance } from "vitest";
 
 export function expectCalledOnce(mock: MockInstance, ...args: unknown[]): void {
   expect(mock).toHaveBeenCalledTimes(1);

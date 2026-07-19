@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { AIProviderFactory } from "@/features/ai-copilot/services/providers/provider-factory";
 import { MockAIProvider } from "@/features/ai-copilot/services/providers/mock-provider";
 import { aiCopilotService } from "@/features/ai-copilot/services/ai-copilot-service";
-import { makeOperationalContext, makeActiveRisk } from "../fixtures/factories";
+import { makeOperationalContext } from "../fixtures/factories";
 
 describe("AI Provider Abstraction", () => {
   it("should adhere to AIProvider interface contract", () => {

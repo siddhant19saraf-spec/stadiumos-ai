@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/tournament-ops/components/main-dashboa
 
 export default function TournamentOpsPage() {
   return (
-    <Shell title="Tournament Operations">
-      <ErrorBoundary module="Tournament Operations">
+    <Shell title="Tournament & Match Operations">
+      <ErrorBoundary module="Tournament & Match Operations">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

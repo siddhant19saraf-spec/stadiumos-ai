@@ -29,7 +29,7 @@ export function HeroSection({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Operations Command Center</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Stadium Operations Command Center</h1>
             <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs">
               <span className="mr-1 h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
               Live

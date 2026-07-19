@@ -41,7 +41,7 @@ export function AIInsightPanel({ insights, className }: AIInsightPanelProps) {
           <p className="py-6 text-center text-xs text-muted-foreground">No active insights</p>
         ) : (
           displayed.map((insight) => {
-            const Icon = insightIcons[insight.type] ?? insightIcons.default;
+            const Icon: React.ElementType = insightIcons[insight.type] ?? AlertTriangle;
             const color = insightColors[insight.type] ?? "text-muted-foreground border-muted bg-muted/20";
             return (
               <div key={insight.id} className={cn("rounded-md border p-3", color)}>

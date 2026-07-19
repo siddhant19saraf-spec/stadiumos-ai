@@ -148,7 +148,6 @@ describe("Semantic HTML", () => {
   });
 
   it("should not use div for interactive widgets", () => {
-    const bad = `<div onclick="handleClick()">Click me</div>`;
     const good = `<button onclick="handleClick()">Click me</button>`;
     expect(good).toContain("<button");
   });

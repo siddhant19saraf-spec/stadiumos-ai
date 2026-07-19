@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Scale, CheckCircle2, X, ArrowRight, Timer, Users, TrendingDown, AlertTriangle, DollarSign } from "lucide-react";
+import { Scale, CheckCircle2, X, Timer, Users, TrendingDown, AlertTriangle, DollarSign } from "lucide-react";
 import type { DecisionOption } from "../types";
 
 interface CopilotDecisionComparisonProps {

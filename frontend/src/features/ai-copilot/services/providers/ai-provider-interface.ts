@@ -1,4 +1,4 @@
-import type { OperationalContext, AIReasoning, CopilotMessage } from "../../types";
+import type { OperationalContext, AIReasoning } from "../../types";
 
 export interface AIProviderResponse {
   content: string;

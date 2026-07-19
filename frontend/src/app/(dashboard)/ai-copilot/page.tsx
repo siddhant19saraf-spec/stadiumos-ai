@@ -65,7 +65,7 @@ export default function AICopilotPage() {
             id: "welcome",
             role: "assistant",
             content:
-              "Welcome to the AI Operations Copilot. I'm ready to assist with stadium operations. Ask me anything about crowd management, parking, security, or any operational domain.",
+              "Welcome to the AI Stadium Copilot. I'm ready to assist with smart stadium operations. Ask me anything about crowd management, parking, tournament scheduling, security, or any stadium operational domain.",
             timestamp: new Date().toISOString(),
             status: "complete",
             suggestions: [
@@ -194,15 +194,15 @@ export default function AICopilotPage() {
 
   if (isInitializing) {
     return (
-      <Shell title="AI Copilot">
-        <LoadingPage message="Initializing AI Operations Copilot..." />
+      <Shell title="AI Stadium Copilot">
+        <LoadingPage message="Initializing AI Stadium Copilot..." />
       </Shell>
     );
   }
 
   return (
-    <Shell title="AI Copilot">
-      <ErrorBoundary module="AI Copilot">
+    <Shell title="AI Stadium Copilot">
+      <ErrorBoundary module="AI Stadium Copilot">
         <div className="flex h-[calc(100vh-8rem)] gap-4">
           {/* Left Panel: Chat */}
           <div className="flex w-full flex-col lg:w-[45%] xl:w-[40%]">

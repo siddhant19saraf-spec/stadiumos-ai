@@ -11,7 +11,6 @@ interface RiskAssessmentPanelProps {
 }
 
 function RiskGauge({ label, value, icon: Icon, color, desc }: { label: string; value: number; icon: React.ElementType; color: string; desc: string }) {
-  const rotation = -120 + (value / 100) * 240;
   return (
     <div className="flex items-center gap-3 rounded-md border bg-gradient-to-r from-primary/5 to-transparent p-3">
       <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">

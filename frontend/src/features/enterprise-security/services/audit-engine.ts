@@ -84,9 +84,9 @@ export class MockAuditEngine implements IAuditEngine {
     if (format === "json") {
       return JSON.stringify(this.logs, null, 2);
     }
-    const headers = ["id", "timestamp", "user", "action", "resourceType", "resourceId", "result", "severity", "ipAddress", "correlationId"];
+    const headers = ["id", "timestamp", "user", "action", "resourceType", "resourceId", "result", "severity", "ipAddress", "correlationId"] as const;
     const rows = this.logs.map((l) =>
-      headers.map((h) => `"${String((l as any)[h] ?? "").replace(/"/g, '""')}"`).join(","),
+      headers.map((h) => `"${String((l as unknown as Record<string, unknown>)[h] ?? "").replace(/"/g, '""')}"`).join(","),
     );
     return [headers.join(","), ...rows].join("\n");
   }

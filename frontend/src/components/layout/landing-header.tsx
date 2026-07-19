@@ -8,7 +8,7 @@ import { AppLogo } from "@/components/app-logo";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Platform", href: "#features" },
+  { label: "Smart Stadium Platform", href: "#features" },
   { label: "Documentation", href: "#" },
 ];
 

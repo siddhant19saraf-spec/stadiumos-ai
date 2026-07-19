@@ -1,4 +1,4 @@
-import type { IncidentType, Severity, TeamType, ResponseTeam, AIRecommendation, MapEntity } from "./types";
+import type { IncidentType, Severity, ResponseTeam, MapEntity } from "./types";
 
 export const INCIDENT_TYPE_CONFIG: Record<IncidentType, { label: string; defaultSeverity: Severity; icon: string; responsePriority: number }> = {
   medical_emergency: { label: "Medical Emergency", defaultSeverity: "critical", icon: "heart", responsePriority: 1 },

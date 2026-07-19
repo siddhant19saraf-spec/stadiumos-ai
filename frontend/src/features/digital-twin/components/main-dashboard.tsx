@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Activity, AlertTriangle } from "lucide-react";
 import { digitalTwinService } from "../services/digital-twin-service";
@@ -52,7 +51,7 @@ export function MainDashboard() {
   }, []);
 
   const criticalCount = state.incidents.filter(
-    (i) => (i.status === "active" || i.status === "acknowledged") && (i.severity === "critical" || i.severity === "high"),
+    (i) => i.status === "active" && (i.severity === "critical" || i.severity === "high"),
   ).length;
 
   return (

@@ -120,7 +120,7 @@ export class CacheStore<T> {
     }).catch(() => {
       this.pendingRefreshes.delete(key);
     });
-    this.pendingRefreshes.set(key, promise);
+    this.pendingRefreshes.set(key, promise as Promise<T>);
   }
 
   has(key: string): boolean {
@@ -159,16 +159,16 @@ export class CacheStore<T> {
 
     const toRemove = this.cache.size - this.config.maxSize;
     for (let i = 0; i < toRemove && i < entries.length; i++) {
-      this.cache.delete(entries[i].key);
+      this.cache.delete(entries[i]!.key);
     }
   }
 }
 
-const defaultStore = new CacheStore();
+const defaultStore = new CacheStore<unknown>();
 
 export function cacheGet<T>(key: string): T | null {
   const result = defaultStore.get(key);
-  return result ? result.value : null;
+  return result ? (result.value as T) : null;
 }
 
 export function cacheSet<T>(key: string, value: T): void {
@@ -188,7 +188,7 @@ export function cacheStats(): ReturnType<CacheStore<unknown>["stats"]> {
 }
 
 export async function withCache<T>(key: string, fetcher: () => Promise<T>, ttlMs?: number): Promise<T> {
-  const store = ttlMs ? new CacheStore<T>({ ttlMs }) : defaultStore;
+  const store: CacheStore<T> = ttlMs ? new CacheStore<T>({ ttlMs }) : (defaultStore as unknown as CacheStore<T>);
   return store.getOrFetch(key, fetcher);
 }
 

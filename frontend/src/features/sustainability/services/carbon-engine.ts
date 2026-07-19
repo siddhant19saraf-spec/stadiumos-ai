@@ -1,4 +1,4 @@
-import type { CarbonMetrics, EnergyMetrics, WasteMetrics, WaterMetrics } from "../types";
+import type { CarbonMetrics, EnergyMetrics, WasteMetrics } from "../types";
 import { CARBON_FACTORS } from "../constants";
 
 function rf(min: number, max: number, d = 1): number {

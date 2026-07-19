@@ -1,9 +1,4 @@
-import type { SimulationScenario, StadiumZone, ZoneLiveStatus, LiveAnalytics, DigitalIncident, TimelineSnapshot } from "../types";
-import { STADIUM_ZONES, ZONE_CAPACITIES, SCENARIO_CONFIGS } from "../constants";
-
-function uid(prefix: string): string {
-  return `${prefix}-${Date.now().toString(36)}-${Math.floor(Math.random() * 999)}`;
-}
+import type { SimulationScenario, StadiumZone, ZoneLiveStatus, LiveAnalytics, TimelineSnapshot } from "../types";
 
 export interface ISimulationEngine {
   applyScenario(scenario: SimulationScenario, zones: StadiumZone[], currentStatuses: Map<string, ZoneLiveStatus>): Map<string, ZoneLiveStatus>;
@@ -13,8 +8,6 @@ export interface ISimulationEngine {
 export class MockSimulationEngine implements ISimulationEngine {
   applyScenario(scenario: SimulationScenario, zones: StadiumZone[], currentStatuses: Map<string, ZoneLiveStatus>): Map<string, ZoneLiveStatus> {
     const updated = new Map(currentStatuses);
-    const config = SCENARIO_CONFIGS[scenario];
-
     for (const zone of zones) {
       const current = updated.get(zone.id);
       if (!current) continue;

@@ -1,5 +1,5 @@
-import type { TrafficRoad, TrafficCondition, ParkingLotStatus, CongestionLevel, RoadStatus } from "../types";
-import { TRAFFIC_ROADS, ALERT_THRESHOLDS } from "../constants";
+import type { TrafficRoad, TrafficCondition, ParkingLotStatus, CongestionLevel } from "../types";
+import { TRAFFIC_ROADS } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;

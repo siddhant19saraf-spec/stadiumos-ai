@@ -1,9 +1,9 @@
 import type {
   Incident, IncidentType, Severity, Priority, AIAnalysis, TimelineEntry,
-  SmartAlert, ResponseTeam, AIRecommendation, EmergencyAnalytics, ResponseTimePoint, EvacuationStatus,
+  SmartAlert, ResponseTeam, AIRecommendation, EmergencyAnalytics, ResponseTimePoint,
 } from "../types";
 import {
-  INCIDENT_TYPE_CONFIG, INCIDENT_LOCATIONS, REPORTED_BY, TEAM_CONFIGS,
+  INCIDENT_TYPE_CONFIG, INCIDENT_LOCATIONS, REPORTED_BY,
   RESPONSE_THRESHOLDS, EVACUATION_EXITS,
 } from "../constants";
 
@@ -27,7 +27,6 @@ const INCIDENT_TYPES: IncidentType[] = [
 ];
 
 const SEVERITIES: Severity[] = ["critical", "high", "medium", "low"];
-const PRIORITIES: Priority[] = ["p0", "p1", "p2", "p3"];
 
 const INCIDENT_DESCRIPTIONS: Record<IncidentType, string[]> = {
   medical_emergency: [
@@ -104,7 +103,6 @@ function generateTimeline(incidentId: string, reportedAt: string): TimelineEntry
 
 export class EmergencySimulationEngine {
   private tick = 0;
-  private resolvedIds: Set<string> = new Set();
 
   generateIncident(existingCount: number): Incident | null {
     this.tick++;
@@ -149,7 +147,7 @@ export class EmergencySimulationEngine {
     };
   }
 
-  private generateAIAnalysis(type: IncidentType, severity: Severity, location: string, estimatedMinutes: number): AIAnalysis {
+  private generateAIAnalysis(type: IncidentType, severity: Severity, location: string, _estimatedMinutes: number): AIAnalysis {
     const routeOptions = EVACUATION_EXITS.map((e) => e.label);
     const selectedRoutes = routeOptions.sort(() => Math.random() - 0.5).slice(0, rand(2, 4));
     const escalationProb = severity === "critical" ? randf(45, 85, 0) : severity === "high" ? randf(20, 55, 0) : randf(5, 30, 0);
@@ -175,7 +173,7 @@ export class EmergencySimulationEngine {
     };
   }
 
-  private estimateImpact(type: IncidentType, severity: Severity): string {
+  private estimateImpact(type: IncidentType, _severity: Severity): string {
     const impacts: Record<string, string[]> = {
       medical_emergency: ["Fan health at risk. Potential fatality without immediate care.", "Medical resources will be strained for 20-45 minutes."],
       fire: ["Structural damage to affected zone. Potential for spread to adjacent areas.", "Evacuation of 2000+ spectators likely required."],

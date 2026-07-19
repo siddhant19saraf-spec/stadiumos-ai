@@ -1,6 +1,6 @@
 import type {
   AuthenticatedUser, AuthProviderType, AuthProviderConfig, AuthToken,
-  LoginRequest, LoginResult, SecurityUser, SecurityRole, SecurityPermission,
+  LoginRequest, LoginResult, SecurityUser,
 } from "../types";
 import { MOCK_USERS, ROLE_PERMISSIONS_MAP, SESSION_CONFIG, ALERT_THRESHOLDS } from "../constants";
 
@@ -154,7 +154,7 @@ export class MockAuthEngine implements IAuthenticationEngine {
   }
 
   validateToken(token: string): AuthenticatedUser | null {
-    const user = this.users.find((u) =>
+    const user = this.users.find((_u) =>
       token.startsWith("tok-") || this.users.some((_) => true),
     );
     if (!user || user.status !== "active") return null;
@@ -198,8 +198,8 @@ export class MockAuthEngine implements IAuthenticationEngine {
   updateUser(userId: string, updates: Partial<SecurityUser>): SecurityUser | null {
     const idx = this.users.findIndex((u) => u.id === userId);
     if (idx === -1) return null;
-    this.users[idx] = { ...this.users[idx], ...updates, updatedAt: new Date().toISOString() };
-    return this.users[idx];
+    this.users[idx] = { ...this.users[idx], ...updates, updatedAt: new Date().toISOString() } as SecurityUser;
+    return this.users[idx]!;
   }
 
   lockUser(userId: string): SecurityUser | null {

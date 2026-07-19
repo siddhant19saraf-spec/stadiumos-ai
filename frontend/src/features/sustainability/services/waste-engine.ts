@@ -92,7 +92,7 @@ export class MockWasteEngine implements IWasteEngine {
     ];
   }
 
-  private factors(type: string, m: WasteMetrics): string[] {
+  private factors(_type: string, m: WasteMetrics): string[] {
     const f = [`Waste type: ${m.assetId.split("-")[1]}`, `Current volume: ${m.totalKg}kg`];
     if (m.temperature > 30 && (m.assetId.includes("food") || m.assetId.includes("organic"))) {
       f.push("Elevated temperature accelerates decomposition — odor and pest risk");

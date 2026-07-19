@@ -8,7 +8,7 @@ export function createMockFetch<T>(data: T, ok = true, status = 200): ReturnType
   });
 }
 
-export function createMockFetchError(message = "Network error", status = 500): ReturnType<typeof vi.fn> {
+export function createMockFetchError(message = "Network error", _status = 500): ReturnType<typeof vi.fn> {
   return vi.fn().mockRejectedValue(new Error(message));
 }
 

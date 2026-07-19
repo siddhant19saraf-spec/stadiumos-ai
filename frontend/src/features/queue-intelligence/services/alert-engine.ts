@@ -15,8 +15,6 @@ export class MockAlertEngine implements IAlertEngine {
 
   evaluate(statuses: Map<string, QueuePointStatus>, inventory: Map<string, InventoryItem>): QueueAlert[] {
     const alerts: QueueAlert[] = [];
-    const now = new Date().toISOString();
-
     for (const [, s] of statuses) {
       const ackKey = `queue-${s.queuePointId}`;
       if (s.estimatedWaitMin >= ALERT_THRESHOLDS.CRITICAL_QUEUE_MIN && !this.ackSet.has(ackKey + "-critical")) {

@@ -4,8 +4,6 @@ import { AppError, ErrorCode } from "@/lib/error-handler";
 import { createMockFetch, createMockFetchError, createMockAbortError } from "../fixtures/mocks";
 
 describe("ApiClient — HTTP Methods", () => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
   });
@@ -27,9 +25,9 @@ describe("ApiClient — HTTP Methods", () => {
     vi.stubGlobal("fetch", fetchMock);
     const result = await apiClient.post("/api/test", { name: "test" });
     expect(result.data).toBeDefined();
-    const callArgs = fetchMock.mock.calls[0];
-    expect(callArgs[1].method).toBe("POST");
-    expect(callArgs[1].body).toBe(JSON.stringify({ name: "test" }));
+    const callArgs = fetchMock.mock.calls[0]!;
+    expect(callArgs[1]!.method).toBe("POST");
+    expect(callArgs[1]!.body).toBe(JSON.stringify({ name: "test" }));
   });
 
   it("should perform PUT request", async () => {
@@ -37,24 +35,24 @@ describe("ApiClient — HTTP Methods", () => {
     vi.stubGlobal("fetch", fetchMock);
     const result = await apiClient.put("/api/test/1", { name: "updated" });
     expect(result.data).toBeDefined();
-    const callArgs = fetchMock.mock.calls[0];
-    expect(callArgs[1].method).toBe("PUT");
+    const callArgs = fetchMock.mock.calls[0]!;
+    expect(callArgs[1]!.method).toBe("PUT");
   });
 
   it("should perform PATCH request", async () => {
     const fetchMock = createMockFetch({ success: true });
     vi.stubGlobal("fetch", fetchMock);
     await apiClient.patch("/api/test/1", { name: "patched" });
-    const callArgs = fetchMock.mock.calls[0];
-    expect(callArgs[1].method).toBe("PATCH");
+    const callArgs = fetchMock.mock.calls[0]!;
+    expect(callArgs[1]!.method).toBe("PATCH");
   });
 
   it("should perform DELETE request", async () => {
     const fetchMock = createMockFetch({ success: true });
     vi.stubGlobal("fetch", fetchMock);
     await apiClient.delete("/api/test/1");
-    const callArgs = fetchMock.mock.calls[0];
-    expect(callArgs[1].method).toBe("DELETE");
+    const callArgs = fetchMock.mock.calls[0]!;
+    expect(callArgs[1]!.method).toBe("DELETE");
   });
 
   it("should perform paginated GET request", async () => {

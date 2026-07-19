@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { Car, CarFront, Star, Zap, Accessibility, ParkingCircle, Activity, Gauge } from "lucide-react";
+import { Car, CarFront, Star, Zap, Accessibility, ParkingCircle, Activity } from "lucide-react";
 import type { SmartParkingState } from "../types";
 
 interface CommandCenterProps {

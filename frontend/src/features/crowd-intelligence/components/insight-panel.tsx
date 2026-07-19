@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Brain, AlertTriangle, TrendingUp, Info, Lightbulb, Eye } from "lucide-react";
+import { Brain, AlertTriangle, TrendingUp, Lightbulb, Eye } from "lucide-react";
 import type { AIInsight } from "../types";
 
 interface InsightPanelProps {

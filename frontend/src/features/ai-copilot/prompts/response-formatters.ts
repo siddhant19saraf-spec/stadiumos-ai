@@ -12,10 +12,8 @@ export function formatAIResponse(raw: string): Omit<CopilotMessage, "id" | "time
 
 function extractReasoning(raw: string): AIReasoning | null {
   const summary = extractSection(raw, "Summary", "Reasoning") ?? raw.slice(0, 200);
-  const reasoningText = extractSection(raw, "Reasoning", "Evidence");
   const evidenceText = extractSection(raw, "Evidence", "Confidence");
   const confidenceStr = extractValue(raw, "Confidence");
-  const priorityStr = extractValue(raw, "Priority");
   const actionText = extractSection(raw, "Recommended Action", "Expected Outcome");
   const outcomeText = extractValue(raw, "Expected Outcome");
 

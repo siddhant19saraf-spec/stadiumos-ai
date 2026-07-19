@@ -66,7 +66,7 @@ export default function LoginPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Sign in to your StadiumOS AI account
+            Sign in to StadiumOS Smart Stadium Platform
           </p>
         </div>
 

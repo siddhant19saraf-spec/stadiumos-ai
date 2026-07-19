@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import { cn } from "@/lib/utils";
 import { BarChart3, TrendingUp, DollarSign, Users, Clock, Shield } from "lucide-react";
 import type { TournamentAnalytics, DailyStat } from "../types";
@@ -58,7 +58,7 @@ export function ExecutiveAnalytics({ analytics, dailyStats, className }: Executi
         <div>
           <h4 className="mb-2 text-xs font-medium text-card-foreground">Daily Attendance Trend</h4>
           <div className="flex items-end gap-1" style={{ height: 60 }}>
-            {dailyStats.map((d, i) => {
+            {dailyStats.map((d, _i) => {
               const max = Math.max(...dailyStats.map((ds) => ds.totalAttendance), 1);
               const h = (d.totalAttendance / max) * 55;
               return (

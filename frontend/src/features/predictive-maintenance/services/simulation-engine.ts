@@ -11,9 +11,8 @@ export class MockSimulationEngine implements ISimulationEngine {
     return SIMULATION_SCENARIOS;
   }
 
-  run(healthMap: Map<string, AssetHealth>, predictions: FailurePrediction[], orders: WorkOrder[], scenarioId: string): SimulationResult {
+  run(healthMap: Map<string, AssetHealth>, predictions: FailurePrediction[], _orders: WorkOrder[], scenarioId: string): SimulationResult {
     const scenario = SIMULATION_SCENARIOS.find((s) => s.id === scenarioId);
-    const baseCost = 0;
     const scenarios: string[] = [];
     const downtime = { predicted: 0, mitigated: 0 };
     const costImpact = { predicted: 0, mitigated: 0 };

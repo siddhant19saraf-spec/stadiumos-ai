@@ -11,12 +11,12 @@ const stats = [
 
 export default function ParkingPage() {
   return (
-    <Shell title="Smart Parking">
-      <ErrorBoundary module="Parking">
+    <Shell title="Smart Parking & Traffic">
+      <ErrorBoundary module="Smart Parking & Traffic">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Smart Parking</h2>
-            <p className="text-muted-foreground">Occupancy prediction, dynamic pricing, and valet routing.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Smart Parking & Traffic</h2>
+            <p className="text-muted-foreground">Stadium parking occupancy prediction, dynamic pricing, traffic flow, and valet routing.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((s) => (

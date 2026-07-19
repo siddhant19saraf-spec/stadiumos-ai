@@ -11,12 +11,12 @@ const slots = [
 
 export default function SchedulingPage() {
   return (
-    <Shell title="Tournament Operations">
-      <ErrorBoundary module="Scheduling">
+    <Shell title="Tournament & Match Operations">
+      <ErrorBoundary module="Tournament & Match Operations">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Tournament Operations</h2>
-            <p className="text-muted-foreground">Schedule optimization, venue management, and conflict detection.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Tournament & Match Operations</h2>
+            <p className="text-muted-foreground">Tournament scheduling, multi-venue match coordination, fixture conflict detection, and game-day timeline management.</p>
           </div>
           <Card>
             <CardHeader><CardTitle>Today's Schedule</CardTitle></CardHeader>

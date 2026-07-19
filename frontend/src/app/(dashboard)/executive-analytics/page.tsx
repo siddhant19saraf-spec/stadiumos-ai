@@ -4,8 +4,8 @@ import { ExecutiveDashboard } from "@/features/executive-analytics/components/ex
 
 export default function ExecutiveAnalyticsPage() {
   return (
-    <Shell title="Executive Analytics">
-      <ErrorBoundary module="Executive Analytics">
+    <Shell title="Executive Decision Support">
+      <ErrorBoundary module="Executive Decision Support">
         <ExecutiveDashboard />
       </ErrorBoundary>
     </Shell>

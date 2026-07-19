@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Clock, MapPin, Brain, AlertTriangle, ChevronRight } from "lucide-react";

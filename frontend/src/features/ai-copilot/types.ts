@@ -118,6 +118,23 @@ export interface AIProviderConfig {
   apiKey?: string;
 }
 
+export interface AIProviderResponse {
+  content: string;
+  reasoning: AIReasoning;
+  suggestions: string[];
+  raw: string;
+}
+
+export interface AIProvider {
+  readonly name: string;
+  analyze(context: OperationalContext): Promise<AIProviderResponse>;
+  query(context: OperationalContext, question: string): Promise<AIProviderResponse>;
+  generateAlert(context: OperationalContext, trigger: string): Promise<AIProviderResponse>;
+  compareDecisions(context: OperationalContext, scenario: string, options: string[]): Promise<{ recommendation: string; reasoning: AIReasoning }>;
+  summarize(context: OperationalContext): Promise<AIProviderResponse>;
+  isAvailable(): Promise<boolean>;
+}
+
 export interface CopilotState {
   messages: CopilotMessage[];
   isProcessing: boolean;

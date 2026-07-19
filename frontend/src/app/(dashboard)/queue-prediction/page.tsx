@@ -11,12 +11,12 @@ const metrics = [
 
 export default function QueuePredictionPage() {
   return (
-    <Shell title="Queue Analytics">
-      <ErrorBoundary module="Queue">
+    <Shell title="Queue & Concourse Intelligence">
+      <ErrorBoundary module="Queue & Concourse Intelligence">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Queue Analytics</h2>
-            <p className="text-muted-foreground">Real-time wait-time prediction and dynamic lane management.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Queue & Concourse Intelligence</h2>
+            <p className="text-muted-foreground">Stadium concourse wait-time prediction, concession queue monitoring, and dynamic lane management.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {metrics.map((m) => (

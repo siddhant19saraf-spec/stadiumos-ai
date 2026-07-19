@@ -4,9 +4,6 @@ import { SUSTAINABILITY_TARGETS } from "../constants";
 function rf(min: number, max: number, d = 1): number {
   return parseFloat((Math.random() * (max - min) + min).toFixed(d));
 }
-function ri(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 export interface IAnalyticsEngine {
   computeSummary(energy: EnergyMetrics[], water: WaterMetrics[], waste: WasteMetrics[], carbon: CarbonMetrics): SustainabilitySummary;

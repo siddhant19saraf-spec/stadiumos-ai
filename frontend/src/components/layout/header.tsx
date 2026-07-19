@@ -1,9 +1,7 @@
-// @ts-nocheck
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/stores/ui-store";
-import { cn } from "@/lib/utils";
 import { Sun, Moon, Bell, Menu, LogOut, User } from "lucide-react";
 import {
   DropdownMenu,

@@ -11,12 +11,12 @@ const categories = [
 
 export default function IncidentsPage() {
   return (
-    <Shell title="Incident Analytics">
-      <ErrorBoundary module="Incidents">
+    <Shell title="Incident Intelligence">
+      <ErrorBoundary module="Incident Intelligence">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Incident Analytics</h2>
-            <p className="text-muted-foreground">Root cause analysis, pattern detection, and post-event reports.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Incident Intelligence</h2>
+            <p className="text-muted-foreground">Stadium incident root cause analysis, pattern detection, and safety trend intelligence.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {categories.map((c) => (

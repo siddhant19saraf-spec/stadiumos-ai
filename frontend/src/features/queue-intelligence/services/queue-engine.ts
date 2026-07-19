@@ -1,5 +1,5 @@
 import type { QueuePoint, QueuePointStatus, QueueStatus, CounterStatus } from "../types";
-import { QUEUE_POINTS, MENU_ITEMS } from "../constants";
+import { QUEUE_POINTS } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -7,10 +7,6 @@ function rand(min: number, max: number): number {
 function randf(min: number, max: number, d = 1): number {
   return parseFloat((Math.random() * (max - min) + min).toFixed(d));
 }
-function pick<T>(arr: readonly T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]!;
-}
-
 export interface IQueueEngine {
   getQueuePoints(): QueuePoint[];
   simulateStatuses(points: QueuePoint[]): Map<string, QueuePointStatus>;
@@ -28,7 +24,6 @@ export class MockQueueEngine implements IQueueEngine {
     this.tick++;
     const now = new Date().toISOString();
     const hour = new Date().getHours();
-    const isEventWindow = hour >= 8 && hour <= 23;
     const eventPhase = this.eventPhase(hour);
     const map = new Map<string, QueuePointStatus>();
 

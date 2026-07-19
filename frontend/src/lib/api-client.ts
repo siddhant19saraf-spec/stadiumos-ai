@@ -39,7 +39,7 @@ const defaultConfig: ApiConfig = {
   },
 };
 
-class ApiClient {
+export class ApiClient {
   private config: ApiConfig;
   private requestInterceptors: RequestInterceptor[] = [];
   private responseInterceptors: ResponseInterceptor[] = [];

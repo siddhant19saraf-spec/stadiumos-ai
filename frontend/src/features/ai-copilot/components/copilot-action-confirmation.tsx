@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle2, Loader2, XCircle, ArrowRight, Clock, Target } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Loader2, XCircle, Clock, Target } from "lucide-react";
 import type { ActionExecution, DecisionOption } from "../types";
 
 interface CopilotActionConfirmationProps {

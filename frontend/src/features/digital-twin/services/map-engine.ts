@@ -1,4 +1,4 @@
-import type { StadiumZone, MapEntity, LayerConfig, LayerId } from "../types";
+import type { StadiumZone, MapEntity, LayerId } from "../types";
 
 export interface IMapEngine {
   getVisibleEntities(entities: MapEntity[], enabledLayers: LayerId[]): MapEntity[];

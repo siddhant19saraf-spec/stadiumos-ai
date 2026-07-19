@@ -104,7 +104,7 @@ export class GeminiProvider implements AIProvider {
         recommendedAction: "Review AI assessment",
         expectedOutcome: "Awaiting operator confirmation",
       },
-      suggestions: formatted.suggestions,
+      suggestions: formatted.suggestions ?? [],
       raw,
     };
   }

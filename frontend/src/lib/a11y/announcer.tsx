@@ -4,12 +4,6 @@ import { useEffect, useRef, useCallback, createContext, useContext, type ReactNo
 
 type Assertiveness = "polite" | "assertive";
 
-interface Announcement {
-  message: string;
-  assertiveness: Assertiveness;
-  id: number;
-}
-
 interface AnnouncerContextValue {
   announce: (message: string, assertiveness?: Assertiveness) => void;
 }

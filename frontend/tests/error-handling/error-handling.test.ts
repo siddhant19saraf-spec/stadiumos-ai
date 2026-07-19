@@ -1,19 +1,18 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { AppError, ErrorCode, isAppError, getErrorMessage, getErrorCode } from "@/lib/error-handler";
+import { MockNotificationEngine } from "@/features/emergency-response/services/notification-engine";
 import { MockIncidentEngine } from "@/features/emergency-response/services/incident-engine";
 import { MockDispatchEngine } from "@/features/emergency-response/services/dispatch-engine";
-import { MockAnalyticsEngine as EmergencyAnalytics } from "@/features/emergency-response/services/analytics-engine";
-import { MockRecommendationEngine as ERecEngine } from "@/features/emergency-response/services/recommendation-engine";
-import { MockNotificationEngine } from "@/features/emergency-response/services/notification-engine";
+import { MockAnalyticsEngine } from "@/features/emergency-response/services/analytics-engine";
+import { MockRecommendationEngine } from "@/features/emergency-response/services/recommendation-engine";
 import { MockSessionEngine } from "@/features/enterprise-security/services/session-engine";
-import { MockAuthEngine } from "@/features/enterprise-security/services/auth-engine";
 import { makeIncident, makeResponseTeam } from "../fixtures/factories";
 
-const incEngine = new MockIncidentEngine();
-const dispatchEngine = new MockDispatchEngine();
-const analytics = new EmergencyAnalytics();
-const recEngine = new ERecEngine();
 const notifEngine = new MockNotificationEngine();
+const analytics = new MockAnalyticsEngine();
+const dispatchEngine = new MockDispatchEngine();
+const incEngine = new MockIncidentEngine();
+const recEngine = new MockRecommendationEngine();
 
 describe("AppError — Error Creation", () => {
   it("should create error with message", () => {
@@ -213,8 +212,7 @@ describe("Error Handling — Network Failures", () => {
     const fetchMock = vi.fn().mockRejectedValue(new TypeError("Failed to fetch"));
     vi.stubGlobal("fetch", fetchMock);
     try {
-      const response = await fetch("http://localhost:8000/api/test");
-      const data = await response.json();
+      await fetch("http://localhost:8000/api/test");
     } catch (e) {
       expect(e).toBeDefined();
     }
@@ -289,29 +287,30 @@ describe("Error Handling — Duplicate Prevention", () => {
 
 describe("Error Handling — Session/Auth Edge Cases", () => {
   const sessionEngine = new MockSessionEngine();
+  const sess = (sessionEngine as any);
 
-  it("should handle expired session tokens", async () => {
-    const session = await sessionEngine.create({ id: "u-1", role: "operator" } as any);
-    const valid = await sessionEngine.validate(session.token);
+  it("should handle expired session tokens", () => {
+    const session = sess.create({ id: "u-1", role: "operator" });
+    const valid = sess.validate(session.token);
     expect(valid).toBeDefined();
   });
 
-  it("should handle invalid tokens", async () => {
-    const valid = await sessionEngine.validate("invalid-token");
+  it("should handle invalid tokens", () => {
+    const valid = sess.validate("invalid-token");
     expect(valid).toBeDefined();
   });
 
-  it("should handle revoked sessions", async () => {
-    const session = await sessionEngine.create({ id: "u-1", role: "operator" } as any);
-    await sessionEngine.invalidate(session.token);
-    const valid = await sessionEngine.validate(session.token);
+  it("should handle revoked sessions", () => {
+    const session = sess.create({ id: "u-1", role: "operator" });
+    sess.invalidate(session.token);
+    const valid = sess.validate(session.token);
     expect(valid).toBe(false);
   });
 
-  it("should handle multiple session refreshes", async () => {
-    const session = await sessionEngine.create({ id: "u-1", role: "operator" } as any);
-    const r1 = await sessionEngine.refresh(session.token);
-    const r2 = await sessionEngine.refresh(session.token);
+  it("should handle multiple session refreshes", () => {
+    const session = sess.create({ id: "u-1", role: "operator" });
+    const r1 = sess.refresh(session.token);
+    const r2 = sess.refresh(session.token);
     expect(r1).toBeDefined();
     expect(r2).toBeDefined();
   });

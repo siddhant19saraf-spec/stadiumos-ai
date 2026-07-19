@@ -21,7 +21,7 @@ const severityColors: Record<string, string> = {
 };
 
 export function LiveIncidentsPanel({ incidents, onSelect, className }: LiveIncidentsPanelProps) {
-  const active = incidents.filter((i) => i.status === "active" || i.status === "acknowledged");
+  const active = incidents.filter((i) => i.status === "active");
   const sorted = [...active].sort((a, b) => {
     const sa = INCIDENT_SEVERITIES.indexOf(a.severity);
     const sb = INCIDENT_SEVERITIES.indexOf(b.severity);

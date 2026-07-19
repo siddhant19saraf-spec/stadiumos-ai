@@ -8,7 +8,7 @@ import { reportingEngine } from "../services/reporting-engine";
 import { notificationEngine } from "../services/notification-engine";
 import { executiveService, createState } from "../services/executive-service";
 import { EXECUTIVE_ROLES, ALERT_THRESHOLDS, KPI_CATEGORY_LABELS, MODULE_NAMES } from "../constants";
-import type { ExecutiveRole, ExecutiveSummary, ExecutiveKpi, ModuleSnapshot } from "../types";
+import type { ExecutiveRole, ExecutiveSummary } from "../types";
 
 /* ===================================================================
    Constants
@@ -245,7 +245,7 @@ describe("DecisionEngine", () => {
     if (decisions.length >= 2) {
       const pm: Record<string, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
       for (let i = 0; i < decisions.length - 1; i++) {
-        expect(pm[decisions[i].priority]).toBeLessThanOrEqual(pm[decisions[i + 1].priority]);
+        expect(pm[decisions[i]!.priority]!).toBeLessThanOrEqual(pm[decisions[i + 1]!.priority]!);
       }
     }
   });
@@ -271,7 +271,7 @@ describe("DecisionEngine", () => {
     const snapshots = executiveEngine.getModuleSnapshots();
     const decisions = decisionEngine.generate(summary, snapshots, "ceo");
     if (decisions.length > 0) {
-      const targetId = decisions[0].id;
+      const targetId = decisions[0]!.id;
       const updated = decisionEngine.implement(targetId, decisions, "ceo");
       const implemented = updated.find((d) => d.id === targetId);
       expect(implemented?.status).toBe("implemented");
@@ -614,7 +614,7 @@ describe("NotificationEngine", () => {
     };
     const alerts = notificationEngine.generateAlerts(summary, [], []);
     if (alerts.length > 0) {
-      const targetId = alerts[0].id;
+      const targetId = alerts[0]!.id;
       const updated = notificationEngine.acknowledge(targetId, alerts);
       const acked = updated.find((a) => a.id === targetId);
       expect(acked?.acknowledged).toBe(true);
@@ -696,14 +696,14 @@ describe("ExecutiveService", () => {
     expect(result).toHaveProperty("answer");
     expect(result).toHaveProperty("confidence");
     expect(newState.copilotHistory.length).toBe(2);
-    expect(newState.copilotHistory[0].role).toBe("user");
-    expect(newState.copilotHistory[1].role).toBe("assistant");
+    expect(newState.copilotHistory[0]!.role).toBe("user");
+    expect(newState.copilotHistory[1]!.role).toBe("assistant");
   });
 
   it("should implement a decision", () => {
     const state = executiveService.initialize("ceo");
     if (state.decisions.length > 0) {
-      const targetId = state.decisions[0].id;
+      const targetId = state.decisions[0]!.id;
       const updated = executiveService.implementDecision(state, targetId, "ceo");
       const decision = updated.decisions.find((d) => d.id === targetId);
       expect(decision?.status).toBe("implemented");
@@ -713,7 +713,7 @@ describe("ExecutiveService", () => {
   it("should acknowledge an alert", () => {
     const state = executiveService.initialize("ceo");
     if (state.alerts.length > 0) {
-      const targetId = state.alerts[0].id;
+      const targetId = state.alerts[0]!.id;
       const updated = executiveService.acknowledgeAlert(state, targetId);
       const alert = updated.alerts.find((a) => a.id === targetId);
       expect(alert?.acknowledged).toBe(true);

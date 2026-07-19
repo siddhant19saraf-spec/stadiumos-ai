@@ -1,5 +1,5 @@
 import type { ExecutiveKpi, ExecutiveSummary, ExecutiveRole, KpiCategory } from "../types";
-import { KPI_CATEGORY_LABELS, KPI_CATEGORY_ICONS } from "../constants";
+import { KPI_CATEGORY_LABELS } from "../constants";
 
 function rf(min: number, max: number, d = 1): number {
   return parseFloat((Math.random() * (max - min) + min).toFixed(d));
@@ -16,7 +16,7 @@ export interface IAnalyticsEngine {
 }
 
 export class MockAnalyticsEngine implements IAnalyticsEngine {
-  aggregateKpis(summary: ExecutiveSummary, kpis: ExecutiveKpi[]) {
+  aggregateKpis(_summary: ExecutiveSummary, kpis: ExecutiveKpi[]) {
     const categories = new Map<KpiCategory, { total: number; count: number }>();
     for (const kpi of kpis) {
       const existing = categories.get(kpi.category) ?? { total: 0, count: 0 };
@@ -31,7 +31,7 @@ export class MockAnalyticsEngine implements IAnalyticsEngine {
     }));
   }
 
-  getCategoryBreakdown(role: ExecutiveRole) {
+  getCategoryBreakdown(_role: ExecutiveRole) {
     return Object.entries(KPI_CATEGORY_LABELS).map(([key, label]) => ({
       category: key,
       value: ri(45, 95),

@@ -1,11 +1,10 @@
-import type { DigitalTwinState, StadiumZone, ZoneLiveStatus, MapEntity, DigitalIncident, LiveAnalytics, AIInsight, ZoneRecommendation, LayerConfig, SimulationScenario, TimelineSnapshot } from "../types";
-import { STADIUM_ZONES, LAYER_CONFIGS } from "../constants";
+import type { DigitalTwinState, StadiumZone, SimulationScenario } from "../types";
+import { LAYER_CONFIGS } from "../constants";
 import { digitalTwinEngine } from "./digital-twin-engine";
 import { simulationEngine } from "./simulation-engine";
 import { mapEngine } from "./map-engine";
 import { predictionEngine } from "./prediction-engine";
 import { recommendationEngine } from "./recommendation-engine";
-import { analyticsEngine } from "./analytics-engine";
 
 class DigitalTwinService {
   private static instance: DigitalTwinService;

@@ -1,4 +1,4 @@
-import type { SecurityAlert, SecurityAlertType, AlertSeverity, AuditLog, SecurityUser, UserSession } from "../types";
+import type { SecurityAlert, SecurityAlertType, AlertSeverity, AuditLog } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
 export interface ISecurityMonitorEngine {

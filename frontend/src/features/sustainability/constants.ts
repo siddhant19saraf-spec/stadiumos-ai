@@ -39,7 +39,7 @@ export const WATER_ASSETS: WaterAsset[] = [
   { id: "rest-west", name: "West Stand Restrooms", type: "restroom", zone: "west_stand", location: "West Stand Level 1", capacityLiters: 3000, criticality: "medium" },
   { id: "rest-vip", name: "VIP Restrooms", type: "restroom", zone: "vip_lounge", location: "VIP Lounge", capacityLiters: 1000, criticality: "high" },
   { id: "irr-field", name: "Pitch Irrigation", type: "irrigation", zone: "north_stand", location: "Playing Field", capacityLiters: 20000, criticality: "high" },
-  { id: "irr-landscape", name: "Landscape Irrigation", type: "irrigation", zone: "perimeter", location: "Perimeter Gardens", capacityLiters: 8000, criticality: "low" },
+  { id: "irr-landscape", name: "Landscape Irrigation", type: "irrigation", zone: "main_concourse", location: "Perimeter Gardens", capacityLiters: 8000, criticality: "low" },
   { id: "cool-main", name: "Main Cooling Tower", type: "cooling_tower", zone: "roof", location: "Roof Plant Room", capacityLiters: 15000, criticality: "critical" },
   { id: "cool-hvac", name: "HVAC Cooling Loop", type: "cooling_tower", zone: "basement", location: "Basement HVAC Room", capacityLiters: 10000, criticality: "critical" },
   { id: "clean-main", name: "Concourse Cleaning Station", type: "cleaning", zone: "main_concourse", location: "Concourse Level 1", capacityLiters: 2000, criticality: "low" },

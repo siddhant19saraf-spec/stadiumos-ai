@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Activity, Users, Shield, Gauge, Clock, Zap, TrendingUp, Heart, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
+import { Activity, Users, Shield, Gauge, Heart, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
 import type { OperationalSummary } from "../types";
 
 interface CopilotOperationalSummaryProps {

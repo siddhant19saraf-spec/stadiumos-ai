@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { TrendingUp, TrendingDown, Minus, Users, Activity, AlertTriangle, Shield, Thermometer } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Users, Activity, Shield, Thermometer } from "lucide-react";
 import type { CrowdAnalytics } from "../types";
 
 interface CrowdStatsCardsProps {
@@ -11,7 +11,7 @@ interface CrowdStatsCardsProps {
   isRefreshing?: boolean;
 }
 
-function TrendIcon({ value, good, bad }: { value: number; good: "up" | "down"; bad: "up" | "down" }) {
+function TrendIcon({ value, good }: { value: number; good: "up" | "down"; bad: "up" | "down" }) {
   const isGood = good === "up" ? value > 50 : value < 50;
   if (Math.abs(value - 50) < 5) return <Minus className="h-4 w-4 text-muted-foreground" />;
   if (isGood) return <TrendingUp className="h-4 w-4 text-emerald-400" />;

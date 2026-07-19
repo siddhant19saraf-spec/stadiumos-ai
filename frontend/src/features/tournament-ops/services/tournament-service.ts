@@ -1,6 +1,6 @@
 import type {
-  Tournament, Venue, Team, Match, ScheduleSlot, Conflict, AIRecommendation,
-  TournamentAnalytics, OperationalTimelineEntry, PredictiveInsight, ResourceAllocation, TournamentState,
+  TournamentState,
+  TournamentAnalytics,
 } from "../types";
 import { TOURNAMENT, VENUES, TEAMS } from "../constants";
 import { simulationEngine } from "./simulation-engine";

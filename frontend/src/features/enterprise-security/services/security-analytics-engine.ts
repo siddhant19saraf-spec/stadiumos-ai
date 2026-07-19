@@ -1,5 +1,4 @@
-import type { SecurityAnalytics, AuditLog, SecurityAlert, UserSession, SecurityUser, SecurityPermission } from "../types";
-import { ROLE_DEFINITIONS, PERMISSION_LABELS } from "../constants";
+import type { SecurityAnalytics, AuditLog, SecurityAlert, UserSession, SecurityUser } from "../types";
 
 export interface ISecurityAnalyticsEngine {
   computeAnalytics(users: SecurityUser[], sessions: UserSession[], alerts: SecurityAlert[], auditLogs: AuditLog[]): SecurityAnalytics;

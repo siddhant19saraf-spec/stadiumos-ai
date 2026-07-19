@@ -1,5 +1,4 @@
 import type { CopilotQueryResult, ExecutiveSummary, DecisionRecommendation, RiskAssessment, ExecutiveKpi, TimelineEvent } from "../types";
-import { KPI_CATEGORY_LABELS } from "../constants";
 
 export interface ICopilotEngine {
   query(question: string, summary: ExecutiveSummary, decisions: DecisionRecommendation[], risks: RiskAssessment[], kpis: ExecutiveKpi[], timeline: TimelineEvent[]): CopilotQueryResult;
@@ -8,7 +7,7 @@ export interface ICopilotEngine {
 }
 
 export class MockCopilotEngine implements ICopilotEngine {
-  query(question: string, summary: ExecutiveSummary, decisions: DecisionRecommendation[], risks: RiskAssessment[], kpis: ExecutiveKpi[], _timeline: TimelineEvent[]): CopilotQueryResult {
+  query(question: string, summary: ExecutiveSummary, decisions: DecisionRecommendation[], risks: RiskAssessment[], _kpis: ExecutiveKpi[], _timeline: TimelineEvent[]): CopilotQueryResult {
     const q = question.toLowerCase();
     let answer = "";
     const relevantKpis: string[] = [];

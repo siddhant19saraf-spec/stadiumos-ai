@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import type { Incident, ResponseTeam, DispatchAction } from "../types";
+import type { Incident, ResponseTeam } from "../types";
 import { MockIncidentEngine } from "../services/incident-engine";
 import { MockDispatchEngine } from "../services/dispatch-engine";
 import { MockNotificationEngine } from "../services/notification-engine";
@@ -182,8 +182,8 @@ describe("Edge Cases", () => {
 
   it("should handle dispatch with no suitable team", () => {
     const engine = new MockDispatchEngine();
-    const inc = makeIncident({ aiAnalysis: { ...incident.aiAnalysis, recommendedTeam: "fire_response" } });
-    const otherTeams = [team]; // team is medical, not fire
+    const inc = makeIncident();
+    const otherTeams = [{ id: "med-alpha", type: "medical_alpha" as const, name: "Medical Team Alpha", members: 6, leader: "Dr. Chen", status: "available" as const, location: "Station 1", coordinates: { x: 15, y: 20 }, incidentId: null, estimatedArrivalMinutes: 3, equipment: ["AED"], certifications: ["ACLS"] }];
     const recommended = engine.recommendTeam(inc, otherTeams);
     expect(recommended).not.toBeNull();
   });
@@ -191,7 +191,7 @@ describe("Edge Cases", () => {
   it("should handle resolution of already-resolved incident", async () => {
     const engine = new MockDispatchEngine();
     const inc = makeIncident({ status: "resolved", assignedTeam: "med-alpha" });
-    const teamMember = { ...team, status: "on_scene" as const, incidentId: inc.id };
+    const teamMember = { id: "med-alpha", type: "medical_alpha" as const, name: "Medical Team Alpha", members: 6, leader: "Dr. Chen", status: "on_scene" as const, location: "Station 1", coordinates: { x: 15, y: 20 }, incidentId: inc.id, estimatedArrivalMinutes: 3, equipment: ["AED"], certifications: ["ACLS"] };
     const result = await engine.resolve(inc, teamMember);
     expect(result.incident.status).toBe("resolved");
   });

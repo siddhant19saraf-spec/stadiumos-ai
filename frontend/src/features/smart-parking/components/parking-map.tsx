@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { ZoomIn, ZoomOut, RotateCcw, Car, Zap, Accessibility, Star, Bus, Bike } from "lucide-react";
+import { ZoomIn, ZoomOut, RotateCcw, Zap, Accessibility, Star, Bus, Bike } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ParkingLot, ParkingLotStatus, TrafficRoad } from "../types";
 
@@ -28,7 +28,7 @@ const typeColors: Record<string, string> = {
 };
 
 export function ParkingMap({
-  lots, statuses, roads, selectedLotId, selectedRoadId, onSelectLot, onSelectRoad, className,
+  lots, statuses, roads, selectedLotId, onSelectLot, onSelectRoad, className,
 }: ParkingMapProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);

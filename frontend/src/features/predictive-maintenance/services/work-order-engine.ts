@@ -12,13 +12,12 @@ export interface IWorkOrderEngine {
 }
 
 export class MockWorkOrderEngine implements IWorkOrderEngine {
-  generate(healthMap: Map<string, AssetHealth>, assets: MaintenanceAsset[]): WorkOrder[] {
+  generate(healthMap: Map<string, AssetHealth>, _assets: MaintenanceAsset[]): WorkOrder[] {
     const orders: WorkOrder[] = [];
     const now = new Date().toISOString();
 
     for (const [, h] of healthMap) {
       if (h.healthScore > 40) continue;
-      const asset = assets.find((a) => a.id === h.assetId);
       const priority = this.determinePriority(h);
 
       orders.push({

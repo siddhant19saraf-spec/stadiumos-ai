@@ -21,8 +21,9 @@ export function QueueGrowthPanel({ queueGrowth, className }: QueueGrowthPanelPro
   }
 
   const grouped = queueGrowth.reduce<Record<string, QueueGrowthPoint[]>>((acc, q) => {
-    if (!acc[q.location]) acc[q.location] = [];
-    acc[q.location].push(q);
+    const loc = q.location!;
+    if (!acc[loc]) acc[loc] = [];
+    acc[loc].push(q);
     return acc;
   }, {});
 

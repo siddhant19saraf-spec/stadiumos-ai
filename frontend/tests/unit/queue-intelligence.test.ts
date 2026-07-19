@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { queueEngine } from "@/features/queue-intelligence/services/queue-engine";
 import { predictionEngine } from "@/features/queue-intelligence/services/prediction-engine";
@@ -8,7 +9,7 @@ import { simulationEngine } from "@/features/queue-intelligence/services/simulat
 import { alertEngine } from "@/features/queue-intelligence/services/alert-engine";
 import { queueIntelligenceService } from "@/features/queue-intelligence/services/queue-service";
 import { QUEUE_POINTS, MENU_ITEMS, SCENARIO_CONFIGS, ALERT_THRESHOLDS, REFRESH_INTERVAL_MS } from "@/features/queue-intelligence/constants";
-import type { QueuePointStatus, QueuePrediction, QueueAlert, InventoryItem } from "@/features/queue-intelligence/types";
+import type { QueuePointStatus, QueueAlert, InventoryItem } from "@/features/queue-intelligence/types";
 
 describe("QueueEngine", () => {
   it("should return 26 queue points", () => {

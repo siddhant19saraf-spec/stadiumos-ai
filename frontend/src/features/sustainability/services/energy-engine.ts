@@ -116,7 +116,7 @@ export class MockEnergyEngine implements IEnergyEngine {
     return r;
   }
 
-  private factors(type: string, m: EnergyMetrics): string[] {
+  private factors(_type: string, m: EnergyMetrics): string[] {
     const f = [`Load: ${m.consumptionKw}kW / ${m.peakDemandKw}kW peak`, `Source: ${m.source}`];
     if (m.temperature > 42) f.push("Elevated operating temperature suggests cooling inefficiency");
     if (m.powerFactor < 0.88) f.push("Low power factor indicates inductive load issues");

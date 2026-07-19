@@ -1,6 +1,5 @@
-import type { SecurityReport, SecurityAnalytics, SecurityAlert, AuditLog, SecurityUser, SecurityPermission, SecurityRole } from "../types";
-import { PERMISSION_LABELS, ROLE_DEFINITIONS, ROLE_PERMISSIONS_MAP, ALL_PERMISSIONS } from "../constants";
-import { auditEngine } from "./audit-engine";
+import type { SecurityReport, SecurityAnalytics, SecurityAlert, AuditLog, SecurityUser } from "../types";
+import { ROLE_DEFINITIONS, ROLE_PERMISSIONS_MAP, ALL_PERMISSIONS } from "../constants";
 
 export interface ISecurityReportEngine {
   generateSecuritySummary(analytics: SecurityAnalytics, alerts: SecurityAlert[], generatedBy: string): SecurityReport;

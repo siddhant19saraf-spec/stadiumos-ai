@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { TrendingUp, Timer, Brain, AlertTriangle, Clock, Users } from "lucide-react";
+import { Timer, Brain, Clock, Users } from "lucide-react";
 import type { QueuePrediction } from "../types";
 
 interface PredictionPanelProps {

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Fn = (...args: any[]) => any;
+export type Fn = (...args: any[]) => unknown;
 
 interface MemoizeOptions {
   maxSize?: number;
@@ -18,7 +18,7 @@ export function memoize<T extends Fn>(fn: T, options: MemoizeOptions = {}): T {
   const { maxSize = DEFAULT_MAX_SIZE, ttlMs, keyFn } = options;
   const cache = new Map<string, CacheEntry<ReturnType<T>>>();
 
-  return ((...args: any[]) => {
+  return ((...args: unknown[]) => {
     const key = keyFn ? keyFn(...args) : JSON.stringify(args);
     const now = Date.now();
     const existing = cache.get(key);
@@ -31,7 +31,7 @@ export function memoize<T extends Fn>(fn: T, options: MemoizeOptions = {}): T {
     }
 
     const result = fn(...args);
-    cache.set(key, { value: result, expiresAt: now + (ttlMs ?? Infinity) });
+    cache.set(key, { value: result as ReturnType<T>, expiresAt: now + (ttlMs ?? Infinity) });
 
     if (cache.size > maxSize) {
       const firstKey = cache.keys().next().value;
@@ -42,7 +42,7 @@ export function memoize<T extends Fn>(fn: T, options: MemoizeOptions = {}): T {
   }) as T;
 }
 
-export async function memoizeAsync<T extends (...args: Parameters<Fn>) => Promise<unknown>>(
+export async function memoizeAsync<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
   options: MemoizeOptions = {},
 ): Promise<T> {
@@ -50,7 +50,7 @@ export async function memoizeAsync<T extends (...args: Parameters<Fn>) => Promis
   const cache = new Map<string, CacheEntry<Awaited<ReturnType<T>>>>();
   const pending = new Map<string, Promise<Awaited<ReturnType<T>>>>();
 
-  return ((...args: Parameters<Fn>) => {
+  return ((...args: unknown[]) => {
     const key = keyFn ? keyFn(...args) : JSON.stringify(args);
     const now = Date.now();
     const existing = cache.get(key);
@@ -65,14 +65,14 @@ export async function memoizeAsync<T extends (...args: Parameters<Fn>) => Promis
     const pendingPromise = pending.get(key);
     if (pendingPromise) return pendingPromise;
 
-    const promise = fn(...args).then((result: Awaited<ReturnType<T>>) => {
-      cache.set(key, { value: result, expiresAt: now + (ttlMs ?? Infinity) });
+    const promise = fn(...args).then((result: unknown) => {
+      cache.set(key, { value: result as Awaited<ReturnType<T>>, expiresAt: now + (ttlMs ?? Infinity) });
       pending.delete(key);
       if (cache.size > maxSize) {
         const firstKey = cache.keys().next().value;
         if (firstKey !== undefined) cache.delete(firstKey);
       }
-      return result;
+      return result as Awaited<ReturnType<T>>;
     }).catch((err: unknown) => {
       pending.delete(key);
       throw err;

@@ -52,15 +52,15 @@ export default function CommandCenterPage() {
 
   if (isLoading || !data) {
     return (
-      <Shell title="Command Center">
-        <LoadingPage message="Loading command center..." />
+      <Shell title="Stadium Command Center">
+        <LoadingPage message="Loading stadium command center..." />
       </Shell>
     );
   }
 
   return (
-    <Shell title="Command Center">
-      <ErrorBoundary module="Command Center">
+    <Shell title="Stadium Command Center">
+      <ErrorBoundary module="Stadium Command Center">
         <div className="space-y-5 pb-8">
           {/* Hero Section */}
           <HeroSection

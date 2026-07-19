@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Brain, ArrowRight, Check, AlertTriangle } from "lucide-react";
+import { Brain, Check, AlertTriangle } from "lucide-react";
 import type { AIRecommendation } from "../types";
 import { useState } from "react";
 

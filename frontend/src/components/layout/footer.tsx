@@ -4,16 +4,16 @@ import { APP_NAME } from "@/constants";
 
 const footerLinks = {
   Platform: [
-    { label: "Command Center", href: "/command-center" },
-    { label: "AI Copilot", href: "#" },
+    { label: "Stadium Command Center", href: "/command-center" },
+    { label: "AI Stadium Copilot", href: "#" },
     { label: "Crowd Intelligence", href: "/crowd-intelligence" },
-    { label: "Executive Analytics", href: "/executive-analytics" },
+    { label: "Executive Decision Support", href: "/executive-analytics" },
   ],
   Solutions: [
-    { label: "Emergency Response", href: "/emergency-response" },
-    { label: "Smart Parking", href: "/parking" },
-    { label: "Energy & Sustainability", href: "/energy" },
-    { label: "Security Center", href: "/enterprise-security" },
+    { label: "Stadium Emergency Response", href: "/emergency-response" },
+    { label: "Smart Parking & Traffic", href: "/parking" },
+    { label: "Stadium Energy & Sustainability", href: "/energy" },
+    { label: "Stadium Security Operations", href: "/enterprise-security" },
   ],
   Company: [
     { label: "About", href: "#" },
@@ -33,7 +33,7 @@ export function Footer() {
               <AppLogo size="sm" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Enterprise-grade AI platform for autonomous stadium and tournament operations.
+              Enterprise-grade AI platform for smart stadium and tournament operations.
             </p>
           </div>
           {Object.entries(footerLinks).map(([title, links]) => (

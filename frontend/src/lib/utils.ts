@@ -53,19 +53,6 @@ export function truncate(text: string, maxLength: number): string {
   return text.slice(0, maxLength - 3).concat("...");
 }
 
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  fn: T,
-  delay: number,
-): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  return (...args: Parameters<T>) => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => fn(...args), delay);
-  };
-}
-
 export function generateId(): string {
   return crypto.randomUUID();
 }

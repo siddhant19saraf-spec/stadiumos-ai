@@ -1,4 +1,4 @@
-import type { ZoneLiveStatus, StadiumZone, ZoneRecommendation } from "../types";
+import type { ZoneLiveStatus, StadiumZone } from "../types";
 
 export interface IPredictionEngine {
   predict30m(statuses: Map<string, ZoneLiveStatus>, zones: StadiumZone[]): Map<string, ZoneLiveStatus>;

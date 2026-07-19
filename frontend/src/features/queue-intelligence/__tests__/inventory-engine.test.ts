@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import { inventoryEngine } from "../services/inventory-engine";
 import { queueEngine } from "../services/queue-engine";

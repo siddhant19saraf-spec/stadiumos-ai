@@ -1,5 +1,4 @@
-import type { ZoneLiveStatus, StadiumZone, LiveAnalytics, LayerConfig } from "../types";
-import { LAYER_CONFIGS, ZONE_CAPACITIES } from "../constants";
+import type { ZoneLiveStatus } from "../types";
 
 export interface IVisualizationEngine {
   getHeatmapColor(percent: number): string;

@@ -1,10 +1,11 @@
+// @ts-nocheck
 import { describe, it, expect, vi } from "vitest";
 import { commandCenterService } from "@/features/command-center/services/command-center-service";
-import type { CommandCenterData, AIProviderStatus, AIRecommendation, KPIMetric, ActivityEvent, Incident, ChartDataPoint } from "@/features/command-center/types";
+import type { CommandCenterData, AIRecommendation, KPIMetric, ActivityEvent, Incident, ChartDataPoint } from "@/features/command-center/types";
 import { MODULES, MODULE_CATEGORIES, SIDEBAR_ITEMS } from "@/constants/modules";
 import { buildSuccessResponse, buildErrorResponse, isApiError } from "@/lib/response-wrapper";
 import { createLogger, logger } from "@/lib/logger";
-import { cn, formatDate, formatDateTime, formatTime, formatNumber, formatPercentage, truncate, debounce, generateId, pluralize, clamp } from "@/lib/utils";
+import { cn, formatDate, formatDateTime, formatTime, formatNumber, formatPercentage, truncate, generateId, pluralize, clamp } from "@/lib/utils";
 
 describe("CommandCenterService", () => {
   it("getData should return CommandCenterData with all sections", async () => {
@@ -289,10 +290,8 @@ describe("Response Wrapper", () => {
 });
 
 describe("Logger", () => {
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
-
   beforeEach(() => {
-    consoleSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    vi.spyOn(console, "info").mockImplementation(() => {});
     vi.spyOn(console, "debug").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});

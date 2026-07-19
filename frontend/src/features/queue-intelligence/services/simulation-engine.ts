@@ -1,10 +1,6 @@
 import type { SimulationScenario, QueuePoint, QueuePointStatus, CounterStatus } from "../types";
 import { SCENARIO_CONFIGS } from "../constants";
 
-function rand(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 export interface ISimulationEngine {
   getAvailableScenarios(): Array<{ id: SimulationScenario; name: string; description: string; details: string; icon: string; color: string; tags: string[] }>;
   applyScenario(scenario: SimulationScenario, points: QueuePoint[], statuses: Map<string, QueuePointStatus>): Map<string, QueuePointStatus>;

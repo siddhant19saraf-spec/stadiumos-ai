@@ -1,4 +1,4 @@
-import type { MiddlewareResult, SecurityContext } from "../types";
+import type { MiddlewareResult, SecurityContext, SecurityPermission } from "../types";
 import { authMiddleware } from "./auth-middleware";
 import { rbacMiddleware } from "./rbac-middleware";
 import { rateLimitMiddleware } from "./rate-limit-middleware";
@@ -6,7 +6,7 @@ import { auditMiddleware } from "./audit-middleware";
 
 export interface ISecurityMiddleware {
   authenticateRequest(token: string | undefined, sessionId: string | undefined, ipAddress: string, userAgent: string, correlationId: string): MiddlewareResult;
-  authorizeRequest(context: SecurityContext | undefined, requiredPermission: string): MiddlewareResult;
+  authorizeRequest(context: SecurityContext | undefined, requiredPermission: SecurityPermission): MiddlewareResult;
   checkRateLimit(identifier: string): MiddlewareResult;
   secureEndpoint(token: string | undefined, sessionId: string | undefined, ipAddress: string, userAgent: string, correlationId: string, requiredPermission: string): Promise<MiddlewareResult>;
   sanitizeInput(input: string): string;
@@ -20,8 +20,8 @@ export class SecurityMiddleware implements ISecurityMiddleware {
     return authMiddleware.authenticate(token, sessionId, ipAddress, userAgent, correlationId);
   }
 
-  authorizeRequest(context: SecurityContext | undefined, requiredPermission: string): MiddlewareResult {
-    const result = rbacMiddleware.requirePermission(context, requiredPermission as any);
+  authorizeRequest(context: SecurityContext | undefined, requiredPermission: SecurityPermission): MiddlewareResult {
+    const result = rbacMiddleware.requirePermission(context, requiredPermission);
     if (!result.allowed) {
       auditMiddleware.logAction(
         result.context ?? context ?? { userId: "unknown", username: "unknown", role: "guest", permissions: [], sessionId: "", correlationId: "", ipAddress: "", userAgent: "", isAuthenticated: false },
@@ -47,7 +47,7 @@ export class SecurityMiddleware implements ISecurityMiddleware {
     const authResult = this.authenticateRequest(token, sessionId, ipAddress, userAgent, correlationId);
     if (!authResult.allowed) return authResult;
 
-    const authzResult = this.authorizeRequest(authResult.context, requiredPermission);
+    const authzResult = this.authorizeRequest(authResult.context, requiredPermission as SecurityPermission);
     return authzResult;
   }
 

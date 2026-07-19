@@ -1,4 +1,4 @@
-import type { UserSession, SecurityRole, SecurityContext } from "../types";
+import type { UserSession, SecurityRole } from "../types";
 import { SESSION_CONFIG } from "../constants";
 
 export interface ISessionEngine {
@@ -30,7 +30,7 @@ export class MockSessionEngine implements ISessionEngine {
       const oldest = activeSessions.sort(
         (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       )[0];
-      this.revokeSession(oldest.id);
+      if (oldest) this.revokeSession(oldest.id);
     }
 
     const now = Date.now();

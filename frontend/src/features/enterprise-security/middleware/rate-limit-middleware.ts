@@ -1,4 +1,4 @@
-import type { RateLimitConfig, RateLimitState, MiddlewareResult, SecurityContext } from "../types";
+import type { RateLimitConfig, RateLimitState, MiddlewareResult } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
 export interface IRateLimitMiddleware {

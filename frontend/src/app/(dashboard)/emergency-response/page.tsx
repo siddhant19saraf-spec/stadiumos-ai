@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/emergency-response/components/main-das
 
 export default function EmergencyResponsePage() {
   return (
-    <Shell title="Emergency Response">
-      <ErrorBoundary module="Emergency Response">
+    <Shell title="Stadium Emergency Response">
+      <ErrorBoundary module="Stadium Emergency Response">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

@@ -1,5 +1,5 @@
-import type { Match, ScheduleSlot, Conflict, Venue, Team } from "../types";
-import { VENUES, TEAMS } from "../constants";
+import type { Match, ScheduleSlot, Conflict, Venue } from "../types";
+import { TEAMS } from "../constants";
 
 export interface ISchedulingEngine {
   generateSchedule(matches: Match[]): ScheduleSlot[];
@@ -43,7 +43,6 @@ export class MockSchedulingEngine implements ISchedulingEngine {
           if (a.date !== b.date) continue;
 
           const aStart = timeToMinutes(a.startTime);
-          const aEnd = timeToMinutes(a.endTime);
           const bStart = timeToMinutes(b.startTime);
 
           if (Math.abs(aStart - bStart) < 180) {

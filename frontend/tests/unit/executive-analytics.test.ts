@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { executiveEngine } from "@/features/executive-analytics/services/executive-engine";
 import { analyticsEngine } from "@/features/executive-analytics/services/analytics-engine";
 import { decisionEngine } from "@/features/executive-analytics/services/decision-engine";
@@ -11,11 +11,7 @@ import {
   EXECUTIVE_ROLES, ALERT_THRESHOLDS, KPI_CATEGORY_LABELS,
   KPI_CATEGORY_ICONS, MODULE_NAMES,
 } from "@/features/executive-analytics/constants";
-import type {
-  ExecutiveRole, ExecutiveSummary, ExecutiveKpi, ModuleSnapshot,
-  RiskAssessment, DecisionRecommendation, ExecutiveAlert,
-} from "@/features/executive-analytics/types";
-import { makeExecutiveKPI, makeDecision, makeRiskAssessment } from "../../tests/fixtures/factories";
+import type { ExecutiveSummary, ExecutiveKpi } from "@/features/executive-analytics/types";
 
 /* ===================================================================
    Constants
@@ -331,8 +327,8 @@ describe("AnalyticsEngine - KPI Aggregation", () => {
 
   it("should compute average score per category", () => {
     const kpis: ExecutiveKpi[] = [
-      { id: "1", label: "A", value: 80, previousValue: 75, unit: "%", category: "operations", trend: "up", status: "healthy", changePct: 6.7, changeDirection: "increase", tooltip: "T" },
-      { id: "2", label: "B", value: 90, previousValue: 85, unit: "%", category: "operations", trend: "up", status: "healthy", changePct: 5.9, changeDirection: "increase", tooltip: "T" },
+      { id: "1", label: "A", value: 80, previousValue: 75, unit: "%", category: "operations" as ExecutiveKpi["category"], trend: "up" as const, status: "healthy" as const, changePct: 6.7, changeDirection: "increase" as const, tooltip: "T" },
+      { id: "2", label: "B", value: 90, previousValue: 85, unit: "%", category: "operations" as ExecutiveKpi["category"], trend: "up" as const, status: "healthy" as const, changePct: 5.9, changeDirection: "increase" as const, tooltip: "T" },
     ];
     const summary = executiveEngine.getSummary("ceo");
     const agg = analyticsEngine.aggregateKpis(summary, kpis);
@@ -347,9 +343,9 @@ describe("AnalyticsEngine - KPI Aggregation", () => {
 
   it("should compute health summary with correct totals", () => {
     const kpis: ExecutiveKpi[] = [
-      { id: "1", label: "A", value: 80, previousValue: 75, unit: "%", category: "operations", trend: "up", status: "healthy", changePct: 6.7, changeDirection: "increase", tooltip: "T" },
-      { id: "2", label: "B", value: 50, previousValue: 55, unit: "%", category: "safety", trend: "down", status: "warning", changePct: -9.1, changeDirection: "decrease", tooltip: "T" },
-      { id: "3", label: "C", value: 30, previousValue: 45, unit: "%", category: "risk", trend: "down", status: "critical", changePct: -33.3, changeDirection: "decrease", tooltip: "T" },
+      { id: "1", label: "A", value: 80, previousValue: 75, unit: "%", category: "operations" as ExecutiveKpi["category"], trend: "up" as const, status: "healthy" as const, changePct: 6.7, changeDirection: "increase" as const, tooltip: "T" },
+      { id: "2", label: "B", value: 50, previousValue: 55, unit: "%", category: "safety" as ExecutiveKpi["category"], trend: "down" as const, status: "warning" as const, changePct: -9.1, changeDirection: "decrease" as const, tooltip: "T" },
+      { id: "3", label: "C", value: 30, previousValue: 45, unit: "%", category: "risk" as ExecutiveKpi["category"], trend: "down" as const, status: "critical" as const, changePct: -33.3, changeDirection: "decrease" as const, tooltip: "T" },
     ];
     const health = analyticsEngine.computeHealthSummary(kpis);
     expect(health.healthy).toBe(1);
@@ -360,8 +356,8 @@ describe("AnalyticsEngine - KPI Aggregation", () => {
 
   it("should compute health summary with all healthy", () => {
     const kpis: ExecutiveKpi[] = [
-      { id: "1", label: "A", value: 85, previousValue: 80, unit: "%", category: "operations", trend: "up", status: "healthy", changePct: 6.3, changeDirection: "increase", tooltip: "T" },
-      { id: "2", label: "B", value: 90, previousValue: 88, unit: "%", category: "safety", trend: "up", status: "healthy", changePct: 2.3, changeDirection: "increase", tooltip: "T" },
+      { id: "1", label: "A", value: 85, previousValue: 80, unit: "%", category: "operations" as ExecutiveKpi["category"], trend: "up" as const, status: "healthy" as const, changePct: 6.3, changeDirection: "increase" as const, tooltip: "T" },
+      { id: "2", label: "B", value: 90, previousValue: 88, unit: "%", category: "safety" as ExecutiveKpi["category"], trend: "up" as const, status: "healthy" as const, changePct: 2.3, changeDirection: "increase" as const, tooltip: "T" },
     ];
     const health = analyticsEngine.computeHealthSummary(kpis);
     expect(health.healthy).toBe(2);
@@ -563,7 +559,7 @@ describe("DecisionEngine - Generation", () => {
     const snapshots = executiveEngine.getModuleSnapshots();
     const decisions = decisionEngine.generate(summary, snapshots, "ceo");
     if (decisions.length > 0) {
-      const id = decisions[0].id;
+      const id = decisions[0]!.id;
       const updated = decisionEngine.implement(id, decisions, "ceo");
       const impl = updated.find((d) => d.id === id);
       expect(impl!.status).toBe("implemented");
@@ -577,7 +573,7 @@ describe("DecisionEngine - Generation", () => {
     const snapshots = executiveEngine.getModuleSnapshots();
     const decisions = decisionEngine.generate(summary, snapshots, "ceo");
     if (decisions.length > 1) {
-      const id = decisions[0].id;
+      const id = decisions[0]!.id;
       const updated = decisionEngine.implement(id, decisions, "ceo");
       expect(updated.find((d) => d.id === id)!.status).toBe("implemented");
       const others = updated.filter((d) => d.id !== id);
@@ -1137,8 +1133,8 @@ describe("NotificationEngine - Alert Generation", () => {
     const decisions = decisionEngine.generate(summary, snapshots, "ceo");
     const events = notificationEngine.generateTimelineEvents(summary, decisions);
     for (let i = 0; i < events.length - 1; i++) {
-      const current = new Date(events[i].timestamp).getTime();
-      const next = new Date(events[i + 1].timestamp).getTime();
+      const current = new Date(events[i]!.timestamp).getTime();
+      const next = new Date(events[i + 1]!.timestamp).getTime();
       expect(current).toBeGreaterThanOrEqual(next);
     }
   });
@@ -1147,7 +1143,7 @@ describe("NotificationEngine - Alert Generation", () => {
     const summary = executiveEngine.getSummary("ceo");
     const alerts = notificationEngine.generateAlerts(summary, [], []);
     if (alerts.length > 0) {
-      const id = alerts[0].id;
+      const id = alerts[0]!.id;
       const updated = notificationEngine.acknowledge(id, alerts);
       const acked = updated.find((a) => a.id === id);
       expect(acked!.acknowledged).toBe(true);
@@ -1159,9 +1155,9 @@ describe("NotificationEngine - Alert Generation", () => {
     const summary = executiveEngine.getSummary("ceo");
     const alerts = notificationEngine.generateAlerts(summary, [], []);
     if (alerts.length > 1) {
-      const id = alerts[0].id;
+      const id = alerts[0]!.id;
       const updated = notificationEngine.acknowledge(id, alerts);
-      const other = updated.find((a) => a.id === alerts[1].id);
+      const other = updated.find((a) => a.id === alerts[1]!.id);
       expect(other!.acknowledged).toBe(false);
     }
   });
@@ -1170,7 +1166,7 @@ describe("NotificationEngine - Alert Generation", () => {
     const summary = executiveEngine.getSummary("ceo");
     const alerts = notificationEngine.generateAlerts(summary, [], []);
     if (alerts.length > 0) {
-      const withAcked = notificationEngine.acknowledge(alerts[0].id, alerts);
+      const withAcked = notificationEngine.acknowledge(alerts[0]!.id, alerts);
       const unacked = notificationEngine.getUnacknowledged(withAcked);
       for (const a of unacked) {
         expect(a.acknowledged).toBe(false);
@@ -1226,8 +1222,8 @@ describe("ExecutiveService - Orchestration", () => {
     const { state: newState, result } = executiveService.queryCopilot(state, "What are the risks?");
     expect(result.answer).toBeTruthy();
     expect(newState.copilotHistory).toHaveLength(2);
-    expect(newState.copilotHistory[0].role).toBe("user");
-    expect(newState.copilotHistory[1].role).toBe("assistant");
+    expect(newState.copilotHistory[0]!.role).toBe("user");
+    expect(newState.copilotHistory[1]!.role).toBe("assistant");
   });
 
   it("should accumulate copilot history across queries", () => {
@@ -1240,7 +1236,7 @@ describe("ExecutiveService - Orchestration", () => {
   it("should implement a decision", () => {
     const state = executiveService.initialize("ceo");
     if (state.decisions.length > 0) {
-      const id = state.decisions[0].id;
+      const id = state.decisions[0]!.id;
       const updated = executiveService.implementDecision(state, id, "ceo");
       const d = updated.decisions.find((dec) => dec.id === id);
       expect(d!.status).toBe("implemented");
@@ -1251,7 +1247,7 @@ describe("ExecutiveService - Orchestration", () => {
   it("should acknowledge an alert", () => {
     const state = executiveService.initialize("ceo");
     if (state.alerts.length > 0) {
-      const id = state.alerts[0].id;
+      const id = state.alerts[0]!.id;
       const updated = executiveService.acknowledgeAlert(state, id);
       const a = updated.alerts.find((al) => al.id === id);
       expect(a!.acknowledged).toBe(true);

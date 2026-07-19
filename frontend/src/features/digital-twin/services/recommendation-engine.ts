@@ -1,4 +1,4 @@
-import type { ZoneRecommendation, ZoneLiveStatus, StadiumZone } from "../types";
+import type { ZoneRecommendation, ZoneLiveStatus } from "../types";
 import { digitalTwinEngine } from "./digital-twin-engine";
 
 export interface IRecommendationEngine {

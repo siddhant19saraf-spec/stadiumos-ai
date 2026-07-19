@@ -1,4 +1,4 @@
-import type { TournamentAnalytics, Match, Venue, Conflict, AIRecommendation, TournamentState } from "../types";
+import type { Match, Venue, Conflict, TournamentState } from "../types";
 
 export interface IReportingEngine {
   generateExecutiveSummary(state: TournamentState): string;

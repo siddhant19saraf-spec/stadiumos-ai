@@ -48,8 +48,6 @@ export class MockReportingEngine implements IReportingEngine {
       { metric: "Carbon Savings YTD", value: summary.carbonReductionYtd, change: rf(5, 15), unit: "kg" },
     ];
 
-    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-
     return {
       id: `report-${Date.now().toString(36)}`,
       title: "Sustainability Executive Report",

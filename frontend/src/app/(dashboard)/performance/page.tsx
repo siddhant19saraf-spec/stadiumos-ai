@@ -4,8 +4,8 @@ import { PerformanceDashboard } from "@/features/performance-center/components/p
 
 export default function PerformancePage() {
   return (
-    <Shell title="Performance Center">
-      <ErrorBoundary module="Performance Center">
+    <Shell title="Stadium Performance Center">
+      <ErrorBoundary module="Stadium Performance Center">
         <PerformanceDashboard />
       </ErrorBoundary>
     </Shell>

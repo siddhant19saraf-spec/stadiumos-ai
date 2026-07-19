@@ -115,8 +115,8 @@ function generateSummary(data: Partial<CommandCenterData>): AIExecutiveSummary {
 export const commandCenterService = {
   async getData(): Promise<CommandCenterData> {
     const match: CommandCenterData["match"] = {
-      homeTeam: teamNames[randomInt(0, teamNames.length - 1)],
-      awayTeam: teamNames[randomInt(0, teamNames.length - 1)],
+      homeTeam: teamNames[randomInt(0, teamNames.length - 1)]!,
+      awayTeam: teamNames[randomInt(0, teamNames.length - 1)]!,
       homeScore: randomInt(0, 4),
       awayScore: randomInt(0, 4),
       minute: randomInt(5, 90),
@@ -235,22 +235,22 @@ export const commandCenterService = {
     const incidents: Incident[] = Array.from({ length: incidentCount }, (_, i) => ({
       id: `inc-${i + 1}`,
       time: new Date(Date.now() - randomInt(0, 120) * 60000).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
-      location: locations[randomInt(0, locations.length - 1)],
-      type: incidentTypes[randomInt(0, incidentTypes.length - 1)],
-      severity: (["critical", "high", "medium", "low"] as const)[randomInt(0, 3)],
-      status: (["open", "dispatched", "resolved", "monitoring"] as const)[randomInt(0, 3)],
-      assignedTeam: teams[randomInt(0, teams.length - 1)],
+      location: locations[randomInt(0, locations.length - 1)]!,
+      type: incidentTypes[randomInt(0, incidentTypes.length - 1)]!,
+      severity: (["critical", "high", "medium", "low"] as const)[randomInt(0, 3)]!,
+      status: (["open", "dispatched", "resolved", "monitoring"] as const)[randomInt(0, 3)]!,
+      assignedTeam: teams[randomInt(0, teams.length - 1)]!,
       aiRecommendation: "AI analysis available",
-      description: `${incidentTypes[randomInt(0, incidentTypes.length - 1)]} reported at ${locations[randomInt(0, locations.length - 1)]}`,
+      description: `${incidentTypes[randomInt(0, incidentTypes.length - 1)]!} reported at ${locations[randomInt(0, locations.length - 1)]!}`,
     }));
 
     const activityEvents: ActivityEvent[] = Array.from({ length: 12 }, (_, i) => ({
       id: `evt-${i + 1}`,
       timestamp: new Date(Date.now() - i * randomInt(30, 300) * 1000).toISOString(),
-      message: `${teams[randomInt(0, teams.length - 1)]} ${activityVerbs[randomInt(0, activityVerbs.length - 1)]} ${locations[randomInt(0, locations.length - 1)]}`,
-      type: (["alert", "action", "system", "ai"] as const)[randomInt(0, 3)],
-      severity: (["critical", "high", "medium", "low", "info"] as const)[randomInt(0, 4)],
-      module: ["Crowd", "Security", "Parking", "Medical", "Facilities"][randomInt(0, 4)],
+      message: `${teams[randomInt(0, teams.length - 1)]!} ${activityVerbs[randomInt(0, activityVerbs.length - 1)]!} ${locations[randomInt(0, locations.length - 1)]!}`,
+      type: (["alert", "action", "system", "ai"] as const)[randomInt(0, 3)]!,
+      severity: (["critical", "high", "medium", "low", "info"] as const)[randomInt(0, 4)]!,
+      module: ["Crowd", "Security", "Parking", "Medical", "Facilities"][randomInt(0, 4)]!,
     }));
 
     const recommendations: AIRecommendation[] = [
@@ -323,7 +323,7 @@ export const commandCenterService = {
     ];
 
     const now = Date.now();
-    const generateTimeline = (count: number, minVal: number, maxVal: number, variance: number): ChartDataPoint[] =>
+    const generateTimeline = (count: number, minVal: number, maxVal: number, _variance: number): ChartDataPoint[] =>
       Array.from({ length: count }, (_, i) => ({
         timestamp: new Date(now - (count - i) * 60000 * 5).toISOString(),
         value: randomFloat(minVal, maxVal),
@@ -349,7 +349,7 @@ export const commandCenterService = {
         capacity,
         capacityPercent,
         weather: {
-          condition: (["Clear", "Partly Cloudy", "Sunny", "Light Rain"] as const)[randomInt(0, 3)],
+          condition: (["Clear", "Partly Cloudy", "Sunny", "Light Rain"] as const)[randomInt(0, 3)]!,
           temperature: randomInt(26, 38),
           icon: "sun",
         },
@@ -397,8 +397,8 @@ export const commandCenterService = {
       id: `live-${Date.now()}-${i}`,
       timestamp: new Date().toISOString(),
       message: `${teams[randomInt(0, teams.length - 1)]} ${activityVerbs[randomInt(0, activityVerbs.length - 1)]} ${locations[randomInt(0, locations.length - 1)]}`,
-      type: (["alert", "action", "system", "ai"] as const)[randomInt(0, 3)],
-      module: ["Crowd", "Security", "Parking", "Medical", "Facilities"][randomInt(0, 4)],
+      type: (["alert", "action", "system", "ai"] as const)[randomInt(0, 3)]!,
+      module: ["Crowd", "Security", "Parking", "Medical", "Facilities"][randomInt(0, 4)]!,
     }));
   },
 };

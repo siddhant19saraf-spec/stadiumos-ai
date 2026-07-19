@@ -35,7 +35,7 @@ const entityLabels: Record<string, string> = {
   command_post: "Command",
 };
 
-export function EmergencyMap({ entities, selectedIncident, className }: EmergencyMapProps) {
+export function EmergencyMap({ entities, selectedIncident, onSelectEntity, className }: EmergencyMapProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   const exits = entities.filter((e) => e.type === "emergency_exit");

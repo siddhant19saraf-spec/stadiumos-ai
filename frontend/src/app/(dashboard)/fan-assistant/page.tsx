@@ -11,12 +11,12 @@ const features = [
 
 export default function FanAssistantPage() {
   return (
-    <Shell title="Fan Experience">
-      <ErrorBoundary module="Fan Assistant">
+    <Shell title="Fan Experience & Engagement">
+      <ErrorBoundary module="Fan Experience & Engagement">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Fan Experience</h2>
-            <p className="text-muted-foreground">AI-powered fan assistant, itineraries, and engagement.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Fan Experience & Engagement</h2>
+            <p className="text-muted-foreground">AI-powered fan assistant, personalized match-day itineraries, and stadium engagement.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {features.map((f) => (

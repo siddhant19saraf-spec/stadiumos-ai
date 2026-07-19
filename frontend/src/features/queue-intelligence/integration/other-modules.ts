@@ -43,7 +43,7 @@ export class QueueIntelligenceIntegration {
     const state = queueIntelligenceService.getState();
     const arr = Array.from(state.queueStatuses.values());
     const avgWait = arr.reduce((s, q) => s + q.estimatedWaitMin, 0) / Math.max(1, arr.length);
-    const worst = arr.reduce((a, b) => a.estimatedWaitMin > b.estimatedWaitMin ? a : b, arr[0]);
+    const worst = arr.reduce((a, b) => a.estimatedWaitMin > b.estimatedWaitMin ? a : b, arr[0]!);
     return {
       totalQueuePoints: arr.length,
       avgWaitMin: Math.round(avgWait),

@@ -1,9 +1,6 @@
-import type { RiskAssessment, ExecutiveSummary, ModuleSnapshot, ExecutiveRole } from "../types";
+import type { RiskAssessment, ExecutiveSummary, ModuleSnapshot } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
-function rf(min: number, max: number, d = 1): number {
-  return parseFloat((Math.random() * (max - min) + min).toFixed(d));
-}
 function ri(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

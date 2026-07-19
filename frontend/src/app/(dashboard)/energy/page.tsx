@@ -11,12 +11,12 @@ const metrics = [
 
 export default function EnergyPage() {
   return (
-    <Shell title="Energy & Sustainability">
-      <ErrorBoundary module="Energy">
+    <Shell title="Stadium Energy & Sustainability">
+      <ErrorBoundary module="Stadium Energy & Sustainability">
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Energy & Sustainability</h2>
-            <p className="text-muted-foreground">Real-time consumption monitoring and carbon tracking.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Stadium Energy & Sustainability</h2>
+            <p className="text-muted-foreground">Stadium energy consumption monitoring, carbon footprint tracking, and AI-driven sustainability optimization.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {metrics.map((m) => (

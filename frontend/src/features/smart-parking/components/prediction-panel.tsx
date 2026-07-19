@@ -27,10 +27,6 @@ export function PredictionPanel({ predictions, trafficPredictions, className }: 
     };
   }, [predictions]);
 
-  const surgeRoads = useMemo(() =>
-    trafficPredictions.filter((t) => t.surgeProbability > 30).length,
-  [trafficPredictions]);
-
   if (!avg) return null;
 
   return (

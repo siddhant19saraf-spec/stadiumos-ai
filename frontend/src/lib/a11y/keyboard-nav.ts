@@ -4,7 +4,7 @@ export type KeyHandler = (e: KeyboardEvent) => void;
 
 export function useKeyboard(
   keyMap: Record<string, KeyHandler>,
-  deps: unknown[] = [],
+  _deps: unknown[] = [],
 ): void {
   const handler = useCallback(
     (e: KeyboardEvent) => {

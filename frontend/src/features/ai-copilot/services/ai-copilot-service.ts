@@ -5,7 +5,6 @@ import type {
   PredictedProblem,
   OperationalSummary,
   ActionExecution,
-  AIReasoning,
 } from "../types";
 import { AIProviderFactory } from "./providers/provider-factory";
 import { MockAIProvider } from "./providers/mock-provider";
@@ -34,7 +33,6 @@ class AICopilotService {
     const revenue = randomInt(200000, 2200000);
     const fanSatisfaction = randomFloat(3.5, 4.9);
 
-    const riskLevels: ActiveRisk["level"][] = ["critical", "high", "medium", "low", "monitoring"];
     const activeRisks: ActiveRisk[] = [
       {
         id: generateId(),
@@ -171,7 +169,7 @@ class AICopilotService {
   }
 
   async sendMessage(
-    messages: CopilotMessage[],
+    _messages: CopilotMessage[],
     context: OperationalContext,
     query: string,
     onUpdate?: (message: CopilotMessage) => void,

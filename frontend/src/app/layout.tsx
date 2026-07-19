@@ -12,34 +12,35 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://stadiumos-ai.vercel.app"),
   title: {
     template: `%s | ${APP_NAME}`,
-    default: `${APP_NAME} – Autonomous Stadium Operations Platform`,
+    default: `${APP_NAME} – Smart Stadium AI Operations Platform`,
   },
   description:
-    "Enterprise-grade AI platform for autonomous stadium and tournament operations monitoring, prediction, and optimization. Powered by multi-provider AI with automatic failover.",
+    "Enterprise-grade AI platform purpose-built for FIFA World Cup, tournaments, and smart stadium operations — crowd intelligence, match-day logistics, security, energy sustainability, and emergency response.",
   keywords: [
-    "stadium",
-    "AI",
-    "operations",
-    "crowd management",
     "smart stadium",
-    "tournament",
-    "sustainability",
+    "stadium AI",
+    "tournament operations",
+    "FIFA World Cup",
+    "crowd management",
+    "match-day operations",
+    "stadium security",
+    "stadium sustainability",
     "energy optimization",
     "emergency response",
     "predictive maintenance",
     "digital twin",
-    "FIFA World Cup",
     "sports technology",
     "Hack2Sustain",
+    "stadium operations",
   ],
   authors: [{ name: "StadiumOS AI" }],
   creator: "StadiumOS AI Team",
   publisher: "StadiumOS AI",
   robots: { index: true, follow: true },
   openGraph: {
-    title: "StadiumOS AI — Autonomous Stadium Operations Platform",
+    title: "StadiumOS AI — Smart Stadium AI Operations Platform",
     description:
-      "Enterprise-grade AI platform for autonomous stadium and tournament operations monitoring, prediction, and optimization.",
+      "Enterprise-grade AI platform for FIFA World Cup, tournaments, and smart stadium operations — unifying crowd intelligence, security, energy, and emergency response.",
     url: "https://stadiumos-ai.vercel.app",
     siteName: "StadiumOS AI",
     type: "website",
@@ -47,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "StadiumOS AI — Autonomous Stadium Operations Platform",
+    title: "StadiumOS AI — Smart Stadium AI Operations Platform",
     description:
-      "Enterprise-grade AI platform for autonomous stadium and tournament operations monitoring, prediction, and optimization.",
+      "Enterprise-grade AI platform for FIFA World Cup, tournaments, and smart stadium operations.",
   },
 };
 

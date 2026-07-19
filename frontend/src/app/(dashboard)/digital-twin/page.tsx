@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/digital-twin/components/main-dashboard
 
 export default function DigitalTwinPage() {
   return (
-    <Shell title="Digital Twin">
-      <ErrorBoundary module="Digital Twin">
+    <Shell title="Stadium Digital Twin">
+      <ErrorBoundary module="Stadium Digital Twin">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

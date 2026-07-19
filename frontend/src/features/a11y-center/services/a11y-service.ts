@@ -1,4 +1,4 @@
-import type { A11ySummary, A11yModuleScore, A11yIssue, WCAGCriteria, ModuleName } from "../types";
+import type { A11ySummary, A11yModuleScore, A11yIssue, ModuleName } from "../types";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -57,7 +57,7 @@ const ISSUE_TEMPLATES: Array<{ wcag: string; desc: string; sev: "critical" | "hi
   { wcag: "2.1.2", desc: "Modal dialog traps keyboard incorrectly", sev: "critical" },
 ];
 
-function generateModuleScore(module: ModuleName, index: number): A11yModuleScore {
+function generateModuleScore(module: ModuleName, _index: number): A11yModuleScore {
   const totalChecks = WCAG_CRITERIA.length;
   const base = Math.round(totalChecks * (0.78 + Math.random() * 0.18));
   const passed = Math.min(totalChecks, base);
@@ -84,7 +84,7 @@ function generateIssues(): A11yIssue[] {
       wcagCriteria: template.wcag,
       description: template.desc,
       severity: template.sev,
-      status: isFixed ? "fixed" : (["open", "in_progress", "wont_fix"] as const)[rand(0, 2)],
+      status: isFixed ? "fixed" : (["open", "in_progress", "wont_fix"] as const)[rand(0, 2)]!,
       impact: template.sev === "critical" || template.sev === "high" ? "Prevents users with disabilities from completing tasks" : "Minor inconvenience for assistive technology users",
       recommendation: `Ensure ${template.wcag} compliance by following WCAG techniques`,
       createdAt: new Date(Date.now() - rand(0, 30) * 86400000).toISOString(),

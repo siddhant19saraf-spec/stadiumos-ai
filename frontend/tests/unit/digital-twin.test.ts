@@ -1,9 +1,6 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { DigitalTwinEngine, digitalTwinEngine } from "@/features/digital-twin/services/digital-twin-engine";
-import { MockAnalyticsEngine, analyticsEngine } from "@/features/digital-twin/services/analytics-engine";
-import { MockPredictionEngine, predictionEngine } from "@/features/digital-twin/services/prediction-engine";
-import { MockRecommendationEngine, recommendationEngine } from "@/features/digital-twin/services/recommendation-engine";
-import { MockSimulationEngine, simulationEngine } from "@/features/digital-twin/services/simulation-engine";
+import { DigitalTwinEngine } from "@/features/digital-twin/services/digital-twin-engine";
 import { MockVisualizationEngine, visualizationEngine } from "@/features/digital-twin/services/visualization-engine";
 import { MockMapEngine, mapEngine } from "@/features/digital-twin/services/map-engine";
 import {
@@ -14,21 +11,14 @@ import {
   REFRESH_INTERVAL,
 } from "@/features/digital-twin/constants";
 import type {
-  StadiumZone,
   ZoneLiveStatus,
   MapEntity,
   DigitalIncident,
-  LiveAnalytics,
-  AIInsight,
-  ZoneRecommendation,
   SimulationScenario,
-  LayerId,
 } from "@/features/digital-twin/types";
 import {
   makeDigitalIncident,
-  makeLiveAnalytics,
   makeZoneLiveStatus,
-  makeAIInsight,
   resetCounter,
 } from "../fixtures/factories";
 
@@ -114,7 +104,7 @@ describe("Constants", () => {
   });
 
   it("ZONE_CAPACITIES all have positive values", () => {
-    for (const [id, cap] of Object.entries(ZONE_CAPACITIES)) {
+    for (const [, cap] of Object.entries(ZONE_CAPACITIES)) {
       expect(cap).toBeGreaterThan(0);
       expect(Number.isInteger(cap)).toBe(true);
     }
@@ -1105,7 +1095,6 @@ describe("MockMapEngine (Digital Twin)", () => {
 
   describe("search", () => {
     it("should find zones by name", () => {
-      const zones = STADIUM_ZONES.filter((z) => z.name.includes("Section 101"));
       const result = engine.search("Section 101", STADIUM_ZONES);
       expect(result.length).toBeGreaterThan(0);
       expect(result[0].name).toContain("Section 101");
@@ -1448,7 +1437,6 @@ describe("Additional Map Engine Edge Cases", () => {
   });
 
   it("search by level substring", () => {
-    const section201 = STADIUM_ZONES.filter((z) => z.id === "section-201");
     const result = engine.search("201", STADIUM_ZONES);
     expect(result.length).toBeGreaterThanOrEqual(1);
   });

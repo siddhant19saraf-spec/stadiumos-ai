@@ -4,8 +4,8 @@ import { SustainabilityDashboard } from "@/features/sustainability/components/su
 
 export default function SustainabilityPage() {
   return (
-    <Shell title="Sustainability Intelligence">
-      <ErrorBoundary module="Sustainability">
+    <Shell title="Stadium Sustainability Intelligence">
+      <ErrorBoundary module="Stadium Sustainability Intelligence">
         <SustainabilityDashboard />
       </ErrorBoundary>
     </Shell>

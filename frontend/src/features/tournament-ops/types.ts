@@ -139,7 +139,7 @@ export interface Match {
   securityLevel: "normal" | "elevated" | "high" | "critical";
   aiDelayRisk: number;
   delayMinutes: number;
-  operationalTimeline: OperationalPhase[];
+  operationalTimeline: TimelinePhase[];
   ticketsSold: number;
   ticketsAvailable: number;
 }

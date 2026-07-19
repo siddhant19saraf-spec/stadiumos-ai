@@ -1,5 +1,4 @@
 import type { InventoryItem, MenuItem, QueuePointStatus } from "../types";
-import { MENU_ITEMS } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -7,10 +6,6 @@ function rand(min: number, max: number): number {
 function randf(min: number, max: number, d = 1): number {
   return parseFloat((Math.random() * (max - min) + min).toFixed(d));
 }
-function pick<T>(arr: readonly T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]!;
-}
-
 export interface IInventoryEngine {
   simulate(menuItems: MenuItem[], queueStatuses: Map<string, QueuePointStatus>): Map<string, InventoryItem>;
   forecastDemand(menuItems: MenuItem[], hour: number): Map<string, number>;
@@ -20,7 +15,7 @@ export interface IInventoryEngine {
 export class MockInventoryEngine implements IInventoryEngine {
   private tick = 0;
 
-  simulate(menuItems: MenuItem[], queueStatuses: Map<string, QueuePointStatus>): Map<string, InventoryItem> {
+  simulate(menuItems: MenuItem[], _queueStatuses: Map<string, QueuePointStatus>): Map<string, InventoryItem> {
     this.tick++;
     const inventory = new Map<string, InventoryItem>();
     const hour = new Date().getHours();
@@ -39,7 +34,7 @@ export class MockInventoryEngine implements IInventoryEngine {
       inventory.set(item.id, {
         id: item.id,
         name: item.name,
-        category: item.category,
+        category: item.category === "other" ? "supplies" : item.category,
         currentStock: Math.max(0, currentStock),
         maxStock,
         reorderPoint,

@@ -4,8 +4,8 @@ import { MainDashboard } from "@/features/smart-parking/components/main-dashboar
 
 export default function SmartParkingPage() {
   return (
-    <Shell title="Smart Parking">
-      <ErrorBoundary module="Smart Parking">
+    <Shell title="Smart Parking & Traffic">
+      <ErrorBoundary module="Smart Parking & Traffic">
         <MainDashboard />
       </ErrorBoundary>
     </Shell>

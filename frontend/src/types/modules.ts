@@ -1,4 +1,4 @@
-import type { BaseEntity, Severity, Status, AlertSeverity, MetricValue } from "./common";
+import type { BaseEntity, AlertSeverity, MetricValue } from "./common";
 import type { UserRole } from "../lib/auth";
 
 export interface Alert extends BaseEntity {

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, ArrowRight, CheckCircle2, XCircle, Timer, Target, AlertTriangle, AlertCircle, Info } from "lucide-react";
+import { Lightbulb, CheckCircle2, XCircle, Timer, Target, AlertTriangle, AlertCircle, Info } from "lucide-react";
 import type { AIRecommendation, RecommendationPriority } from "../types";
 
 interface AIRecommendationsProps {

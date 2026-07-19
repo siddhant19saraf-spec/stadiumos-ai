@@ -4,8 +4,8 @@ import { SecurityDashboard } from "@/features/enterprise-security/components/sec
 
 export default function EnterpriseSecurityPage() {
   return (
-    <Shell title="Security Command Center">
-      <ErrorBoundary module="Enterprise Security">
+    <Shell title="Stadium Security Operations">
+      <ErrorBoundary module="Stadium Security Operations">
         <SecurityDashboard />
       </ErrorBoundary>
     </Shell>

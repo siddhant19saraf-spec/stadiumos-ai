@@ -28,7 +28,7 @@ export function PriorityQueue({ incidents, selectedId, onSelect, className }: Pr
     [...incidents]
       .filter((i) => i.status !== "resolved")
       .sort((a, b) => {
-        const p = priorityOrder[a.priority] - priorityOrder[b.priority];
+        const p = (priorityOrder[a.priority] ?? 0) - (priorityOrder[b.priority] ?? 0);
         if (p !== 0) return p;
         return new Date(a.reportedAt).getTime() - new Date(b.reportedAt).getTime();
       }),

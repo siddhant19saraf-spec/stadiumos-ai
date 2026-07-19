@@ -1,9 +1,6 @@
-import type { BoardReport, ExecutiveSummary, DecisionRecommendation } from "../types";
+import type { BoardReport, ExecutiveSummary, DecisionRecommendation, KpiCategory } from "../types";
 import type { ExecutiveKpi } from "../types";
 
-function rf(min: number, max: number, d = 1): number {
-  return parseFloat((Math.random() * (max - min) + min).toFixed(d));
-}
 function ri(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -65,7 +62,7 @@ export class MockReportingEngine implements IReportingEngine {
   }
 
   private buildScorecards(kpis: ExecutiveKpi[]) {
-    const grouped = new Map<string, ExecutiveKpi[]>();
+    const grouped = new Map<KpiCategory, ExecutiveKpi[]>();
     for (const kpi of kpis) {
       const existing = grouped.get(kpi.category) ?? [];
       existing.push(kpi);

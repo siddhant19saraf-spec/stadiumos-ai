@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { authEngine } from "../services/auth-engine";
 import { rbacEngine } from "../services/rbac-engine";
 import { permissionEngine } from "../services/permission-engine";
@@ -250,10 +250,10 @@ describe("RBACEngine", () => {
 
   it("should return role hierarchy sorted by priority", () => {
     const hierarchy = rbacEngine.getRoleHierarchy();
-    expect(hierarchy[0].role).toBe("super_admin");
-    expect(hierarchy[hierarchy.length - 1].role).toBe("guest");
+    expect(hierarchy[0]!.role).toBe("super_admin");
+    expect(hierarchy[hierarchy.length - 1]!.role).toBe("guest");
     for (let i = 0; i < hierarchy.length - 1; i++) {
-      expect(hierarchy[i].priority).toBeLessThan(hierarchy[i + 1].priority);
+      expect(hierarchy[i]!.priority).toBeLessThan(hierarchy[i + 1]!.priority);
     }
   });
 
@@ -328,7 +328,7 @@ describe("PermissionEngine", () => {
     const items = [{ name: "A", perm: "dashboard:view" as SecurityPermission }, { name: "B", perm: "users:delete" as SecurityPermission }];
     const allowed = permissionEngine.filterAllowed(items, guestContext, (i) => i.perm);
     expect(allowed).toHaveLength(1);
-    expect(allowed[0].name).toBe("A");
+    expect(allowed[0]!.name).toBe("A");
   });
 
   it("should build security context correctly", () => {
@@ -425,7 +425,7 @@ describe("AuditEngine", () => {
     auditEngine.log("login_failed", "admin", "u-001", "super_admin", "session", "s2", "Failed", "failure", "1.1.1.2", "c2", "UA", "warning");
     const failures = auditEngine.getLogs({ result: "failure" });
     expect(failures).toHaveLength(1);
-    expect(failures[0].action).toBe("login_failed");
+    expect(failures[0]!.action).toBe("login_failed");
   });
 
   it("should get user activity", () => {
@@ -807,7 +807,7 @@ describe("AuditMiddleware", () => {
     auditMiddleware.logAction(ctx, "test_action", "resource", "r1", "Test detail", "success");
     const logs = auditEngine.getLogs({ action: "test_action" });
     expect(logs.length).toBeGreaterThan(0);
-    expect(logs[0].user).toBe("admin");
+    expect(logs[0]!.user).toBe("admin");
   });
 
   it("should log access", () => {
@@ -899,7 +899,7 @@ describe("SecurityService", () => {
   it("should return role hierarchy", () => {
     const hierarchy = securityService.getRoleHierarchy();
     expect(hierarchy.length).toBe(11);
-    expect(hierarchy[0].role).toBe("super_admin");
+    expect(hierarchy[0]!.role).toBe("super_admin");
   });
 
   it("should return permission matrix", () => {

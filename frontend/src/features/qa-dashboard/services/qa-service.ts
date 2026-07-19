@@ -19,7 +19,7 @@ const TEST_TYPES: TestType[] = [
   "unit", "integration", "e2e", "api", "security", "performance", "accessibility", "error-handling", "ai-validation",
 ];
 
-function generateModuleStatus(module: ModuleName, index: number): QAModuleStatus {
+function generateModuleStatus(module: ModuleName, _index: number): QAModuleStatus {
   const total = rand(80, 250);
   const passed = Math.round(total * rands(0.88, 0.99));
   const failed = Math.round(total * rands(0.01, 0.06));
@@ -64,7 +64,7 @@ export function generateQASummary(): QASummary {
   const totalFailed = moduleStatuses.reduce((s, m) => s + m.failed, 0);
   const totalSkipped = moduleStatuses.reduce((s, m) => s + m.skipped, 0);
   const avgCoverage = Math.round(moduleStatuses.reduce((s, m) => s + m.coverage, 0) / moduleStatuses.length);
-  const durations = moduleStatuses.map((m) => rand(500, 8000));
+  const durations = moduleStatuses.map((_m) => rand(500, 8000));
   const maxDuration = Math.max(...durations);
   const minDuration = Math.min(...durations);
 

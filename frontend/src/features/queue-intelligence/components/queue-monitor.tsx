@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Timer, Users, Gauge, Smile, Wifi, WifiOff, AlertCircle } from "lucide-react";
+import { Timer, Users, Smile, Wifi, WifiOff, AlertCircle } from "lucide-react";
 import type { QueuePointStatus, QueuePoint } from "../types";
 
 interface QueueMonitorProps {
@@ -28,7 +28,7 @@ const typeLabels: Record<string, string> = {
   customer_service: "Service", atm: "ATM", ticket_booth: "Tickets", information: "Info",
 };
 
-export function QueueMonitor({ points, statuses, selectedQueueId, onSelect, className }: QueueMonitorProps) {
+export function QueueMonitor({ points: _points, statuses, selectedQueueId, onSelect, className }: QueueMonitorProps) {
   const sorted = useMemo(() => {
     const arr = Array.from(statuses.values());
     const order: Record<string, number> = { critical: 0, congested: 1, busy: 2, normal: 3 };
@@ -45,7 +45,6 @@ export function QueueMonitor({ points, statuses, selectedQueueId, onSelect, clas
       </CardHeader>
       <CardContent className="space-y-1.5 max-h-[450px] overflow-y-auto">
         {sorted.map((q) => {
-          const point = points.find((p) => p.id === q.queuePointId);
           const breakdownCount = q.counterStatuses.filter((c) => c === "breakdown").length;
           return (
             <button

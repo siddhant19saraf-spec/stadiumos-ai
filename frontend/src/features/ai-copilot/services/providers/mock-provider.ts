@@ -51,7 +51,6 @@ function generateReasoning(
   context: OperationalContext,
   query?: string,
 ): AIReasoning {
-  const priorities: AIReasoning["priority"][] = ["critical", "high", "medium", "low"];
   const priority = context.emergencyAlerts > 0 ? "critical" : context.crowdDensity > 80 ? "high" : "medium";
 
   const evidence = [
@@ -200,7 +199,7 @@ export class MockAIProvider implements AIProvider {
   }
 
   async compareDecisions(
-    context: OperationalContext,
+    _context: OperationalContext,
     _scenario: string,
     _options: string[],
   ): Promise<{ recommendation: string; reasoning: AIReasoning }> {

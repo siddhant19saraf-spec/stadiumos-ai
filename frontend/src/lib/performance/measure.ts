@@ -1,6 +1,6 @@
 const marks = new Map<string, number>();
 
-export function createPerformanceTimer(name: string): { start: () => void; end: () => number } {
+export function createPerformanceTimer(_name: string): { start: () => void; end: () => number } {
   let started = false;
   let startTime = 0;
 

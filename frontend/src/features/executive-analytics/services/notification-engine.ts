@@ -52,7 +52,7 @@ export class MockNotificationEngine implements INotificationEngine {
         timestamp: now, acknowledged: false, acknowledgedAt: null,
         requiresExecutiveAction: false,
         aiSuggestion: "Open additional exit gates. Increase security presence in affected zones. Monitor density trends.",
-        escalationLevel: "elevated",
+        escalationLevel: "escalated",
       });
     }
 

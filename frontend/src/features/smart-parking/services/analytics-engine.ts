@@ -1,8 +1,4 @@
-import type { ParkingAnalytics, ParkingLotStatus, TrafficRoad, TrafficCondition } from "../types";
-
-function randf(min: number, max: number, d = 1): number {
-  return parseFloat((Math.random() * (max - min) + min).toFixed(d));
-}
+import type { ParkingAnalytics, ParkingLotStatus, TrafficCondition } from "../types";
 
 export interface IAnalyticsEngine {
   compute(statuses: Map<string, ParkingLotStatus>, traffic: TrafficCondition): ParkingAnalytics;

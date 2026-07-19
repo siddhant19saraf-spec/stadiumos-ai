@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { ZoomIn, ZoomOut, RotateCcw, Timer, Users, ShoppingBag, UtensilsCrossed, Wine, Shield, LogIn, Ticket, Info, CreditCard } from "lucide-react";
+import { ZoomIn, ZoomOut, RotateCcw, Users, ShoppingBag, UtensilsCrossed, Wine, Shield, LogIn, Ticket, Info, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { QueuePoint, QueuePointStatus } from "../types";
 

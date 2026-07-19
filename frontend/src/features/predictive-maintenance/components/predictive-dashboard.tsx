@@ -82,8 +82,6 @@ export function PredictiveDashboard() {
   const healthScores = healthArray.map((h) => h.healthScore);
   const riskScores = healthArray.map((h) => h.riskScore);
 
-  const TabIcon = tabs.find((t) => t.id === activeTab)?.icon ?? LayoutDashboard;
-
   if (loading && state.assets.length === 0) {
     return (
       <div className="flex h-60 items-center justify-center text-xs text-muted-foreground">

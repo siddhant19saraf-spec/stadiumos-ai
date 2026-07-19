@@ -1,4 +1,4 @@
-import type { ExecutiveAnalyticsData, ExecutiveRole, CopilotMessage, CopilotQueryResult } from "../types";
+import type { ExecutiveAnalyticsData, ExecutiveSummary, ExecutiveRole, CopilotMessage, CopilotQueryResult } from "../types";
 import { executiveEngine } from "./executive-engine";
 import { decisionEngine } from "./decision-engine";
 import { riskEngine } from "./risk-engine";
@@ -8,7 +8,7 @@ import { notificationEngine } from "./notification-engine";
 
 export function createState(): ExecutiveAnalyticsData {
   return {
-    summary: null,
+    summary: null as unknown as ExecutiveSummary,
     kpis: [],
     decisions: [],
     alerts: [],
@@ -82,7 +82,7 @@ export const executiveService: IExecutiveService = {
     };
   },
 
-  switchRole(state: ExecutiveAnalyticsData, role: ExecutiveRole): ExecutiveAnalyticsData {
+  switchRole(_state: ExecutiveAnalyticsData, role: ExecutiveRole): ExecutiveAnalyticsData {
     return this.initialize(role);
   },
 

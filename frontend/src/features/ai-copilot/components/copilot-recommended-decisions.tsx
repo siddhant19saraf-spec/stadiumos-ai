@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, Gauge, Target, Timer, CheckCircle2, ArrowRight, Users, Car, Clock, Shield, Zap, Wrench, AlertTriangle } from "lucide-react";
+import { Lightbulb, Target, CheckCircle2, ArrowRight, Users, Car, Shield, Zap, Wrench, AlertTriangle } from "lucide-react";
 import type { RecommendedDecision, Priority, ActionCategory } from "../types";
 
 interface CopilotRecommendedDecisionsProps {

@@ -25,100 +25,98 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LandingHeader } from "@/components/layout/landing-header";
 import { Footer } from "@/components/layout/footer";
-import { APP_NAME } from "@/constants";
-
 const features = [
   {
-    title: "Command Center",
-    description: "Real-time operations dashboard with AI-powered KPIs and system health monitoring.",
+    title: "Stadium Command Center",
+    description: "Real-time stadium operations dashboard with AI-powered KPIs, live alerts, and match-day system health monitoring.",
     icon: Gauge,
     href: "/command-center",
   },
   {
     title: "Crowd Intelligence",
-    description: "Real-time density mapping, flow prediction, and pinch-point detection across the venue.",
+    description: "Real-time crowd density mapping, fan flow prediction, and pinch-point detection across stadium concourses and gates.",
     icon: Users,
     href: "/crowd-intelligence",
   },
   {
-    title: "AI Copilot",
-    description: "Conversational AI assistant for instant operational insights and recommendations.",
+    title: "AI Stadium Copilot",
+    description: "Conversational AI assistant for instant stadium operations insights, tactical decisions, and recommendations.",
     icon: Sparkles,
     href: "#",
   },
   {
-    title: "Emergency Response",
-    description: "Automated incident detection, evacuation routing, and first-responder dispatch coordination.",
+    title: "Stadium Emergency Response",
+    description: "Automated incident detection, stadium evacuation routing, and first-responder dispatch coordination.",
     icon: Siren,
     href: "/emergency-response",
   },
   {
-    title: "Smart Parking",
-    description: "Occupancy prediction, dynamic pricing, and valet routing optimization.",
+    title: "Smart Parking & Traffic",
+    description: "Stadium parking occupancy prediction, dynamic pricing, traffic flow optimization, and valet routing.",
     icon: Car,
     href: "/parking",
   },
   {
-    title: "Queue Analytics",
-    description: "Wait-time forecasting with automated staff trigger alerts for optimal service levels.",
+    title: "Queue & Concourse Intelligence",
+    description: "Stadium concourse wait-time forecasting, concession queue monitoring, and automated staff trigger alerts.",
     icon: Clock,
     href: "/queue-prediction",
   },
   {
-    title: "Digital Twin",
-    description: "3D/2D stadium model with live IoT sensor overlay and simulation capabilities.",
+    title: "Stadium Digital Twin",
+    description: "3D/2D interactive stadium model with live IoT sensor overlay, simulation capabilities, and what-if analysis.",
     icon: Globe,
     href: "/digital-twin",
   },
   {
-    title: "Fan Experience",
-    description: "Multilingual AI chatbot with personalized itineraries and real-time assistance.",
+    title: "Fan Experience & Engagement",
+    description: "Multilingual AI chatbot for fan support, personalized match-day itineraries, and in-stadium engagement.",
     icon: Bot,
     href: "/fan-assistant",
   },
   {
-    title: "Predictive Maintenance",
-    description: "IoT anomaly detection and remaining-useful-life forecasting for critical infrastructure.",
+    title: "Stadium Predictive Maintenance",
+    description: "IoT anomaly detection and remaining-useful-life forecasting for critical stadium infrastructure and equipment.",
     icon: Wrench,
     href: "/maintenance",
   },
   {
-    title: "Executive Analytics",
-    description: "KPI dashboards, AI-generated board reports, and strategic decision intelligence.",
+    title: "Executive Decision Support",
+    description: "Stadium KPI dashboards, AI-generated board reports, and strategic decision intelligence for executives.",
     icon: LayoutDashboard,
     href: "/executive-analytics",
   },
   {
-    title: "Energy & Sustainability",
-    description: "Consumption monitoring, carbon tracking, and AI-driven optimization.",
+    title: "Stadium Energy & Sustainability",
+    description: "Stadium energy consumption monitoring, carbon footprint tracking, and AI-driven sustainability optimization.",
     icon: Zap,
     href: "/energy",
   },
   {
-    title: "Security Center",
-    description: "Enterprise RBAC, audit logging, compliance monitoring, and threat detection.",
+    title: "Stadium Security Operations",
+    description: "Stadium-wide RBAC, access control, audit logging, compliance monitoring, and threat detection.",
     icon: Shield,
     href: "/enterprise-security",
   },
   {
-    title: "Tournament Operations",
-    description: "Multi-venue scheduling, conflict detection, and resource optimization.",
+    title: "Tournament & Match Operations",
+    description: "Tournament scheduling, multi-venue match coordination, fixture conflict detection, and resource optimization.",
     icon: Calendar,
     href: "/scheduling",
   },
   {
-    title: "Sustainability",
-    description: "AI-powered water, waste, energy, and carbon intelligence platform.",
+    title: "Stadium Sustainability Intelligence",
+    description: "AI-powered stadium water, waste, energy, and carbon intelligence platform for green venue operations.",
     icon: Leaf,
     href: "/sustainability",
   },
 ];
 
 const stats = [
-  { value: "14+", label: "AI-Powered Modules" },
-  { value: "Real-time", label: "Live Data Processing" },
-  { value: "99.9%", label: "System Uptime" },
-  { value: "Multi-venue", label: "Scalable Architecture" },
+  { value: "14+", label: "AI Stadium Modules" },
+  { value: "Real-time", label: "Match-Day Data Processing" },
+  { value: "99.9%", label: "Stadium System Uptime" },
+  { value: "Multi-venue", label: "Tournament-Scale Architecture" },
 ];
 
 export default function LandingPage() {
@@ -136,15 +134,15 @@ export default function LandingPage() {
                 Hack2Sustain 2026 — AI for Sustainable Stadium Operations
               </div>
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                Autonomous Stadium{" "}
+                Smart Stadium{" "}
                 <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                  Operations Platform
+                  AI Operations Platform
                 </span>
               </h1>
               <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Enterprise-grade AI platform that monitors, predicts, and optimizes every aspect of
-                stadium and tournament operations — from crowd flow and parking to energy consumption
-                and emergency response.
+                Enterprise-grade AI platform purpose-built for FIFA World Cup, tournaments, and large-scale
+                stadium operations — unifying crowd intelligence, match-day logistics, security,
+                energy sustainability, and emergency response into one autonomous command center.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href="/command-center">
@@ -167,11 +165,11 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Everything You Need to Run a Stadium
+                Everything You Need to Run a Smart Stadium
               </h2>
               <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                {features.length} integrated modules covering operations, intelligence, safety, fan
-                experience, and analytics — all working together in real time.
+                {features.length} integrated AI modules covering stadium operations, intelligence, safety, fan
+                engagement, and analytics — purpose-built for tournament and match-day management.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -220,11 +218,11 @@ export default function LandingPage() {
                 Powered by AI for Sustainable Operations
               </div>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Sustainability at the Core
+                Stadium Sustainability at the Core
               </h2>
               <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                Every module is engineered to reduce resource consumption, minimize waste, and lower the carbon
-                footprint of large-scale venue operations. Aligned with UN Sustainable Development Goals.
+                Every stadium module is engineered to reduce resource consumption, minimize waste, and lower the carbon
+                footprint of large-scale tournament venue operations. Aligned with UN Sustainable Development Goals.
               </p>
             </div>
 
@@ -283,10 +281,10 @@ export default function LandingPage() {
         <section className="py-20 md:py-28">
           <div className="mx-auto max-w-7xl px-6 text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Ready to Transform Your Stadium Operations?
+              Ready to Transform Your Smart Stadium Operations?
             </h2>
             <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-              Explore the live dashboard and see how AI can optimize every aspect of your venue.
+              Explore the live StadiumOS dashboard and see how AI can optimize every aspect of your tournament venue.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/command-center">

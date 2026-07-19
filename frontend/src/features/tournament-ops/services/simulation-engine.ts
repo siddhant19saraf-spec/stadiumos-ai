@@ -1,8 +1,8 @@
 import type {
-  Tournament, Venue, Team, Match, WeatherData, ScheduleSlot,
+  Match, ScheduleSlot,
   ResourceAllocation, OperationalTimelineEntry, TimelinePhase, PredictiveInsight,
 } from "../types";
-import { TOURNAMENT, VENUES, TEAMS, RESOURCE_REQUIREMENTS, WEATHER_SCENARIOS, PHASE_DURATION_MINUTES } from "../constants";
+import { VENUES, TEAMS, RESOURCE_REQUIREMENTS, WEATHER_SCENARIOS, PHASE_DURATION_MINUTES } from "../constants";
 
 function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -101,7 +101,6 @@ export class TournamentSimulationEngine {
     return matches.slice(0, 6).map((match) => {
       const venue = VENUES.find((v) => v.id === match.venueId);
       const now = new Date();
-      const baseHour = parseInt(match.scheduledTime.split(":")[0]!);
       const phases: TimelinePhase[] = OPERATIONAL_PHASES.map((phase, idx) => ({
         phase,
         startTime: new Date(now.getTime() + idx * 60000).toISOString(),
