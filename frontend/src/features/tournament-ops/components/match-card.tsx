@@ -38,18 +38,16 @@ export function MatchCard({ match, isSelected, onSelect, className }: MatchCardP
   const awayTeam = match.title.split(" vs ")[1];
 
   return (
-    <div
+    <button
+      type="button"
       className={cn(
-        "cursor-pointer rounded-md border bg-gradient-to-r from-primary/5 to-transparent p-3 transition-all duration-200 hover:bg-muted/20",
+        "w-full rounded-md border bg-gradient-to-r from-primary/5 to-transparent p-3 text-left transition-all duration-200 hover:bg-muted/20",
         isSelected && "ring-1 ring-primary",
         className,
       )}
       onClick={() => onSelect?.(match.id)}
-      role="button"
-      tabIndex={0}
       aria-label={`Match: ${match.title}`}
       aria-selected={isSelected}
-      onKeyDown={(e) => e.key === "Enter" && onSelect?.(match.id)}
     >
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
@@ -92,7 +90,7 @@ export function MatchCard({ match, isSelected, onSelect, className }: MatchCardP
         <span>Attendance: {match.capacityPercent}%</span>
         <span>AI Delay Risk: {match.aiDelayRisk}%</span>
       </div>
-    </div>
+    </button>
   );
 }
 

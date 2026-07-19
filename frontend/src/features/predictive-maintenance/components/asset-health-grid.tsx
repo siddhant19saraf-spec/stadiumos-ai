@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -39,17 +39,15 @@ export function AssetHealthGrid({ assets, selectedId, onSelect, className }: Ass
   return (
     <div className={cn("grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3", className)}>
       {assets.map((asset) => (
-        <Card
+        <button
+          type="button"
           key={asset.assetId}
           className={cn(
-            "cursor-pointer border-primary/10 bg-gradient-to-br from-background to-primary/[0.02] transition-all duration-200 hover:bg-muted/20",
+            "w-full rounded-lg border border-primary/10 bg-gradient-to-br from-background to-primary/[0.02] p-3 text-left transition-all duration-200 hover:bg-muted/20",
             selectedId === asset.assetId && "ring-1 ring-primary",
           )}
           onClick={() => onSelect?.(asset.assetId)}
-          role="button"
-          tabIndex={0}
           aria-selected={selectedId === asset.assetId}
-          onKeyDown={(e) => e.key === "Enter" && onSelect?.(asset.assetId)}
         >
           <CardContent className="p-3">
             <div className="flex items-start justify-between">
@@ -114,7 +112,7 @@ export function AssetHealthGrid({ assets, selectedId, onSelect, className }: Ass
               </div>
             )}
           </CardContent>
-        </Card>
+        </button>
       ))}
     </div>
   );

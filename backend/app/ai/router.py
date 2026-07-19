@@ -4,8 +4,6 @@ from typing import Optional, Type
 from pydantic import BaseModel
 
 from app.ai.base import AIProvider, AIRequest, AIResponse
-from app.ai.gemini_provider import GeminiProvider
-from app.ai.openai_provider import OpenAIProvider
 from app.core.cache import cache_get, cache_set
 from app.core.config import settings
 
@@ -118,7 +116,35 @@ class AIProviderRouter:
 
 
 ai_router = AIProviderRouter()
-ai_router.register_provider("openai", OpenAIProvider())
-ai_router.register_provider("gemini", GeminiProvider())
-ai_router.set_primary(settings.ai_provider_primary.value)
-ai_router.set_fallback(settings.ai_provider_fallback.value)
+
+def register_providers():
+    try:
+        from app.ai.openai_provider import OpenAIProvider
+        ai_router.register_provider("openai", OpenAIProvider())
+    except Exception as e:
+        logger.warning("Failed to register OpenAI provider: %s", e)
+
+    try:
+        from app.ai.gemini_provider import GeminiProvider
+        ai_router.register_provider("gemini", GeminiProvider())
+    except Exception as e:
+        logger.warning("Failed to register Gemini provider: %s", e)
+
+    try:
+        from app.ai.mock_provider import MockProvider
+        ai_router.register_provider("mock", MockProvider())
+    except Exception as e:
+        logger.warning("Failed to register Mock provider: %s", e)
+
+    if settings.ai_provider_primary.value != "mock" and settings.ai_provider_primary.value not in ai_router._providers:
+        logger.warning("Primary provider '%s' not available, falling back to mock", settings.ai_provider_primary.value)
+        ai_router.set_primary("mock")
+    else:
+        ai_router.set_primary(settings.ai_provider_primary.value)
+
+    if settings.ai_provider_fallback.value not in ai_router._providers:
+        ai_router.set_fallback("mock")
+    else:
+        ai_router.set_fallback(settings.ai_provider_fallback.value)
+
+register_providers()

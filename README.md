@@ -13,7 +13,6 @@
 [![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Tests](https://img.shields.io/badge/Tests-2,000%2B-22c55e)](https://github.com/)
 [![WCAG](https://img.shields.io/badge/WCAG-2.2%20AA-005A9C)](https://www.w3.org/TR/WCAG22/)
-[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/features/actions)
 
 ---
 
@@ -38,7 +37,7 @@ This entire platform was built using **prompt-driven development** — every mod
 2. **Component prompts** → 100+ accessible React components (WCAG 2.2 AA)
 3. **Backend prompts** → FastAPI async-native services with 8 specialized engines
 4. **AI prompts** → Multi-provider abstraction with automatic failover
-5. **DevOps prompts** → 5 CI/CD workflows, Docker multi-stage, K8s manifests
+5. **DevOps prompts** → Docker multi-stage builds, K8s manifests, Prometheus/Grafana monitoring
 6. **Testing prompts** → 2,000+ tests across all modules
 
 **Key insight**: Prompt engineering IS architecture. Clear, specific prompts with context produce production-grade code.
@@ -85,7 +84,7 @@ Modern stadiums run on **15+ disconnected systems** — crowd monitoring, parkin
 | **Scope** | 14 integrated operational modules — crowd, parking, queue, emergency, maintenance, energy, security, tournament, digital twin, AI copilot, executive analytics, accessibility, performance, QA |
 | **AI** | Multi-provider AI abstraction (OpenAI GPT-4 + Gemini + Mock) with automatic failover. AI Copilot with conversation, reasoning, and explainability |
 | **Architecture** | Feature-sliced design with 10 ADRs. Next.js 16 App Router + FastAPI async + PostgreSQL 16 + Redis 7. Event-driven via pub/sub |
-| **DevOps** | 5 GitHub Actions workflows (CI, deploy, security, performance, release). Docker multi-stage. K8s manifests. Signed images. SBOM generation |
+| **DevOps** | Docker multi-stage builds (4-stage frontend, 3-stage backend). K8s manifests with probes. Prometheus/Grafana/Loki/Tempo stack. 18 alert rules. Deployment scripts |
 | **Observability** | Prometheus (35+ metrics, 18 alert rules). Grafana (17-panel ops center). Loki logs. Tempo traces. Correlation IDs |
 | **Accessibility** | WCAG 2.2 AA. 25 criteria tracked. SkipLink, Announcer, Focus Manager, Keyboard nav, Reduced motion |
 | **Quality** | 2,000+ test suite. Quality gates block deployment. 80% coverage floor. pnpm audit + Safety + Trivy + CodeQL + TruffleHog + Semgrep |
@@ -117,7 +116,7 @@ Modern stadiums run on **15+ disconnected systems** — crowd monitoring, parkin
 ### Infrastructure: Production-Grade DevOps
 - **Docker**: 4-stage frontend build (deps → builder → dev → prod), 3-stage backend. Non-root users. Health checks. `.dockerignore`
 - **Docker Compose**: Production (5 services), dev overrides, monitoring stack (6 services)
-- **CI/CD**: 5 workflows — CI (10 parallel jobs), deploy (signed + SBOM + staging + prod), security (8 tools), performance (k6 + Lighthouse), release (standard + hotfix)
+- **CI/CD**: Workflow architecture designed (`.github/workflows/` documentation in [`ci-cd-guide.md`](docs/ops/ci-cd-guide.md))
 - **Kubernetes**: Base manifests with liveness/readiness/startup probes, resource limits, Kustomize overlays for staging/production
 - **Monitoring**: Prometheus (18 alert rules, 3 severity levels), Grafana (auto-provisioned dashboards), Loki (structured logs), Tempo (OTLP traces)
 
@@ -200,7 +199,6 @@ See all [10 Architecture Decision Records](docs/adrs/) for detailed rationale.
 | Frontend components | 100+ across 14 feature modules |
 | Backend services | 29 Python modules, 8 service engines |
 | Docker images | 2 (frontend ~150MB, backend ~200MB) |
-| CI/CD workflows | 5 (CI, deploy, security, performance, release) |
 | Prometheus metrics | 35+ custom across API, AI, DB, queue, auth |
 | Alert rules | 18 across 6 severity groups |
 | Documentation | 30+ documents, 10 ADRs, 8 runbooks |

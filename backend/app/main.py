@@ -9,8 +9,10 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.core.config import settings
 from app.core.cache import close_cache, init_cache
 from app.core.errors import (
+    HTTPException,
     StadiumOSError,
     global_exception_handler,
+    http_exception_handler,
     stadiumos_error_handler,
 )
 from app.core.event_bus import event_bus
@@ -67,6 +69,7 @@ app.add_middleware(
 
 
 app.add_exception_handler(StadiumOSError, stadiumos_error_handler)
+app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(Exception, global_exception_handler)
 
 app.include_router(crowd_router, prefix=settings.api_prefix)

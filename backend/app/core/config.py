@@ -21,6 +21,7 @@ class LogLevel(str, Enum):
 class AIProvider(str, Enum):
     OPENAI = "openai"
     GEMINI = "gemini"
+    MOCK = "mock"
 
 
 class Environment(str, Enum):
@@ -76,8 +77,8 @@ class Settings(BaseSettings):
     gemini_max_tokens: int = 4096
     gemini_temperature: float = 0.2
 
-    ai_provider_primary: AIProvider = AIProvider.OPENAI
-    ai_provider_fallback: AIProvider = AIProvider.GEMINI
+    ai_provider_primary: AIProvider = AIProvider.MOCK
+    ai_provider_fallback: AIProvider = AIProvider.MOCK
     ai_rate_limit_per_minute: int = 60
     ai_cache_ttl_seconds: int = 300
 

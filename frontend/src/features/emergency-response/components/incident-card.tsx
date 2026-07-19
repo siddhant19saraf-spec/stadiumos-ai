@@ -42,19 +42,17 @@ const typeLabels: Record<string, string> = {
 
 export function IncidentCard({ incident, isSelected, onSelect, className }: IncidentCardProps) {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
-        "cursor-pointer rounded-md border-l-4 border bg-gradient-to-r from-primary/5 to-transparent p-3 transition-all duration-200 hover:bg-muted/20",
+        "w-full rounded-md border-l-4 border bg-gradient-to-r from-primary/5 to-transparent p-3 text-left transition-all duration-200 hover:bg-muted/20",
         severityColors[incident.severity],
         isSelected && "ring-1 ring-primary",
         className,
       )}
       onClick={() => onSelect?.(incident.id)}
-      role="button"
-      tabIndex={0}
-      aria-selected={isSelected}
       aria-label={`Incident: ${incident.title} (${incident.severity})`}
-      onKeyDown={(e) => e.key === "Enter" && onSelect?.(incident.id)}
+      aria-selected={isSelected}
     >
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
@@ -94,7 +92,7 @@ export function IncidentCard({ incident, isSelected, onSelect, className }: Inci
           Assigned: {incident.assignedTeam}
         </div>
       ) : null}
-    </div>
+    </button>
   );
 }
 

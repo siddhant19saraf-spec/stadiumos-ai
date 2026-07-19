@@ -7,8 +7,8 @@ from pydantic import BaseModel, Field
 
 class CrowdSnapshotResponse(BaseModel):
     id: UUID
-    zone_id: UUID
-    event_id: UUID
+    zone_id: str
+    event_id: str
     current_count: int
     predicted_count_30min: Optional[int] = None
     density_percent: float
@@ -16,13 +16,13 @@ class CrowdSnapshotResponse(BaseModel):
 
 
 class CrowdPredictionRequest(BaseModel):
-    zone_id: UUID
-    event_id: UUID
+    zone_id: str
+    event_id: str
     include_recommendations: bool = True
 
 
 class ZonePrediction(BaseModel):
-    zone_id: UUID
+    zone_id: str
     predicted_occupancy_30min: int
     confidence: float = Field(ge=0.0, le=1.0)
     pin_chance: float = Field(ge=0.0, le=1.0)
@@ -36,19 +36,19 @@ class RecommendedAction(BaseModel):
 
 class CrowdPredictionResponse(BaseModel):
     predictions: list[ZonePrediction]
-    recommended_actions: list[RecommendedAction]
+    recommended_actions: list[str] = []
     generated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
 class CrowdAlertRequest(BaseModel):
-    zone_id: UUID
-    event_id: UUID
+    zone_id: str
+    event_id: str
     threshold: float = Field(default=80.0, ge=0.0, le=100.0)
 
 
 class CrowdAlertResponse(BaseModel):
     alert_id: UUID = Field(default_factory=uuid4)
-    zone_id: UUID
+    zone_id: str
     severity: str
     message: str
     current_density: float

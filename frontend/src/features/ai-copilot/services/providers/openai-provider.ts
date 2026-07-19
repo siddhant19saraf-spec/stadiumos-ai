@@ -10,7 +10,7 @@ export class OpenAIProvider implements AIProvider {
   private model: string;
 
   constructor(apiKey?: string, model = "gpt-4-turbo") {
-    this.apiKey = apiKey ?? process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "";
+    this.apiKey = apiKey ?? process.env.OPENAI_API_KEY ?? "";
     this.model = model;
   }
 

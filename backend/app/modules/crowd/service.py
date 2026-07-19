@@ -1,4 +1,6 @@
+import json
 import logging
+import uuid
 from typing import Optional
 
 from sqlalchemy import select
@@ -22,16 +24,17 @@ class CrowdService:
 
     async def get_snapshot(self, snapshot_id: str) -> Optional[CrowdSnapshot]:
         result = await self.db.execute(
-            select(CrowdSnapshot).where(CrowdSnapshot.id == snapshot_id)
+            select(CrowdSnapshot).where(CrowdSnapshot.id == uuid.UUID(snapshot_id))
         )
         return result.scalar_one_or_none()
 
     async def get_recent_snapshots(
         self, zone_id: str, limit: int = 100
     ) -> list[CrowdSnapshot]:
+        zone_uuid = uuid.UUID(zone_id)
         result = await self.db.execute(
             select(CrowdSnapshot)
-            .where(CrowdSnapshot.zone_id == zone_id)
+            .where(CrowdSnapshot.zone_id == zone_uuid)
             .order_by(CrowdSnapshot.recorded_at.desc())
             .limit(limit)
         )
@@ -40,6 +43,8 @@ class CrowdService:
     async def predict_crowd(
         self, zone_id: str, event_id: str
     ) -> CrowdPredictionResponse:
+        zone_uuid = uuid.UUID(zone_id)
+        event_uuid = uuid.UUID(event_id)
         recent_data = await self.get_recent_snapshots(zone_id, limit=10)
 
         context = {
@@ -61,25 +66,52 @@ class CrowdService:
 
         response = await ai_router.generate(ai_request, cache_key=f"crowd:{zone_id}:{event_id}")
 
+        if response.success and response.content:
+            try:
+                data = json.loads(response.content)
+                predictions_data = data.get("predictions", [data])
+                predictions = [
+                    ZonePrediction(
+                        zone_id=p.get("zone_id", zone_id),
+                        predicted_occupancy_30min=p.get("predicted_occupancy_30min", 0),
+                        confidence=p.get("confidence", 0.0),
+                        pin_chance=p.get("pin_chance", 0.0),
+                    )
+                    for p in (predictions_data if isinstance(predictions_data, list) else [predictions_data])
+                ]
+                return CrowdPredictionResponse(
+                    predictions=predictions,
+                    recommended_actions=data.get("recommended_actions", []),
+                )
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning("Failed to parse AI prediction response: %s", e)
+
+        avg_count = sum(context["recent_counts"]) / max(len(context["recent_counts"]), 1)
+        avg_density = sum(context["density_percentages"]) / max(len(context["density_percentages"]), 1)
         return CrowdPredictionResponse(
             predictions=[
                 ZonePrediction(
                     zone_id=zone_id,
-                    predicted_occupancy_30min=0,
-                    confidence=0.0,
-                    pin_chance=0.0,
+                    predicted_occupancy_30min=int(avg_count * 1.1),
+                    confidence=min(avg_density / 100, 0.95),
+                    pin_chance=max(0.0, (avg_density - 50) / 100),
                 )
             ],
-            recommended_actions=[],
+            recommended_actions=(
+                ["Monitor zone density — approaching threshold"] if avg_density > 70 else
+                ["Zone operating normally"]
+            ),
         )
 
     async def check_threshold(
         self, zone_id: str, event_id: str, threshold: float = 80.0
     ) -> Optional[CrowdAlertResponse]:
+        zone_uuid = uuid.UUID(zone_id)
+        event_uuid = uuid.UUID(event_id)
         result = await self.db.execute(
             select(CrowdSnapshot)
-            .where(CrowdSnapshot.zone_id == zone_id)
-            .where(CrowdSnapshot.event_id == event_id)
+            .where(CrowdSnapshot.zone_id == zone_uuid)
+            .where(CrowdSnapshot.event_id == event_uuid)
             .order_by(CrowdSnapshot.recorded_at.desc())
             .limit(1)
         )

@@ -30,7 +30,7 @@
 | **Frontend** | Next.js 16 App Router, React 19, TypeScript strict, RSC/RCC split, 100+ accessible components |
 | **Backend** | FastAPI async-native, SQLAlchemy 2.0 async, Redis pub/sub event bus, ARQ task queue |
 | **Observability** | 35+ Prometheus metrics, 18 alert rules, Grafana dashboard, Loki logs, Tempo traces, correlation IDs across all services |
-| **DevOps** | 5 GitHub Actions workflows, Docker multi-stage (150MB images), signed containers, SBOM, K8s manifests |
+| **DevOps** | Docker multi-stage (150MB images), K8s manifests, Prometheus/Grafana/Loki/Tempo observability, deployment scripts |
 | **Accessibility** | WCAG 2.2 AA — SkipLink, AnnouncerProvider, FocusManager, keyboard-nav, motion detection — 25 criteria tracked |
 | **Security** | CodeQL + Semgrep SAST, Trivy container scan, TruffleHog secrets, Cosign signing, 8-dimensional automated security |
 

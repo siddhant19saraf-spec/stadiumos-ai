@@ -7,9 +7,10 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.database import Base, get_db
+from app.core.security import create_access_token
 from app.main import app
 
-TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+TEST_DATABASE_URL = "sqlite+aiosqlite://"
 
 
 @pytest.fixture(scope="session")
@@ -53,4 +54,5 @@ async def client(test_session: AsyncSession) -> AsyncGenerator[AsyncClient, None
 
 @pytest_asyncio.fixture
 async def auth_headers() -> dict[str, str]:
-    return {"Authorization": "Bearer test-token"}
+    token = create_access_token(subject="test-user", role="admin")
+    return {"Authorization": f"Bearer {token}"}

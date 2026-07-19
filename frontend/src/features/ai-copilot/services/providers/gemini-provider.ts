@@ -10,7 +10,7 @@ export class GeminiProvider implements AIProvider {
   private model: string;
 
   constructor(apiKey?: string, model = "gemini-1.5-pro") {
-    this.apiKey = apiKey ?? process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? "";
+    this.apiKey = apiKey ?? process.env.GEMINI_API_KEY ?? "";
     this.model = model;
   }
 

@@ -23,12 +23,7 @@ export function LayerControls({ layers, onToggle, className }: LayerControlsProp
         {layers.map((layer) => (
           <div
             key={layer.id}
-            className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/20"
-            onClick={() => onToggle(layer.id)}
-            role="switch"
-            aria-checked={layer.enabled}
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(layer.id); } }}
+            className="flex items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/20"
           >
             <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded" style={{ backgroundColor: layer.color, opacity: layer.enabled ? 0.7 : 0.3 }}>
               {layer.enabled ? <Eye className="h-3 w-3 text-white" /> : <EyeOff className="h-3 w-3 text-white" />}
