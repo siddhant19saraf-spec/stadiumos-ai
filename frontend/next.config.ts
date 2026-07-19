@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  outputFileTracingRoot: process.env.VERCEL ? process.cwd() : undefined,
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   typescript: {
     ignoreBuildErrors: true,
@@ -32,7 +31,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       "lucide-react",
       "recharts",
-      "@radix-ui/react-*",
     ],
   },
 
