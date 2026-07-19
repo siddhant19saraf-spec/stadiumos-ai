@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { APP_NAME } from "@/constants";
+import { AppLogo } from "@/components/app-logo";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -18,11 +18,8 @@ export function LandingHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-            S
-          </div>
-          <span className="text-lg font-bold">{APP_NAME}</span>
+        <Link href="/">
+          <AppLogo size="sm" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

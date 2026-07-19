@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { MODULE_CATEGORIES, APP_NAME } from "@/constants";
+import { MODULE_CATEGORIES } from "@/constants";
 import { MODULES } from "@/constants/modules";
+import { MiniLogo } from "@/components/app-logo";
 import { useUIStore } from "@/stores/ui-store";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -50,9 +51,8 @@ export function Sidebar() {
     >
       <div className={cn("flex h-14 items-center border-b px-4", isCollapsed && "justify-center")}>
         {!isCollapsed && (
-          <Link href="/" className="flex items-center gap-2 font-semibold text-sidebar-foreground">
-            <Icons.LayoutDashboard className="h-6 w-6 text-sidebar-primary" />
-            <span className="text-sm">{APP_NAME}</span>
+          <Link href="/">
+            <MiniLogo />
           </Link>
         )}
         <Button

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AppLogo } from "@/components/app-logo";
 import { APP_NAME } from "@/constants";
 
 const footerLinks = {
@@ -28,11 +29,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-                S
-              </div>
-              <span className="text-lg font-bold">{APP_NAME}</span>
+            <Link href="/">
+              <AppLogo size="sm" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
               Enterprise-grade AI platform for autonomous stadium and tournament operations.

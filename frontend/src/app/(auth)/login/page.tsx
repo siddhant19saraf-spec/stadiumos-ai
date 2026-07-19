@@ -3,13 +3,12 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { APP_NAME } from "@/constants";
+import { AppLogo } from "@/components/app-logo";
 import { toast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trophy } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -52,49 +51,72 @@ export default function LoginPage() {
   }
 
   return (
-    <Card>
-      <CardHeader className="space-y-1 text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-primary text-lg font-bold">S</span>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5 p-4">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 size-80 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 size-80 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] rounded-full border border-primary/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[400px] rounded-full border border-primary/5" />
+      </div>
+
+      <div className="relative w-full max-w-md">
+        <div className="mb-8 text-center">
+          <div className="flex justify-center mb-4">
+            <AppLogo size="lg" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Sign in to your StadiumOS AI account
+          </p>
+        </div>
+
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+          <form onSubmit={onSubmit}>
+            <div className="p-6 space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="admin@stadiumos.ai"
+                  required
+                  autoComplete="email"
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <span className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                    Forgot password?
+                  </span>
+                </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  required
+                  autoComplete="current-password"
+                  disabled={isLoading}
+                />
+              </div>
             </div>
-          </div>
-        <CardTitle className="text-2xl">{APP_NAME}</CardTitle>
-        <CardDescription>Sign in to your account to continue</CardDescription>
-      </CardHeader>
-      <form onSubmit={onSubmit}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="name@example.com"
-              required
-              autoComplete="email"
-              disabled={isLoading}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              disabled={isLoading}
-            />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" type="submit" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign in
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+            <div className="p-6 pt-0">
+              <Button className="w-full" type="submit" disabled={isLoading} size="lg">
+                {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+                Sign in
+              </Button>
+            </div>
+          </form>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+          <Trophy className="size-3" />
+          <span>Built for Hack2Sustain 2026</span>
+        </div>
+      </div>
+    </div>
   );
 }
