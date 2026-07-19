@@ -2,9 +2,12 @@
     "name": "stadiumos-ai-frontend",
     "version": "0.1.0",
     "private": true,
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "next build --debug",
         "start": "next start",
         "lint": "next lint",
         "typecheck": "tsc --noEmit",
