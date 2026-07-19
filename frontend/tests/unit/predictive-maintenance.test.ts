@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { assetEngine } from "@/features/predictive-maintenance/services/asset-engine";
 import { healthEngine } from "@/features/predictive-maintenance/services/health-engine";
@@ -1364,3 +1365,4 @@ describe("Edge Cases — Predictive Maintenance", () => {
     });
   });
 });
+

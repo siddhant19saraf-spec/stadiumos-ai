@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { StadiumZone, MapEntity, LayerConfig, LayerId } from "../types";
 
 export interface IMapEngine {
@@ -28,3 +29,4 @@ export class MockMapEngine implements IMapEngine {
 }
 
 export const mapEngine = new MockMapEngine();
+

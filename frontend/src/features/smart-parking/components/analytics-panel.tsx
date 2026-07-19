@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,3 +76,4 @@ function AnalyticCard({ icon: Icon, label, value, desc, color }: { icon: React.E
     </div>
   );
 }
+

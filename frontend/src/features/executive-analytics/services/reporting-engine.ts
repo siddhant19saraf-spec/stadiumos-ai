@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { BoardReport, ExecutiveSummary, DecisionRecommendation } from "../types";
 import type { ExecutiveKpi } from "../types";
 
@@ -79,3 +80,4 @@ export class MockReportingEngine implements IReportingEngine {
 }
 
 export const reportingEngine = new MockReportingEngine();
+

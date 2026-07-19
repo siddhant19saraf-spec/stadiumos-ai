@@ -24,6 +24,7 @@ import type {
   DecisionOption,
   AIReasoning,
   OperationalContext,
+  RecommendedDecision,
 } from "@/features/ai-copilot/types";
 import { toast } from "@/hooks/use-toast";
 
@@ -40,6 +41,7 @@ export default function AICopilotPage() {
     option: DecisionOption;
   } | null>(null);
   const [executionResult, setExecutionResult] = useState<ActionExecution | null>(null);
+  const [decisions, _setDecisions] = useState<RecommendedDecision[]>([]);
   const [comparisonData, setComparisonData] = useState<{
     title: string;
     options: DecisionOption[];
@@ -190,12 +192,6 @@ export default function AICopilotPage() {
     setExecutionResult(null);
   }, []);
 
-  const handleSelectReasoning = useCallback((msg: CopilotMessage) => {
-    if (msg.reasoning) {
-      setSelectedReasoning(msg.reasoning);
-    }
-  }, []);
-
   if (isInitializing) {
     return (
       <Shell title="AI Copilot">
@@ -245,6 +241,7 @@ export default function AICopilotPage() {
 
             {/* Recommended Decisions */}
             <CopilotRecommendedDecisions
+              decisions={decisions}
               onApply={handleDecisionApply}
               onCompare={handleDecisionCompare}
             />

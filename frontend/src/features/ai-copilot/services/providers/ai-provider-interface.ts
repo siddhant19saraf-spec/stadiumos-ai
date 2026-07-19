@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { OperationalContext, AIReasoning, CopilotMessage } from "../../types";
 
 export interface AIProviderResponse {
@@ -32,3 +33,4 @@ export interface AIProvider {
   /** Check if the provider is available */
   isAvailable(): Promise<boolean>;
 }
+

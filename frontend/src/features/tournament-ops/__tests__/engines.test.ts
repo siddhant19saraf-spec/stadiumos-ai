@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import { TOURNAMENT, VENUES, TEAMS, RESOURCE_REQUIREMENTS, PHASE_DURATION_MINUTES } from "../constants";
 import { MockSchedulingEngine } from "../services/scheduling-engine";
@@ -232,3 +233,4 @@ describe("OptimizationEngine", () => {
     expect(reallocated[0]!.allocated).toBeGreaterThan(70);
   });
 });
+

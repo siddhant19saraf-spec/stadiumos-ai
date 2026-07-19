@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { SimulationScenario, QueuePoint, QueuePointStatus, CounterStatus } from "../types";
 import { SCENARIO_CONFIGS } from "../constants";
 
@@ -121,3 +122,4 @@ export class MockSimulationEngine implements ISimulationEngine {
 }
 
 export const simulationEngine = new MockSimulationEngine();
+

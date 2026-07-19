@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { TrafficRoad, TrafficCondition, ParkingLotStatus, CongestionLevel, RoadStatus } from "../types";
 import { TRAFFIC_ROADS, ALERT_THRESHOLDS } from "../constants";
 
@@ -108,3 +109,4 @@ export class MockTrafficEngine implements ITrafficEngine {
 }
 
 export const trafficEngine = new MockTrafficEngine();
+

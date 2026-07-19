@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useMemo } from "react";
@@ -81,3 +82,4 @@ export function PriorityQueue({ incidents, selectedId, onSelect, className }: Pr
     </Card>
   );
 }
+

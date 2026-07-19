@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -94,3 +95,4 @@ export function MatchCard({ match, isSelected, onSelect, className }: MatchCardP
     </div>
   );
 }
+

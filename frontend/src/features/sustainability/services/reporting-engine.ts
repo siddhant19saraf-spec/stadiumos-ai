@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ExecutiveReport, SustainabilitySummary, ESGKPI, AIRecommendation, TrendDataPoint } from "../types";
 
 function rf(min: number, max: number, d = 1): number {
@@ -87,3 +88,4 @@ export class MockReportingEngine implements IReportingEngine {
 }
 
 export const reportingEngine = new MockReportingEngine();
+

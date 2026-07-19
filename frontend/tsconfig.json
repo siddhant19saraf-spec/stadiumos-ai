@@ -57,7 +57,7 @@
         "./src/styles/*"
       ]
     },
-    "baseUrl": ".",
+
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,

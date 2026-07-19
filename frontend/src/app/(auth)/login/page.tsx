@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { APP_NAME } from "@/constants";
 import { toast } from "@/hooks/use-toast";
-import { Stadium, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -54,9 +54,11 @@ export default function LoginPage() {
   return (
     <Card>
       <CardHeader className="space-y-1 text-center">
-        <div className="mb-4 flex justify-center">
-          <Stadium className="h-10 w-10 text-primary" />
-        </div>
+          <div className="mb-4 flex justify-center">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-primary text-lg font-bold">S</span>
+            </div>
+          </div>
         <CardTitle className="text-2xl">{APP_NAME}</CardTitle>
         <CardDescription>Sign in to your account to continue</CardDescription>
       </CardHeader>

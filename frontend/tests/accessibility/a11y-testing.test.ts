@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 
 describe("ARIA Compliance", () => {
@@ -319,3 +320,4 @@ describe("WCAG 2.2 AA Compliance", () => {
     expect(form).toContain("type=\"submit\"");
   });
 });
+

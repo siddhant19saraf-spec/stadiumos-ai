@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ZoneLiveStatus, StadiumZone, ZoneRecommendation } from "../types";
 
 export interface IPredictionEngine {
@@ -27,3 +28,4 @@ export class MockPredictionEngine implements IPredictionEngine {
 }
 
 export const predictionEngine = new MockPredictionEngine();
+

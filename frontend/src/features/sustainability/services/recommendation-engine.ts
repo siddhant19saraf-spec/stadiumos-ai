@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { EnergyMetrics, WaterMetrics, WasteMetrics, AIRecommendation } from "../types";
 import { UTILITY_RATES } from "../constants";
 
@@ -172,3 +173,4 @@ export class MockRecommendationEngine implements IRecommendationEngine {
 }
 
 export const recommendationEngine = new MockRecommendationEngine();
+

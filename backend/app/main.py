@@ -78,8 +78,8 @@ async def health_check():
     redis_healthy = False
 
     try:
-        from app.core.database import get_session
-        async for _ in get_session():
+        from app.core.database import get_db
+        async for _ in get_db():
             db_healthy = True
             break
     except Exception:

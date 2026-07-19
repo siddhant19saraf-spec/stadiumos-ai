@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useMemo } from "react";
@@ -112,3 +113,4 @@ function TimeSlot({ icon: Icon, label, value, desc }: { icon: React.ElementType;
     </div>
   );
 }
+

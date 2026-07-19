@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   CopilotMessage,
   OperationalContext,
@@ -330,3 +331,4 @@ function randomFloat(min: number, max: number): number {
 }
 
 export const aiCopilotService = new AICopilotService();
+

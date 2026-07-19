@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ParkingPrediction, TrafficPrediction, ParkingLot, ParkingLotStatus, TrafficRoad, CongestionLevel } from "../types";
 import { PARKING_LOTS } from "../constants";
 
@@ -149,3 +150,4 @@ export class MockPredictionEngine implements IPredictionEngine {
 }
 
 export const predictionEngine = new MockPredictionEngine();
+

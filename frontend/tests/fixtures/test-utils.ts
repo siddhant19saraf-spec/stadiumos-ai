@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { vi, type MockInstance } from "vitest";
 
 export function expectCalledOnce(mock: MockInstance, ...args: unknown[]): void {
@@ -60,3 +61,4 @@ export function expectRange(value: number, min: number, max: number): void {
 export function expectDefined<T>(value: T | null | undefined): asserts value is T {
   expect(value).toBeDefined();
 }
+

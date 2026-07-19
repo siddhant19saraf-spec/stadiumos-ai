@@ -104,7 +104,7 @@ export default function CommandCenterPage() {
               <AIRecommendations
                 recommendations={data.recommendations}
                 onApply={(id) => toast({ title: "Recommendation applied", description: `Recommendation ${id} applied`, variant: "default" })}
-                onDismiss={(id) => toast({ title: "Recommendation dismissed", variant: "default" })}
+                onDismiss={(_id) => toast({ title: "Recommendation dismissed", variant: "default" })}
               />
             </div>
 

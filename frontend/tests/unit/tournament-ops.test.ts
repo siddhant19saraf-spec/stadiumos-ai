@@ -8,7 +8,7 @@ import { reportingEngine } from "@/features/tournament-ops/services/reporting-en
 import { simulationEngine } from "@/features/tournament-ops/services/simulation-engine";
 import { tournamentService } from "@/features/tournament-ops/services/tournament-service";
 import { VENUES, TEAMS, RESOURCE_TYPES, RESOURCE_REQUIREMENTS, READINESS_CATEGORIES, OPERATIONAL_PHASES, PHASE_DURATION_MINUTES, WEATHER_SCENARIOS } from "@/features/tournament-ops/constants";
-import type { Match, Venue, Conflict, TournamentAnalytics, ScheduleSlot, AIRecommendation, TournamentState, ResourceAllocation, Team, Tournament } from "@/features/tournament-ops/types";
+import type { Match, Conflict, TournamentAnalytics, ScheduleSlot, AIRecommendation, TournamentState, ResourceAllocation } from "@/features/tournament-ops/types";
 import { makeMatch, makeVenue, makeTournament, makeTeam, resetCounter } from "../fixtures";
 
 beforeEach(() => {
@@ -80,7 +80,7 @@ describe("AnalyticsEngine", () => {
   });
 
   it("computes venue stats per venue", () => {
-    const existingVenue = VENUES[0];
+    const existingVenue = VENUES[0]!;
     const matches = [makeMatch({ venueId: existingVenue.id, attendance: 40000 })];
     const result = analyticsEngine.compute(matches, VENUES, []);
     const entry = result.perVenueStats.find((vs) => vs.venueId === existingVenue.id);
@@ -170,16 +170,16 @@ describe("SchedulingEngine", () => {
     ];
     const slots = schedulingEngine.generateSchedule(matches);
     expect(slots).toHaveLength(2);
-    expect(slots[0].matchId).toBe(matches[0].id);
-    expect(slots[0].date).toBe("2026-06-15");
-    expect(slots[0].startTime).toBe("14:00");
-    expect(slots[1].startTime).toBe("18:00");
+    expect(slots[0]!.matchId).toBe(matches[0]!.id);
+    expect(slots[0]!.date).toBe("2026-06-15");
+    expect(slots[0]!.startTime).toBe("14:00");
+    expect(slots[1]!.startTime).toBe("18:00");
   });
 
   it("generates end time as start time + 2 hours", () => {
     const matches = [makeMatch({ scheduledTime: "15:30" })];
     const slots = schedulingEngine.generateSchedule(matches);
-    expect(slots[0].endTime).toBe("17:30");
+    expect(slots[0]!.endTime).toBe("17:30");
   });
 
   it("generates schedule for empty matches list", () => {
@@ -190,18 +190,18 @@ describe("SchedulingEngine", () => {
   it("generates slots with allocated resources as empty", () => {
     const matches = [makeMatch()];
     const slots = schedulingEngine.generateSchedule(matches);
-    expect(slots[0].allocatedResources).toEqual([]);
-    expect(slots[0].conflicts).toEqual([]);
+    expect(slots[0]!.allocatedResources).toEqual([]);
+    expect(slots[0]!.conflicts).toEqual([]);
   });
 
   it("generates slots with phase as match", () => {
     const matches = [makeMatch()];
     const slots = schedulingEngine.generateSchedule(matches);
-    expect(slots[0].phase).toBe("match");
+    expect(slots[0]!.phase).toBe("match");
   });
 
   it("detects time overlap conflicts at same venue on same date", () => {
-    const venue = VENUES[0];
+    const venue = VENUES[0]!;
     const matches = [
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "14:00" }),
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "15:00" }),
@@ -210,11 +210,11 @@ describe("SchedulingEngine", () => {
     const conflicts = schedulingEngine.detectConflicts(slots, matches, [venue]);
     const timeOverlaps = conflicts.filter((c) => c.type === "time_overlap");
     expect(timeOverlaps.length).toBeGreaterThanOrEqual(1);
-    expect(timeOverlaps[0].severity).toBe("high");
+    expect(timeOverlaps[0]!.severity).toBe("high");
   });
 
   it("detects no conflict when gap is sufficient", () => {
-    const venue = VENUES[0];
+    const venue = VENUES[0]!;
     const matches = [
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "10:00" }),
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "14:00" }),
@@ -226,7 +226,7 @@ describe("SchedulingEngine", () => {
   });
 
   it("detects no conflict on different dates", () => {
-    const venue = VENUES[0];
+    const venue = VENUES[0]!;
     const matches = [
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "14:00" }),
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-16", scheduledTime: "14:00" }),
@@ -238,7 +238,7 @@ describe("SchedulingEngine", () => {
   });
 
   it("detects team rest violations", () => {
-    const team = TEAMS[0];
+    const team = TEAMS[0]!;
     const matches = [
       makeMatch({ homeTeamId: team.id, scheduledDate: "2026-06-15" }),
       makeMatch({ awayTeamId: team.id, scheduledDate: "2026-06-16" }),
@@ -250,7 +250,7 @@ describe("SchedulingEngine", () => {
   });
 
   it("detects no rest violation with sufficient gap", () => {
-    const team = TEAMS[0];
+    const team = TEAMS[0]!;
     const matches = [
       makeMatch({ homeTeamId: team.id, scheduledDate: "2026-06-15" }),
       makeMatch({ awayTeamId: team.id, scheduledDate: "2026-06-19" }),
@@ -278,7 +278,7 @@ describe("SchedulingEngine", () => {
   });
 
   it("detects multiple conflicts for single venue with tight schedule", () => {
-    const venue = VENUES[0];
+    const venue = VENUES[0]!;
     const matches = [
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "10:00" }),
       makeMatch({ venueId: venue.id, scheduledDate: "2026-06-15", scheduledTime: "11:00" }),
@@ -324,7 +324,7 @@ describe("ConflictEngine", () => {
     const conflicts = conflictEngine.detectAll(slots, matches, [venue]);
     const maintConflicts = conflicts.filter((c) => c.type === "maintenance_conflict");
     expect(maintConflicts.length).toBeGreaterThanOrEqual(1);
-    expect(maintConflicts[0].severity).toBe("critical");
+    expect(maintConflicts[0]!.severity).toBe("critical");
   });
 
   it("detects no maintenance conflict when venue is ready", () => {
@@ -345,9 +345,9 @@ describe("ConflictEngine", () => {
       { id: "c3", type: "time_overlap", severity: "high", title: "High", description: "", affectedIds: [], affectedVenues: [], aiResolution: "", aiConfidence: 90, resolved: false, detectedAt: "", resolvedAt: null },
     ];
     const prioritized = conflictEngine.prioritize(conflicts);
-    expect(prioritized[0].severity).toBe("critical");
-    expect(prioritized[1].severity).toBe("high");
-    expect(prioritized[2].severity).toBe("low");
+    expect(prioritized[0]!.severity).toBe("critical");
+    expect(prioritized[1]!.severity).toBe("high");
+    expect(prioritized[2]!.severity).toBe("low");
   });
 
   it("suggestResolution returns AI resolution text", () => {
@@ -395,6 +395,7 @@ describe("ConflictEngine", () => {
     ];
     const matches = [makeMatch({ id: "m1" }), makeMatch({ id: "m2" })];
     const conflicts = conflictEngine.detectAll(slots, matches, [venue]);
+    void conflicts;
   });
 });
 
@@ -459,7 +460,7 @@ describe("OptimizationEngine", () => {
       { type: "medical", required: 50, allocated: 55, available: 60, utilizationPercent: 92, status: "sufficient", teams: [] },
     ];
     const reallocated = optimizationEngine.reallocate(resources, "m1", "v1");
-    expect(reallocated[0].allocated).toBe(55);
+    expect(reallocated[0]!.allocated).toBe(55);
   });
 
   it("reallocate handles empty list", () => {
@@ -497,8 +498,8 @@ describe("RecommendationEngine", () => {
     };
     const recs = recommendationEngine.generate(conflicts, matches, analytics);
     expect(recs.length).toBeGreaterThanOrEqual(1);
-    expect(recs[0].type).toBe("reschedule");
-    expect(recs[0].requiresApproval).toBe(true);
+    expect(recs[0]!.type).toBe("reschedule");
+    expect(recs[0]!.requiresApproval).toBe(true);
   });
 
   it("generates no more than 8 recommendations", () => {
@@ -581,7 +582,7 @@ describe("RecommendationEngine", () => {
     const recs = recommendationEngine.generate(conflicts, [makeMatch()], analytics);
     for (let i = 1; i < recs.length; i++) {
       const order = { critical: 0, high: 1, medium: 2, low: 3 };
-      expect(order[recs[i - 1].priority]).toBeLessThanOrEqual(order[recs[i].priority]);
+      expect(order[recs[i - 1]!.priority]).toBeLessThanOrEqual(order[recs[i]!.priority]);
     }
   });
 
@@ -740,8 +741,8 @@ describe("SimulationEngine", () => {
 
   it("simulated matches have operational timeline phases", () => {
     const matches = simulationEngine.simulateMatches();
-    const inProgress = matches.find((m) => m.status === "in_progress");
-    const completed = matches.find((m) => m.status === "completed");
+    const inProgress = matches.find((m: Match) => m.status === "in_progress");
+    const completed = matches.find((m: Match) => m.status === "completed");
     if (inProgress) {
       expect(inProgress.operationalTimeline.length).toBeGreaterThan(0);
     }
@@ -782,7 +783,7 @@ describe("SimulationEngine", () => {
     const matches = [makeMatch()];
     const timeline = simulationEngine.simulateTimeline(matches);
     if (timeline.length > 0) {
-      const phases = timeline[0].phases;
+      const phases = timeline[0]!.phases;
       const completedPhases = phases.filter((p) => p.status === "completed");
       const activePhases = phases.filter((p) => p.status === "active");
       const pendingPhases = phases.filter((p) => p.status === "pending");
@@ -815,7 +816,7 @@ describe("SimulationEngine", () => {
     const matches = [makeMatch({ scheduledTime: "18:00" })];
     const schedule = simulationEngine.simulateSchedule(matches);
     expect(schedule).toHaveLength(1);
-    expect(schedule[0].matchId).toBe(matches[0].id);
+    expect(schedule[0]!.matchId).toBe(matches[0]!.id);
   });
 
   it("simulated resources have utilization percent", () => {
@@ -893,8 +894,8 @@ describe("TournamentService", () => {
   it("generates match report for existing match", () => {
     const state = tournamentService.getState();
     if (state.matches.length > 0) {
-      const report = tournamentService.generateReport("match", state.matches[0].id);
-      expect(report).toContain(state.matches[0].title);
+      const report = tournamentService.generateReport("match", state.matches[0]!.id);
+      expect(report).toContain(state.matches[0]!.title);
     }
   });
 
@@ -922,7 +923,7 @@ describe("TournamentService", () => {
   it("acknowledgeRecommendation updates implemented flag", () => {
     const state = tournamentService.getState();
     if (state.recommendations.length > 0) {
-      const recId = state.recommendations[0].id;
+      const recId = state.recommendations[0]!.id;
       tournamentService.acknowledgeRecommendation(recId);
       const updated = tournamentService.getState();
       const rec = updated.recommendations.find((r) => r.id === recId);
@@ -1042,7 +1043,7 @@ describe("Edge Cases — Tournament Ops", () => {
         { type: "security", required: 0, allocated: 0, available: 0, utilizationPercent: 0, status: "sufficient", teams: [] },
       ];
       const reallocated = optimizationEngine.reallocate(resources, "m1", "v1");
-      expect(reallocated[0].status).toBe("sufficient");
+      expect(reallocated[0]!.status).toBe("sufficient");
     });
   });
 
@@ -1082,7 +1083,7 @@ describe("Edge Cases — Tournament Ops", () => {
     it("all resource types have requirements defined", () => {
       RESOURCE_TYPES.forEach((type) => {
         expect(RESOURCE_REQUIREMENTS[type]).toBeDefined();
-        expect(RESOURCE_REQUIREMENTS[type].base).toBeGreaterThan(0);
+        expect(RESOURCE_REQUIREMENTS[type]!.base).toBeGreaterThan(0);
       });
     });
 
@@ -1210,7 +1211,7 @@ describe("Edge Cases — Tournament Ops", () => {
       const phases = OPERATIONAL_PHASES.map((phase) => ({
         phase, startTime: "", endTime: "", status: "pending" as const, durationMinutes: PHASE_DURATION_MINUTES[phase],
       }));
-      const m = makeMatch({ operationalTimeline: phases });
+      const m = makeMatch({ operationalTimeline: phases as any });
       expect(m.operationalTimeline.length).toBe(OPERATIONAL_PHASES.length);
     });
   });
@@ -1388,7 +1389,7 @@ describe("Edge Cases — Tournament Ops", () => {
 
   describe("Venue readiness calculation edge cases", () => {
     it("readiness calculation uses all 8 categories", () => {
-      const venue = VENUES[0];
+      const venue = VENUES[0]!;
       const categories = ["infrastructure", "safety", "maintenance", "parking", "connectivity", "power", "emergency", "cleaning"] as const;
       categories.forEach((cat) => {
         expect(venue.readiness[cat]).toBeGreaterThanOrEqual(0);

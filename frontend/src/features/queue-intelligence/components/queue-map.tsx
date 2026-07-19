@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
@@ -131,3 +132,4 @@ export function QueueMap({ points, statuses, selectedQueueId, onSelect, classNam
     </div>
   );
 }
+

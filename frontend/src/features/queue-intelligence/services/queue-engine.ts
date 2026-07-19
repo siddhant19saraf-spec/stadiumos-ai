@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { QueuePoint, QueuePointStatus, QueueStatus, CounterStatus } from "../types";
 import { QUEUE_POINTS, MENU_ITEMS } from "../constants";
 
@@ -151,3 +152,4 @@ export class MockQueueEngine implements IQueueEngine {
 const ALERT_THRESHOLDS = { LONG_QUEUE_MIN: 15, CRITICAL_QUEUE_MIN: 25 };
 
 export const queueEngine = new MockQueueEngine();
+

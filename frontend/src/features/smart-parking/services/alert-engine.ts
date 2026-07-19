@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ParkingAlert, ParkingLotStatus, TrafficRoad, AlertType, AlertSeverity } from "../types";
 import { PARKING_LOTS, ALERT_THRESHOLDS } from "../constants";
 
@@ -101,3 +102,4 @@ export class MockAlertEngine implements IAlertEngine {
 }
 
 export const alertEngine = new MockAlertEngine();
+

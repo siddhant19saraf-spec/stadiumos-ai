@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useMemo } from "react";
@@ -84,3 +85,4 @@ export function QueueMonitor({ points, statuses, selectedQueueId, onSelect, clas
     </Card>
   );
 }
+

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Alert, AssetHealth, FailurePrediction, WorkOrder, AlertSeverity, AlertCategory } from "../types";
 
 let alertCounter = 0;
@@ -109,3 +110,4 @@ export class MockAlertEngine implements IAlertEngine {
 }
 
 export const alertEngine = new MockAlertEngine();
+

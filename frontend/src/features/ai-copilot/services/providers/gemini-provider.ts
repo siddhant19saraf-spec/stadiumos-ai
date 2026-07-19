@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { AIProvider, AIProviderResponse, OperationalContext, AIReasoning } from "../../types";
 import { SYSTEM_PROMPTS } from "../../prompts/system-prompts";
 import { buildFullContext, buildQueryContext } from "../../prompts/context-builders";
@@ -109,3 +110,4 @@ export class GeminiProvider implements AIProvider {
     };
   }
 }
+

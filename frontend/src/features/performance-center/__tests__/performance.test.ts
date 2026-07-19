@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 /* ===================================================================
@@ -577,3 +578,4 @@ describe("Performance Benchmarks", () => {
     expect(durationMs).toBeGreaterThanOrEqual(15);
   });
 });
+

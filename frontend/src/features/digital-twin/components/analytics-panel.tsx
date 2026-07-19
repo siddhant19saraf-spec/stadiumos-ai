@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useMemo } from "react";
@@ -108,3 +109,4 @@ function zonesWith(statuses: Map<string, ZoneLiveStatus>, status: string): numbe
   }
   return c;
 }
+

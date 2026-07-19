@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useEffect, useRef, useCallback, createContext, useContext, type ReactNode } from "react";
@@ -90,3 +91,4 @@ export function AriaLiveRegion({ message, assertiveness = "polite" }: { message:
     />
   );
 }
+

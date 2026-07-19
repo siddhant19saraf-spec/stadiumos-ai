@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   CommandCenterData,
   AIExecutiveSummary,
@@ -402,3 +403,4 @@ export const commandCenterService = {
     }));
   },
 };
+

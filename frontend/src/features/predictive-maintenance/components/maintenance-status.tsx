@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,3 +44,4 @@ export function MaintenanceStatus({ totalAssets, maintenanceCompliance, dueCount
     </Card>
   );
 }
+

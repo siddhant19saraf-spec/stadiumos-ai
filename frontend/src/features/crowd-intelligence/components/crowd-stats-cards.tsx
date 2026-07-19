@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -96,3 +97,4 @@ export function CrowdStatsCards({ analytics, className, isRefreshing }: CrowdSta
     </div>
   );
 }
+

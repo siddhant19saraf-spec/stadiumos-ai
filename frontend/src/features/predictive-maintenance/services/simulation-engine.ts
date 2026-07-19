@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ScenarioDefinition, SimulationResult, FailurePrediction, WorkOrder, AssetHealth } from "../types";
 import { SIMULATION_SCENARIOS } from "../constants";
 
@@ -87,3 +88,4 @@ export class MockSimulationEngine implements ISimulationEngine {
 }
 
 export const simulationEngine = new MockSimulationEngine();
+

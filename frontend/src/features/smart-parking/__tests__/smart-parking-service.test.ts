@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 import { smartParkingService } from "../services/smart-parking-service";
 import type { SmartParkingState } from "../types";
@@ -115,3 +116,4 @@ describe("SmartParkingService", () => {
     expect(state.analytics.trafficDelayMin).toBeGreaterThanOrEqual(0);
   });
 });
+

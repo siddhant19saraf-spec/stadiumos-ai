@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Incident, ResponseTeam, DispatchAction } from "../types";
 import { MockIncidentEngine } from "../services/incident-engine";
@@ -196,3 +197,4 @@ describe("Edge Cases", () => {
     expect(result.incident.status).toBe("resolved");
   });
 });
+

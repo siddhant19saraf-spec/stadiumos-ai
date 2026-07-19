@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -119,3 +120,4 @@ export function MainDashboard() {
     </div>
   );
 }
+

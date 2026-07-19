@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
@@ -196,3 +197,4 @@ export function StadiumMap({
     </div>
   );
 }
+

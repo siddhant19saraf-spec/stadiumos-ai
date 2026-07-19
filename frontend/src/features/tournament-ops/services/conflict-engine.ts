@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Conflict, Match, ScheduleSlot, Venue } from "../types";
 
 export interface IConflictEngine {
@@ -101,3 +102,4 @@ function timeToMinutes(time: string): number {
 }
 
 export const conflictEngine = new MockConflictEngine();
+

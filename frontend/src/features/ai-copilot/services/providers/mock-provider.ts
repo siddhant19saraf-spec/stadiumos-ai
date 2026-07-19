@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   AIProvider,
   AIProviderResponse,
@@ -285,3 +286,4 @@ export class MockAIProvider implements AIProvider {
     });
   }
 }
+

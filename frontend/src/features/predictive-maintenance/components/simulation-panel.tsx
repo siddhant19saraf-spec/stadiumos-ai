@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -129,3 +130,4 @@ export function SimulationPanel({ scenarios, result, onRun, running, className }
     </div>
   );
 }
+

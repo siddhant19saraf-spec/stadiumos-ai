@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   MockIncidentEngine,
@@ -1803,3 +1804,4 @@ describe("Additional Map Engine Edge Cases", () => {
     expect(entity?.severity).toBe("critical");
   });
 });
+

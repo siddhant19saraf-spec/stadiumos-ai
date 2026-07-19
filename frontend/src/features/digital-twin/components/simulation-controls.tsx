@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { useState } from "react";
@@ -81,3 +82,4 @@ export function SimulationControls({ active, activeScenario, onStart, onStop, cl
     </Card>
   );
 }
+

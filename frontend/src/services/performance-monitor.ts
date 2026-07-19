@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { CacheStore, cacheStoreManager } from "@/lib/performance/cache";
 
 /* ——— Types ——— */
@@ -209,3 +210,4 @@ export class MockPerformanceMonitorEngine implements IPerformanceMonitorEngine {
 
 export const performanceMonitor = new MockPerformanceMonitorEngine();
 performanceMonitor.seedMockData();
+

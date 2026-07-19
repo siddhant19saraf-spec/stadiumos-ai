@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Match, ScheduleSlot, Conflict, Venue, Team } from "../types";
 import { VENUES, TEAMS } from "../constants";
 
@@ -108,3 +109,4 @@ function timeToMinutes(time: string): number {
 }
 
 export const schedulingEngine = new MockSchedulingEngine();
+

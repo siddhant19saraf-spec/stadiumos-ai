@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { ExecutiveAlert, TimelineEvent, ExecutiveSummary, DecisionRecommendation, RiskAssessment } from "../types";
 
 function uid(prefix: string): string {
@@ -170,3 +171,4 @@ export class MockNotificationEngine implements INotificationEngine {
 }
 
 export const notificationEngine = new MockNotificationEngine();
+

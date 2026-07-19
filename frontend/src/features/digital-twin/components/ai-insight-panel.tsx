@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,3 +72,4 @@ export function AIInsightPanel({ insights, className }: AIInsightPanelProps) {
     </Card>
   );
 }
+

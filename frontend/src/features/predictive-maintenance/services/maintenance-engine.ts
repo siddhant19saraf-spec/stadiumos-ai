@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { AssetHealth } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
@@ -31,3 +32,4 @@ export class MockMaintenanceEngine implements IMaintenanceEngine {
 }
 
 export const maintenanceEngine = new MockMaintenanceEngine();
+

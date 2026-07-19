@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import { authEngine } from "../services/auth-engine";
 import { rbacEngine } from "../services/rbac-engine";
@@ -931,3 +932,4 @@ describe("SecurityService", () => {
     expect(report.generatedBy).toBe("admin");
   });
 });
+

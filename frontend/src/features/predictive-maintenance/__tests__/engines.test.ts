@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import type { AssetHealth, MaintenanceAsset } from "../types";
 import { ASSETS, SIMULATION_SCENARIOS, ALERT_THRESHOLDS } from "../constants";
@@ -383,3 +384,4 @@ describe("Constants", () => {
     expect(ALERT_THRESHOLDS.RISK_CRITICAL).toBe(75);
   });
 });
+

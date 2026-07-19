@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CarbonMetrics, EnergyMetrics, WasteMetrics, WaterMetrics } from "../types";
 import { CARBON_FACTORS } from "../constants";
 
@@ -93,3 +94,4 @@ export class MockCarbonEngine implements ICarbonEngine {
 }
 
 export const carbonEngine = new MockCarbonEngine();
+

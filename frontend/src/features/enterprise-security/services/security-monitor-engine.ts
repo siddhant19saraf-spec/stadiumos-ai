@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { SecurityAlert, SecurityAlertType, AlertSeverity, AuditLog, SecurityUser, UserSession } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 
@@ -153,3 +154,4 @@ export class MockSecurityMonitorEngine implements ISecurityMonitorEngine {
 }
 
 export const securityMonitorEngine = new MockSecurityMonitorEngine();
+

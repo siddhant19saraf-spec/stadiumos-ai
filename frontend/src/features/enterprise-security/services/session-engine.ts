@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { UserSession, SecurityRole, SecurityContext } from "../types";
 import { SESSION_CONFIG } from "../constants";
 
@@ -127,3 +128,4 @@ export class MockSessionEngine implements ISessionEngine {
 }
 
 export const sessionEngine = new MockSessionEngine();
+

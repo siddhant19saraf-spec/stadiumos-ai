@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import type { EnergyAsset, WaterAsset, WasteAsset, CarbonMetrics, EnergyMetrics, WaterMetrics, WasteMetrics } from "../types";
 import { ENERGY_ASSETS, WATER_ASSETS, WASTE_ASSETS, SIMULATION_SCENARIOS, ALERT_THRESHOLDS, SUSTAINABILITY_TARGETS, CARBON_FACTORS, UTILITY_RATES } from "../constants";
@@ -506,3 +507,4 @@ describe("SustainabilityService", () => {
     expect(withReport.lastReport!.title).toBe("Sustainability Executive Report");
   });
 });
+

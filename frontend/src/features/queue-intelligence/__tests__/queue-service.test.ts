@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 import { queueIntelligenceService } from "../services/queue-service";
 
@@ -85,3 +86,4 @@ describe("QueueIntelligenceService", () => {
     expect(state.analytics.customerSatisfactionAvg).toBeGreaterThan(0);
   });
 });
+

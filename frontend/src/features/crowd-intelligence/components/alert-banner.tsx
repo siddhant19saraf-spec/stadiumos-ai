@@ -63,6 +63,7 @@ export function AlertBanner({ alerts, onDismiss, className }: AlertBannerProps) 
                   setDismissed((prev) => new Set(prev).add(alert.id));
                   onDismiss?.(alert.id);
                 }}
+                aria-label="Dismiss alert"
               >
                 <X className="h-3 w-3" />
               </Button>

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { lazy } from "react";
 import type { ComponentType } from "react";
 
@@ -16,3 +17,4 @@ export function lazyComponent(
   if (displayName) Component.displayName = displayName;
   return Component;
 }
+

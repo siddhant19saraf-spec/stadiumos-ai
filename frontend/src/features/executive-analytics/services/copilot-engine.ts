@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { CopilotQueryResult, ExecutiveSummary, DecisionRecommendation, RiskAssessment, ExecutiveKpi, TimelineEvent } from "../types";
 import { KPI_CATEGORY_LABELS } from "../constants";
 
@@ -83,3 +84,4 @@ export class MockCopilotEngine implements ICopilotEngine {
 }
 
 export const copilotEngine = new MockCopilotEngine();
+

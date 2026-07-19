@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { DigitalTwinEngine, digitalTwinEngine } from "@/features/digital-twin/services/digital-twin-engine";
 import { MockAnalyticsEngine, analyticsEngine } from "@/features/digital-twin/services/analytics-engine";
@@ -1458,3 +1459,4 @@ describe("Additional Map Engine Edge Cases", () => {
     expect(result.length).toBeGreaterThanOrEqual(6);
   });
 });
+

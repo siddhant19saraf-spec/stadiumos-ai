@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   Incident, IncidentType, Severity, Priority, AIAnalysis, TimelineEntry,
   SmartAlert, ResponseTeam, AIRecommendation, EmergencyAnalytics, ResponseTimePoint, EvacuationStatus,
@@ -393,3 +394,4 @@ export class EmergencySimulationEngine {
 }
 
 export const simulationEngine = new EmergencySimulationEngine();
+

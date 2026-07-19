@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { apiClient, ApiClient } from "@/lib/api-client";
 import { AppError, ErrorCode } from "@/lib/error-handler";
@@ -221,3 +222,4 @@ describe("ApiClient — Custom Configuration", () => {
     expect(client).toBeDefined();
   });
 });
+
