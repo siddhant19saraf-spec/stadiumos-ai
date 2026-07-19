@@ -8,9 +8,13 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
-  turbopack: {
-    root: process.cwd(),
-  },
+  ...(process.env.TURBO_BUILD === "true"
+    ? {
+        turbopack: {
+          root: process.cwd(),
+        },
+      }
+    : {}),
 
   images: {
     deviceSizes: [640, 768, 1024, 1280, 1536],
