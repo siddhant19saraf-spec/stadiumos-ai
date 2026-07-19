@@ -21,8 +21,10 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 60 * 60 * 24,
   },
-};
 
-export default nextConfig;
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+};
 
 export default nextConfig;
