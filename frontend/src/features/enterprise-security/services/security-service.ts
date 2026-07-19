@@ -37,7 +37,7 @@ export function createInitialState(): EnterpriseSecurityData {
     auditLogs: [],
     alerts: [],
     complianceFrameworks: [],
-    analytics: null as any,
+    analytics: null,
     reports: [],
     roleDefinitions: ROLE_DEFINITIONS,
     selectedRole: null,
@@ -263,7 +263,7 @@ export const securityService: ISecurityService = {
   },
 
   getAuditLogs(filters?: Record<string, string>): AuditLog[] {
-    return auditEngine.getLogs(filters as any);
+    return auditEngine.getLogs(filters ?? {});
   },
 
   getComplianceData() {

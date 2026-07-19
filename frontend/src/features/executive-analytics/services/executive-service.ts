@@ -1,16 +1,14 @@
 import type { ExecutiveAnalyticsData, ExecutiveRole, CopilotMessage, CopilotQueryResult } from "../types";
 import { executiveEngine } from "./executive-engine";
-import { analyticsEngine } from "./analytics-engine";
 import { decisionEngine } from "./decision-engine";
 import { riskEngine } from "./risk-engine";
 import { copilotEngine } from "./copilot-engine";
 import { reportingEngine } from "./reporting-engine";
 import { notificationEngine } from "./notification-engine";
-import { EXECUTIVE_ROLES } from "../constants";
 
 export function createState(): ExecutiveAnalyticsData {
   return {
-    summary: null as any,
+    summary: null,
     kpis: [],
     decisions: [],
     alerts: [],
@@ -131,7 +129,6 @@ export const executiveService: IExecutiveService = {
       status: k.value >= 70 ? "on_track" : k.value >= 50 ? "at_risk" : "behind",
       trend: k.trend === "up" ? "improving" : k.trend === "down" ? "declining" : "stable",
     })) : []);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const report = reportingEngine.generateBoardReport(state.summary, state.kpis, state.decisions, esgKpis);
     return { ...state, lastReport: report };
   },

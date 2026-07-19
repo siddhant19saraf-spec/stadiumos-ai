@@ -9,8 +9,7 @@ describe("SmartParkingService", () => {
   });
 
   it("should be a singleton", () => {
-    const instance = require("../services/smart-parking-service").smartParkingService;
-    expect(instance).toBeDefined();
+    expect(smartParkingService).toBeDefined();
   });
 
   it("should initialize with a valid state", () => {

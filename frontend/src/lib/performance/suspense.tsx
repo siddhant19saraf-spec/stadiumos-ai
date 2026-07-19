@@ -1,4 +1,6 @@
 import { Suspense, type ComponentType, type ReactNode } from "react";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Props = Record<string, any>;
 
 export function SuspenseFallback({ message = "Loading..." }: { message?: string }) {
   return (
@@ -13,10 +15,10 @@ export function SuspenseFallback({ message = "Loading..." }: { message?: string 
 }
 
 export function createSuspenseWrapper(
-  Component: ComponentType<any>,
+  Component: ComponentType<Props>,
   fallback?: ReactNode,
-): ComponentType<any> {
-  const Wrapped = (props: any) => (
+): ComponentType<Props> {
+  const Wrapped = (props: Props) => (
     <Suspense fallback={fallback ?? <SuspenseFallback />}>
       <Component {...props} />
     </Suspense>

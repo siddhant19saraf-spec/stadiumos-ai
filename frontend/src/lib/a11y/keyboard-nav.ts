@@ -8,13 +8,12 @@ export function useKeyboard(
 ): void {
   const handler = useCallback(
     (e: KeyboardEvent) => {
-      const entry = keyMap[e.key];
+      const entry = keyMap[e.key as string];
       if (entry) {
         entry(e);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps,
+    [keyMap],
   );
 
   useEffect(() => {

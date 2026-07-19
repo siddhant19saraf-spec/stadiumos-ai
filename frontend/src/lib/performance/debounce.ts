@@ -1,4 +1,7 @@
-export function debounce<T extends (...args: any[]) => void>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyFn = (...args: any[]) => void;
+
+export function debounce<T extends AnyFn>(
   fn: T,
   delayMs: number,
 ): { (...args: Parameters<T>): void; cancel: () => void; flush: () => void } {
@@ -32,7 +35,7 @@ export function debounce<T extends (...args: any[]) => void>(
   return debounced;
 }
 
-export function throttle<T extends (...args: any[]) => void>(
+export function throttle<T extends AnyFn>(
   fn: T,
   limitMs: number,
 ): { (...args: Parameters<T>): void; cancel: () => void } {
@@ -65,7 +68,7 @@ export function throttle<T extends (...args: any[]) => void>(
   return throttled;
 }
 
-export function rafThrottle<T extends (...args: any[]) => void>(fn: T): (...args: Parameters<T>) => void {
+export function rafThrottle<T extends AnyFn>(fn: T): (...args: Parameters<T>) => void {
   let rafId: number | null = null;
   let lastArgs: Parameters<T> | null = null;
 
@@ -80,7 +83,7 @@ export function rafThrottle<T extends (...args: any[]) => void>(fn: T): (...args
   };
 }
 
-export function leadingDebounce<T extends (...args: any[]) => void>(
+export function leadingDebounce<T extends AnyFn>(
   fn: T,
   delayMs: number,
 ): (...args: Parameters<T>) => void {

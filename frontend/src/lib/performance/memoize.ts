@@ -1,9 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Fn = (...args: any[]) => any;
 
 interface MemoizeOptions {
   maxSize?: number;
   ttlMs?: number;
-  keyFn?: (...args: any[]) => string;
+  keyFn?: (...args: Parameters<Fn>) => string;
 }
 
 interface CacheEntry<T> {
@@ -41,7 +42,7 @@ export function memoize<T extends Fn>(fn: T, options: MemoizeOptions = {}): T {
   }) as T;
 }
 
-export async function memoizeAsync<T extends (...args: any[]) => Promise<any>>(
+export async function memoizeAsync<T extends (...args: Parameters<Fn>) => Promise<unknown>>(
   fn: T,
   options: MemoizeOptions = {},
 ): Promise<T> {
@@ -49,7 +50,7 @@ export async function memoizeAsync<T extends (...args: any[]) => Promise<any>>(
   const cache = new Map<string, CacheEntry<Awaited<ReturnType<T>>>>();
   const pending = new Map<string, Promise<Awaited<ReturnType<T>>>>();
 
-  return ((...args: any[]) => {
+  return ((...args: Parameters<Fn>) => {
     const key = keyFn ? keyFn(...args) : JSON.stringify(args);
     const now = Date.now();
     const existing = cache.get(key);

@@ -72,7 +72,7 @@ export class MockReportingEngine implements IReportingEngine {
       grouped.set(kpi.category, existing);
     }
     return Array.from(grouped.entries()).map(([category, categoryKpis]) => ({
-      category: category as any,
+      category,
       kpis: categoryKpis,
     }));
   }
