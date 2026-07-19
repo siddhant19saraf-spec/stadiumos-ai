@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MockAuthEngine } from "@/features/enterprise-security/services/auth-engine";
 import { MockRBACEngine } from "@/features/enterprise-security/services/rbac-engine";

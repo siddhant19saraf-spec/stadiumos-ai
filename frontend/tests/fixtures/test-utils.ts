@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { vi, type MockInstance } from "vitest";
 
 export function expectCalledOnce(mock: MockInstance, ...args: unknown[]): void {

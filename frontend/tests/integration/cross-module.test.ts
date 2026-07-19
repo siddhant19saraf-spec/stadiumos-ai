@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MockIncidentEngine } from "@/features/emergency-response/services/incident-engine";
 import { MockNotificationEngine } from "@/features/emergency-response/services/notification-engine";

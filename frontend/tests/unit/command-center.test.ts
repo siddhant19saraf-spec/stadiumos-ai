@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi } from "vitest";
 import { commandCenterService } from "@/features/command-center/services/command-center-service";
 import type { CommandCenterData, AIProviderStatus, AIRecommendation, KPIMetric, ActivityEvent, Incident, ChartDataPoint } from "@/features/command-center/types";

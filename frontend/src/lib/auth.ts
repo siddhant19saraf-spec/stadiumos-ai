@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { type AuthOptions, type Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { logger } from "./logger";

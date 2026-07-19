@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, beforeEach } from "vitest";
 import { energyEngine } from "@/features/sustainability/services/energy-engine";
 import { waterEngine } from "@/features/sustainability/services/water-engine";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { BaseEntity, Severity, Status, AlertSeverity, MetricValue } from "./common";
 import type { UserRole } from "../lib/auth";
 

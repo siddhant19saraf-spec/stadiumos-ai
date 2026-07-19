@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -27,9 +26,24 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
-  const ariaLabel = variant === "success" ? "Success" : variant === "destructive" ? "Critical" : variant === "warning" ? "Warning" : variant === "secondary" ? "Secondary" : variant;
-  return <span className={cn(badgeVariants({ variant }), className)} role="status" aria-label={ariaLabel} {...props} />;
+  const ariaLabel =
+    variant === "success"
+      ? "Success"
+      : variant === "destructive"
+        ? "Critical"
+        : variant === "warning"
+          ? "Warning"
+          : variant === "secondary"
+            ? "Secondary"
+            : "Badge";
+  return (
+    <span
+      className={cn(badgeVariants({ variant }), className)}
+      role="status"
+      aria-label={ariaLabel}
+      {...props}
+    />
+  );
 }
 
 export { Badge, badgeVariants };
-

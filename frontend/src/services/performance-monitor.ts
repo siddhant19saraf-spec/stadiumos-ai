@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { CacheStore, cacheStoreManager } from "@/lib/performance/cache";
 
 /* ——— Types ——— */

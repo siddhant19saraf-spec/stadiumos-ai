@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { executiveEngine } from "@/features/executive-analytics/services/executive-engine";
 import { analyticsEngine } from "@/features/executive-analytics/services/analytics-engine";

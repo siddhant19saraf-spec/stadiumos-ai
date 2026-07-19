@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { MockPredictionEngine, predictionEngine } from "@/features/crowd-intelligence/services/prediction-engine";
 import { MockRecommendationEngine, recommendationEngine } from "@/features/crowd-intelligence/services/recommendation-engine";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { queueEngine } from "@/features/queue-intelligence/services/queue-engine";
 import { predictionEngine } from "@/features/queue-intelligence/services/prediction-engine";

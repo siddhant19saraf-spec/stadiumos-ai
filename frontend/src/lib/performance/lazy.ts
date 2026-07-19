@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { lazy } from "react";
 import type { ComponentType } from "react";
 

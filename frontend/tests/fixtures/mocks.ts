@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { vi } from "vitest";
 
 export function createMockFetch<T>(data: T, ok = true, status = 200): ReturnType<typeof vi.fn> {

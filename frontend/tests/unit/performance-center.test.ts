@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { performanceMonitor, MockPerformanceMonitorEngine } from "@/services/performance-monitor";
 import { performanceMiddleware } from "@/middleware/performance-middleware";

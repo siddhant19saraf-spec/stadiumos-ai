@@ -1,4 +1,3 @@
-// @ts-nocheck
 const marks = new Map<string, number>();
 
 export function createPerformanceTimer(name: string): { start: () => void; end: () => number } {

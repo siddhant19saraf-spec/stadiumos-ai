@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useRef, useCallback, createContext, useContext, type ReactNode } from "react";

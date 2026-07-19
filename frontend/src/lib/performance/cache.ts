@@ -1,4 +1,3 @@
-// @ts-nocheck
 interface CacheConfig {
   ttlMs: number;
   maxSize: number;

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { memoize } from "@/lib/performance/memoize";
 import { debounce, throttle } from "@/lib/performance/debounce";

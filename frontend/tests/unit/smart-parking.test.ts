@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { parkingEngine, MockParkingEngine } from "@/features/smart-parking/services/parking-engine";
 import { trafficEngine, MockTrafficEngine } from "@/features/smart-parking/services/traffic-engine";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AIProviderFactory } from "@/features/ai-copilot/services/providers/provider-factory";
 import { MockAIProvider } from "@/features/ai-copilot/services/providers/mock-provider";
