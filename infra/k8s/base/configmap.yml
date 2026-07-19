@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stadiumos-config
+  namespace: stadiumos
+data:
+  APP_NAME: "StadiumOS AI"
+  APP_VERSION: "0.1.0"
+  API_PREFIX: "/api/v1"
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "info"
+  NODE_ENV: "production"
+  NEXT_PUBLIC_APP_URL: "https://stadiumos.ai"
+  NEXT_PUBLIC_API_URL: "https://api.stadiumos.ai"
+  CORS_ORIGINS: "https://stadiumos.ai,https://api.stadiumos.ai"
+  JWT_ALGORITHM: "HS256"
+  JWT_EXPIRY_MINUTES: "15"
+  JWT_REFRESH_EXPIRY_DAYS: "7"
+  DATABASE_POOL_SIZE: "20"
+  DATABASE_MAX_OVERFLOW: "10"
+  AI_PROVIDER_PRIMARY: "openai"
+  AI_PROVIDER_FALLBACK: "gemini"
+  AI_RATE_LIMIT_REQUESTS_PER_MINUTE: "60"
+  AI_CACHE_TTL_SECONDS: "300"
+  GUNICORN_WORKERS: "4"
+  STADIUMOS_METRICS_ENABLED: "true"

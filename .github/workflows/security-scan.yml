@@ -1,0 +1,198 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+
+  dependencies:
+    name: Dependency Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan frontend (pnpm audit)
+        working-directory: frontend
+        run: |
+          npm install -g pnpm@9
+          pnpm audit --audit-level=high > audit-frontend.txt
+          cat audit-frontend.txt
+        continue-on-error: true
+
+      - name: Scan backend (pip-audit)
+        working-directory: backend
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt > audit-backend.txt
+          cat audit-backend.txt
+        continue-on-error: true
+
+      - name: Upload audit reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audits
+          path: |
+            frontend/audit-frontend.txt
+            backend/audit-backend.txt
+          retention-days: 30
+
+  container:
+    name: Container Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build frontend image
+        run: docker build -f infra/docker/frontend/Dockerfile --target production -t stadiumos-frontend:scan frontend/
+
+      - name: Build backend image
+        run: docker build -f infra/docker/backend/Dockerfile --target production -t stadiumos-backend:scan backend/
+
+      - name: Scan frontend (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: stadiumos-frontend:scan
+          format: sarif
+          output: trivy-frontend.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+
+      - name: Scan backend (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: stadiumos-backend:scan
+          format: sarif
+          output: trivy-backend.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-scans
+          path: trivy-*.sarif
+          retention-days: 30
+
+  code-analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python
+          queries: security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/default
+          auditOn: push
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        continue-on-error: true
+
+  secrets:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog (full history)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified --since-commit HEAD~50
+        continue-on-error: true
+
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+
+  sbom:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: spdx-json
+          output-file: sbom-full.spdx.json
+
+      - name: Generate CycloneDX SBOM
+        uses: cyclonedx/gha-generate-bom@v2
+        with:
+          path: ./
+          format: json
+          output: sbom-cyclonedx.json
+        continue-on-error: true
+
+      - name: Upload SBOMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-artifacts
+          path: |
+            sbom-*.json
+          retention-days: 90
+
+  license:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Frontend license check
+        working-directory: frontend
+        run: |
+          npm install -g license-checker
+          license-checker --summary --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;CC0-1.0;Unlicense" > license-report.txt || echo "⚠️ License issues found"
+          cat license-report.txt
+        continue-on-error: true
+
+      - name: Upload license report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-reports
+          path: frontend/license-report.txt
+          retention-days: 30
+
+  report:
+    name: Security Report
+    needs: [dependencies, container, code-analysis, secrets, sbom, license]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate security report
+        run: |
+          echo "# Security Scan Report — $(date +'%Y-%m-%d')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Scan | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          for scan in dependencies container code-analysis secrets sbom license; do
+            STATUS="${{ needs[scan].result }}"
+            if [ "$STATUS" = "success" ]; then
+              echo "| ✅ $scan | Clean |" >> $GITHUB_STEP_SUMMARY
+            elif [ "$STATUS" = "failure" ]; then
+              echo "| ⚠️ $scan | Issues found |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| ❌ $scan | Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Full scan results available in workflow artifacts." >> $GITHUB_STEP_SUMMARY

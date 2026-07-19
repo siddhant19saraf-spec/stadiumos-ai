@@ -1,0 +1,204 @@
+{
+  "title": "StadiumOS AI — Operations Center",
+  "version": 1,
+  "description": "Central operations dashboard for StadiumOS AI platform",
+  "tags": ["stadiumos", "operations", "production"],
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "refresh": "30s",
+  "templating": {
+    "list": [
+      {
+        "name": "environment",
+        "type": "constant",
+        "label": "Environment",
+        "query": "production",
+        "current": { "text": "production", "value": "production" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "Service Health",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 0, "y": 0 },
+      "targets": [{
+        "expr": "count(up{job=~\"stadiumos.*\"} == 1)",
+        "legendFormat": "Healthy"
+      }],
+      "description": "Count of healthy services"
+    },
+    {
+      "title": "Services Down",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 3, "y": 0 },
+      "targets": [{
+        "expr": "count(up{job=~\"stadiumos.*\"} == 0)",
+        "legendFormat": "Down"
+      }],
+      "description": "Count of unhealthy services"
+    },
+    {
+      "title": "API Requests/sec",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 6, "y": 0 },
+      "targets": [{
+        "expr": "sum(rate(http_requests_total[1m]))",
+        "legendFormat": "req/s"
+      }],
+      "description": "Total API request rate"
+    },
+    {
+      "title": "API Error Rate",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 9, "y": 0 },
+      "targets": [{
+        "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])) * 100",
+        "legendFormat": "%"
+      }],
+      "unit": "percent",
+      "description": "Percentage of 5xx responses"
+    },
+    {
+      "title": "p95 API Latency",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 12, "y": 0 },
+      "targets": [{
+        "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+        "legendFormat": "p95"
+      }],
+      "unit": "s",
+      "description": "95th percentile API latency"
+    },
+    {
+      "title": "AI Response Time (p95)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 15, "y": 0 },
+      "targets": [{
+        "expr": "histogram_quantile(0.95, sum(rate(ai_response_duration_seconds_bucket[5m])) by (le))",
+        "legendFormat": "p95"
+      }],
+      "unit": "s",
+      "description": "95th percentile AI response time"
+    },
+    {
+      "title": "Active Users",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 18, "y": 0 },
+      "targets": [{
+        "expr": "sum(active_users)",
+        "legendFormat": "Users"
+      }],
+      "description": "Currently active users"
+    },
+    {
+      "title": "Queue Backlog",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 3, "x": 21, "y": 0 },
+      "targets": [{
+        "expr": "arq_queue_size",
+        "legendFormat": "Jobs"
+      }],
+      "description": "Background job queue depth"
+    },
+    {
+      "title": "API Request Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 4 },
+      "targets": [
+        { "expr": "sum(rate(http_requests_total{status=~\"2..\"}[1m]))", "legendFormat": "2xx" },
+        { "expr": "sum(rate(http_requests_total{status=~\"4..\"}[1m]))", "legendFormat": "4xx" },
+        { "expr": "sum(rate(http_requests_total{status=~\"5..\"}[1m]))", "legendFormat": "5xx" }
+      ],
+      "description": "API request rate by status code"
+    },
+    {
+      "title": "API Latency (p50, p95, p99)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 4 },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p95" },
+        { "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p99" }
+      ],
+      "description": "API latency percentiles"
+    },
+    {
+      "title": "AI Provider Response Times",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 4 },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(ai_response_duration_seconds_bucket{provider=\"primary\"}[5m])) by (le))", "legendFormat": "Primary" },
+        { "expr": "histogram_quantile(0.95, sum(rate(ai_response_duration_seconds_bucket{provider=\"fallback\"}[5m])) by (le))", "legendFormat": "Fallback" }
+      ],
+      "description": "AI provider p95 response times"
+    },
+    {
+      "title": "Database Connections",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 12 },
+      "targets": [{
+        "expr": "pg_stat_database_numbackends",
+        "legendFormat": "Active connections"
+      }],
+      "description": "Active database connections"
+    },
+    {
+      "title": "Memory Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 12 },
+      "targets": [{
+        "expr": "process_resident_memory_bytes / 1024 / 1024",
+        "legendFormat": "Memory (MB)"
+      }],
+      "unit": "MB",
+      "description": "Process memory usage"
+    },
+    {
+      "title": "CPU Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 12 },
+      "targets": [{
+        "expr": "rate(process_cpu_seconds_total[1m]) * 100",
+        "legendFormat": "CPU %"
+      }],
+      "unit": "percent",
+      "description": "CPU utilization"
+    },
+    {
+      "title": "Error Distribution",
+      "type": "piechart",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 12 },
+      "targets": [{
+        "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) by (status)",
+        "legendFormat": "HTTP {{ status }}"
+      }],
+      "description": "Error breakdown by status code"
+    },
+    {
+      "title": "Latest Deployments",
+      "type": "table",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 18 },
+      "targets": [{
+        "expr": "deployment_info",
+        "format": "table",
+        "instant": true
+      }],
+      "description": "Recent deployment information"
+    },
+    {
+      "title": "Active Incidents",
+      "type": "table",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 18 },
+      "targets": [{
+        "expr": "alerts_active",
+        "format": "table",
+        "instant": true
+      }],
+      "description": "Currently firing alerts"
+    }
+  ]
+}

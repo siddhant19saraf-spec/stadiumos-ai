@@ -1,0 +1,91 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - stadiumos-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql+asyncpg://stadiumos:stadiumos@db:5432/stadiumos
+      - DATABASE_URL_SYNC=postgresql://stadiumos:stadiumos@db:5432/stadiumos
+      - REDIS_URL=redis://redis:6379/0
+      - CORS_ORIGINS=http://localhost:3000
+      - LOG_LEVEL=DEBUG
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - stadiumos-network
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=stadiumos
+      - POSTGRES_PASSWORD=stadiumos
+      - POSTGRES_DB=stadiumos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stadiumos"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stadiumos-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - stadiumos-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  stadiumos-network:
+    driver: bridge
