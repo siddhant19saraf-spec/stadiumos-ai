@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { Match, ScheduleSlot, Conflict, Venue, Team } from "../types";
 import { VENUES, TEAMS } from "../constants";
 

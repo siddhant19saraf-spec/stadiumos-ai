@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { AIRecommendation, Conflict, Match, Venue, TournamentAnalytics } from "../types";
 import { VENUES, TEAMS } from "../constants";
 

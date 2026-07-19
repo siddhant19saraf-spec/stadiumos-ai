@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { EnterpriseSecurityData, SecurityRole, SecurityUser, LoginRequest, LoginResult, SecurityPermission, SecurityContext, SecurityReport, AuditLog } from "../types";
 import { authEngine } from "./auth-engine";
 import { rbacEngine } from "./rbac-engine";

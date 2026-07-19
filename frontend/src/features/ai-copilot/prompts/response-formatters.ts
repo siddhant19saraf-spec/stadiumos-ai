@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { CopilotMessage, AIReasoning, DecisionOption } from "../types";
 
 export function formatAIResponse(raw: string): Omit<CopilotMessage, "id" | "timestamp" | "status"> {

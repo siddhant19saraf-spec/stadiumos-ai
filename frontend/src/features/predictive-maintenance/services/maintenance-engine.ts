@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { AssetHealth } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ParkingRecommendation, ParkingLotStatus, TrafficRoad, ParkingAlert } from "../types";
 import { PARKING_LOTS, ALERT_THRESHOLDS } from "../constants";
 

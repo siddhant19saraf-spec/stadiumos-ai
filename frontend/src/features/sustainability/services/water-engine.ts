@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { WaterMetrics, WaterAsset, WaterPrediction } from "../types";
 import { WATER_ASSETS } from "../constants";
 

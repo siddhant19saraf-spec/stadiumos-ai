@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { SmartAlert, Incident, AlertType, Severity } from "../types";
 
 export interface INotificationEngine {

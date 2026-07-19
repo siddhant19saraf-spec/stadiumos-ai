@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   MaintenanceAsset, AssetHealth, FailurePrediction, WorkOrder, Alert,
   AnalyticsSummary, TrendData, SimulationResult,

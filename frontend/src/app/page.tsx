@@ -17,6 +17,9 @@ import {
   Leaf,
   Sparkles,
   Calendar,
+  Droplets,
+  Recycle,
+  TreePine,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -205,6 +208,74 @@ export default function LandingPage() {
                   <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b py-20 md:py-28 bg-gradient-to-b from-emerald-50/50 via-background to-background dark:from-emerald-950/20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="text-center mb-14">
+              <div className="inline-flex items-center rounded-full border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 px-4 py-1.5 text-xs font-medium mb-6 text-emerald-700 dark:text-emerald-300">
+                <Leaf className="size-3.5 mr-1.5" />
+                Powered by AI for Sustainable Operations
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Sustainability at the Core
+              </h2>
+              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+                Every module is engineered to reduce resource consumption, minimize waste, and lower the carbon
+                footprint of large-scale venue operations. Aligned with UN Sustainable Development Goals.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+              {[
+                { icon: Zap, label: "Energy Reduction", value: "10–20%", description: "AI-driven load optimization across HVAC, lighting, and power systems" },
+                { icon: Recycle, label: "Waste Reduction", value: "20–30%", description: "AI demand prediction for concessions and smart recycling zone management" },
+                { icon: TreePine, label: "Carbon Tracking", value: "15–25%", description: "Real-time CO₂ monitoring with AI-recommended operational changes" },
+                { icon: Droplets, label: "Water Conservation", value: "10–15%", description: "Consumption monitoring, leak detection, and irrigation optimization" },
+              ].map((metric) => {
+                const Icon = metric.icon;
+                return (
+                  <Card key={metric.label} className="border-emerald-200 dark:border-emerald-800/50">
+                    <CardContent className="p-5">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                          <Icon className="size-4.5" />
+                        </div>
+                        <div>
+                          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{metric.value}</div>
+                          <div className="text-xs font-medium">{metric.label}</div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{metric.description}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-4">Aligned with UN Sustainable Development Goals</h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {[
+                  { number: "7", name: "Affordable & Clean Energy" },
+                  { number: "11", name: "Sustainable Cities" },
+                  { number: "12", name: "Responsible Consumption" },
+                  { number: "13", name: "Climate Action" },
+                  { number: "6", name: "Clean Water" },
+                ].map((sdg) => (
+                  <div
+                    key={sdg.number}
+                    className="inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-sm"
+                  >
+                    <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {sdg.number}
+                    </span>
+                    <span className="text-muted-foreground">{sdg.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>

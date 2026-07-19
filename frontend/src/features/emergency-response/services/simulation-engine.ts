@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   Incident, IncidentType, Severity, Priority, AIAnalysis, TimelineEntry,
   SmartAlert, ResponseTeam, AIRecommendation, EmergencyAnalytics, ResponseTimePoint, EvacuationStatus,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { Alert, AssetHealth, FailurePrediction, WorkOrder, AlertSeverity, AlertCategory } from "../types";
 
 let alertCounter = 0;

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { TrendDataPoint, ESGKPI, SustainabilitySummary, EnergyMetrics, WaterMetrics, WasteMetrics, CarbonMetrics } from "../types";
 import { SUSTAINABILITY_TARGETS } from "../constants";
 

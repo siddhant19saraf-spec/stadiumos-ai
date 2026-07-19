@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { CarbonMetrics, EnergyMetrics, WasteMetrics, WaterMetrics } from "../types";
 import { CARBON_FACTORS } from "../constants";
 

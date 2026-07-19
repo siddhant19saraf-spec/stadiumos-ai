@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   StadiumZone, CrowdAnalytics, CrowdTimelinePoint, GateUtilization,
   QueueGrowthPoint, CrowdAlert, AIInsight, ZoneStatus,

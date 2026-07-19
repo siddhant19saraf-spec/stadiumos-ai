@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { SecurityAnalytics, AuditLog, SecurityAlert, UserSession, SecurityUser, SecurityPermission } from "../types";
 import { ROLE_DEFINITIONS, PERMISSION_LABELS } from "../constants";
 

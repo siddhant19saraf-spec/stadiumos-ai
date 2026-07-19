@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { RateLimitConfig, RateLimitState, MiddlewareResult, SecurityContext } from "../types";
 import { ALERT_THRESHOLDS } from "../constants";
 

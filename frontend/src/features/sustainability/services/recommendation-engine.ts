@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { EnergyMetrics, WaterMetrics, WasteMetrics, AIRecommendation } from "../types";
 import { UTILITY_RATES } from "../constants";
 

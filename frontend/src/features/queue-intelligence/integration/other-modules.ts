@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { queueIntelligenceService } from "../services/queue-service";
 
 export interface CopilotQueueSummary {

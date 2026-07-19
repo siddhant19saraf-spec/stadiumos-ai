@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type {
   Tournament, Venue, Team, Match, WeatherData, ScheduleSlot,
   ResourceAllocation, OperationalTimelineEntry, TimelinePhase, PredictiveInsight,

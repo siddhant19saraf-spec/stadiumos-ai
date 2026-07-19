@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { Conflict, Match, ScheduleSlot, Venue } from "../types";
 
 export interface IConflictEngine {

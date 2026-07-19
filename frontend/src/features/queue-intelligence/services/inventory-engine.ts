@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { InventoryItem, MenuItem, QueuePointStatus } from "../types";
 import { MENU_ITEMS } from "../constants";
 

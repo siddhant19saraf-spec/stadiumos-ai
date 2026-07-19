@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { DigitalTwinState, StadiumZone, ZoneLiveStatus, MapEntity, DigitalIncident, LiveAnalytics, AIInsight, ZoneRecommendation, LayerConfig, SimulationScenario, TimelineSnapshot } from "../types";
 import { STADIUM_ZONES, LAYER_CONFIGS } from "../constants";
 import { digitalTwinEngine } from "./digital-twin-engine";

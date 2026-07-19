@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect } from "vitest";
 import { TOURNAMENT, VENUES, TEAMS, RESOURCE_REQUIREMENTS, PHASE_DURATION_MINUTES } from "../constants";
 import { MockSchedulingEngine } from "../services/scheduling-engine";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ExecutiveSummary, ModuleSnapshot, ExecutiveRole } from "../types";
 import { ALERT_THRESHOLDS, MODULE_NAMES, EXECUTIVE_ROLES } from "../constants";
 

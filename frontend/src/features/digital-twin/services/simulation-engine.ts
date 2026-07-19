@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { SimulationScenario, StadiumZone, ZoneLiveStatus, LiveAnalytics, DigitalIncident, TimelineSnapshot } from "../types";
 import { STADIUM_ZONES, ZONE_CAPACITIES, SCENARIO_CONFIGS } from "../constants";
 

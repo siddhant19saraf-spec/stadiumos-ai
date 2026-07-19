@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ZoneLiveStatus, StadiumZone, LiveAnalytics, LayerConfig } from "../types";
 import { LAYER_CONFIGS, ZONE_CAPACITIES } from "../constants";
 

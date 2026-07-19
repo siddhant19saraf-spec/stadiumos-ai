@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { FailurePrediction, MaintenanceAsset, AssetHealth, FailureMode } from "../types";
 import { ASSETS } from "../constants";
 

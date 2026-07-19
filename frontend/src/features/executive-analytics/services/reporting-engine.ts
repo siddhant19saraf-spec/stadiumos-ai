@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { BoardReport, ExecutiveSummary, DecisionRecommendation } from "../types";
 import type { ExecutiveKpi } from "../types";
 

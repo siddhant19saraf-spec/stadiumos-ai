@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ZoneLiveStatus, StadiumZone, ZoneRecommendation } from "../types";
 
 export interface IPredictionEngine {

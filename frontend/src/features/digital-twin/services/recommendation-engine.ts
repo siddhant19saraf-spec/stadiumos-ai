@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ZoneRecommendation, ZoneLiveStatus, StadiumZone } from "../types";
 import { digitalTwinEngine } from "./digital-twin-engine";
 

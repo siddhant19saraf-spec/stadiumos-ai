@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { WorkOrder, AssetHealth, MaintenanceAsset, WorkOrderPriority, WorkOrderStatus } from "../types";
 
 let woCounter = 0;

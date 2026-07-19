@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { QueueRecommendation, QueuePointStatus, QueueAlert, InventoryItem, QueuePoint } from "../types";
 import { QUEUE_POINTS, ALERT_THRESHOLDS } from "../constants";
 

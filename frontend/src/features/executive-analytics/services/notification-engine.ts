@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ExecutiveAlert, TimelineEvent, ExecutiveSummary, DecisionRecommendation, RiskAssessment } from "../types";
 
 function uid(prefix: string): string {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { A11ySummary, A11yModuleScore, A11yIssue, WCAGCriteria, ModuleName } from "../types";
 
 function rand(min: number, max: number): number {

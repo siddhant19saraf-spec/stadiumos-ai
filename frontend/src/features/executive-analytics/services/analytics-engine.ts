@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { ExecutiveKpi, ExecutiveSummary, ExecutiveRole, KpiCategory } from "../types";
 import { KPI_CATEGORY_LABELS, KPI_CATEGORY_ICONS } from "../constants";
 

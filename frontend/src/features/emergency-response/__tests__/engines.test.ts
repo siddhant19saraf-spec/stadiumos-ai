@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe, it, expect, vi } from "vitest";
 import type { Incident, IncidentType, Severity, ResponseTeam, AIAnalysis, EmergencyAnalytics, ResponseTimePoint } from "../types";
 import { TEAM_CONFIGS, INCIDENT_TYPE_CONFIG, RESPONSE_THRESHOLDS, EVACUATION_EXITS } from "../constants";

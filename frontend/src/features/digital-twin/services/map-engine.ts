@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { StadiumZone, MapEntity, LayerConfig, LayerId } from "../types";
 
 export interface IMapEngine {

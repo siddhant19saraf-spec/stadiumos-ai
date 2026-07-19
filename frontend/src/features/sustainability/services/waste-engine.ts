@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { WasteMetrics, WasteAsset, WastePrediction } from "../types";
 import { WASTE_ASSETS } from "../constants";
 

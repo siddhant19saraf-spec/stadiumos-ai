@@ -1,4 +1,3 @@
-// @ts-nocheck
 import type { QASummary, QAModuleStatus, QATestResult, QABuildConfig, ModuleName, TestType, TestStatus } from "../types";
 
 function rand(min: number, max: number): number {
