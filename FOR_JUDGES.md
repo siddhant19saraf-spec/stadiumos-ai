@@ -36,6 +36,27 @@
 
 ---
 
+## 🧠 Prompt Strategy: How AI Built This
+
+This platform was built using **prompt-driven development** — every module, component, and test was generated with AI assistance.
+
+### Prompt Patterns Used
+
+| Phase | Prompt Type | Result |
+|-------|-------------|--------|
+| Architecture | System design prompts | Feature-sliced architecture, 10 ADRs |
+| Frontend | Component-level prompts | 100+ accessible React components |
+| Backend | Service design prompts | FastAPI async-native with 8 engines |
+| AI Integration | Provider abstraction prompts | Multi-provider with automatic failover |
+| DevOps | Infrastructure prompts | 5 CI/CD workflows, Docker, K8s |
+| Testing | Test generation prompts | 2,000+ test cases across all modules |
+
+### Key Insight
+
+> **Prompt engineering IS architecture.** The quality of your prompts determines the quality of your code. Clear, specific prompts with context produce production-grade results.
+
+---
+
 ## 🚀 Demo in 30 Seconds
 
 ```bash
@@ -137,6 +158,8 @@ These are intentional trade-offs for the hackathon scope. Each has a documented 
 |------|----------------|
 | `README.md` | Full project overview |
 | `FOR_JUDGES.md` | You are here 👈 |
+| `BLOG.md` | Technical blog — prompt strategy and build journey |
+| `LINKEDIN_POST.md` | LinkedIn Build-in-Public narrative |
 | `PRODUCTION_READINESS.md` | Comprehensive DevOps scoring (89/100) |
 | `FINAL_REVIEW.md` | Multi-judge evaluation (85/100 overall) |
 | `ARCHITECTURE.md` | System architecture |
@@ -150,3 +173,14 @@ These are intentional trade-offs for the hackathon scope. Each has a documented 
 | `frontend/src/app/(dashboard)/` | 14 module pages |
 | `backend/app/monitoring/metrics.py` | 35+ Prometheus metrics |
 | `SECURITY.md` | Threat model and security policy |
+
+---
+
+## 📋 Submission Checklist (PromptWars Challenge 4)
+
+| Requirement | Status |
+|-------------|--------|
+| **Technical: Code** | ✅ GitHub repository with full source |
+| **Technical: Live Preview** | ✅ Deployed on Vercel |
+| **Narrative: Technical Blog** | ✅ `BLOG.md` — prompt strategy, architecture, build journey |
+| **Narrative: LinkedIn Post** | ✅ `LINKEDIN_POST.md` — Build-in-Public narrative |

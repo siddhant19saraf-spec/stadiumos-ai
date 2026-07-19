@@ -17,6 +17,34 @@
 
 ---
 
+## 🎯 PromptWars Challenge 4: Smart Stadium Operations
+
+> **Submission for PromptWars Virtual — Challenge 4: Smart Stadium Operations**
+>
+> Built using prompt-driven development with Google Antigravity and AI-assisted engineering.
+
+| Submission | Status |
+|------------|--------|
+| **Technical** | ✅ Code + Architecture (this repository) |
+| **Live Demo** | ✅ [Deployed on Vercel](#) |
+| **Narrative** | ✅ [Technical Blog](BLOG.md) · [LinkedIn Post](LINKEDIN_POST.md) |
+| **Documentation** | ✅ [For Judges](FOR_JUDGES.md) · [Architecture](ARCHITECTURE.md) |
+
+### Prompt Strategy Summary
+
+This entire platform was built using **prompt-driven development** — every module, component, and test was generated with AI assistance and refined with human judgment:
+
+1. **Architecture prompts** → Feature-sliced architecture with 10 ADRs
+2. **Component prompts** → 100+ accessible React components (WCAG 2.2 AA)
+3. **Backend prompts** → FastAPI async-native services with 8 specialized engines
+4. **AI prompts** → Multi-provider abstraction with automatic failover
+5. **DevOps prompts** → 5 CI/CD workflows, Docker multi-stage, K8s manifests
+6. **Testing prompts** → 2,000+ tests across all modules
+
+**Key insight**: Prompt engineering IS architecture. Clear, specific prompts with context produce production-grade code.
+
+---
+
 ## Why StadiumOS AI?
 
 Modern stadiums run on **15+ disconnected systems** — crowd monitoring, parking, emergency response, maintenance, concessions, energy. Operators juggle separate dashboards. Critical insights are missed. Response times suffer.
