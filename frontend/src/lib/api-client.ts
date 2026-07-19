@@ -1,4 +1,5 @@
 import { AppError, ErrorCode } from "./error-handler";
+import { getApiUrl } from "./url";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -30,7 +31,7 @@ type RequestInterceptor = (config: RequestInit & { url: string }) => RequestInit
 type ResponseInterceptor = <T>(response: ApiResponse<T>) => ApiResponse<T>;
 
 const defaultConfig: ApiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
+  baseUrl: getApiUrl(),
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",

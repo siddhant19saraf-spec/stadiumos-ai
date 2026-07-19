@@ -5,7 +5,7 @@ import { AppError, ErrorCode } from "@/lib/error-handler";
 import { createMockFetch, createMockFetchError, createMockAbortError } from "../fixtures/mocks";
 
 describe("ApiClient — HTTP Methods", () => {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
@@ -88,7 +88,7 @@ describe("ApiClient — Authentication", () => {
 
   it("should set Content-Type and Accept headers by default", async () => {
     vi.stubGlobal("fetch", createMockFetch({ success: true }));
-    const client = new ApiClient({ baseUrl: "http://localhost:8000" });
+    const client = new ApiClient({ baseUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000" });
     await client.get("/api/test");
     const callArgs = (vi.mocked(fetch) as any).mock.calls[0];
     expect(callArgs[1].headers["Content-Type"]).toBe("application/json");
@@ -179,7 +179,7 @@ describe("ApiClient — Error Handling", () => {
 });
 
 describe("ApiClient — Request Interceptors", () => {
-  const client = new ApiClient({ baseUrl: "http://localhost:8000" });
+  const client = new ApiClient({ baseUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000" });
 
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
