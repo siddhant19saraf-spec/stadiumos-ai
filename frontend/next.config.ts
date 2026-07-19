@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  outputFileTracingRoot: process.env.VERCEL ? process.cwd() : undefined,
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   typescript: {
     ignoreBuildErrors: true,
@@ -15,7 +16,7 @@ const nextConfig: NextConfig = {
         },
       }
     : {}),
-
+  
   images: {
     deviceSizes: [640, 768, 1024, 1280, 1536],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
