@@ -3,7 +3,7 @@
 
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { Car, CarFront, Star, Zap, Wheelchair, ParkingCircle, Activity, Gauge } from "lucide-react";
+import { Car, CarFront, Star, Zap, Accessibility, ParkingCircle, Activity, Gauge } from "lucide-react";
 import type { SmartParkingState } from "../types";
 
 interface CommandCenterProps {
@@ -35,7 +35,7 @@ export function CommandCenter({ state, className }: CommandCenterProps) {
       <StatCard icon={Star} label="Reserved Spaces" value={totals.totalReserved.toLocaleString()} subtitle="VIP, media, staff" color="text-purple-400" />
       <StatCard icon={Star} label="VIP Parking" value={totals.vipStatus ? `${totals.vipStatus.occupancyPercent}%` : "N/A"} subtitle={`${totals.vipStatus?.available ?? "?"} spaces left`} color="text-amber-400" />
       <StatCard icon={Zap} label="EV Charging" value={totals.evStatus ? `${totals.evStatus.evChargingUsed}/${totals.evStatus.evChargingTotal}` : "N/A"} subtitle={`${totals.evStatus ? (totals.evStatus.evChargingUsed / totals.evStatus.evChargingTotal * 100).toFixed(0) : "?"}% in use`} color={totals.evStatus && totals.evStatus.evChargingUsed > totals.evStatus.evChargingTotal * 0.85 ? "text-red-400" : "text-cyan-400"} />
-      <StatCard icon={Wheelchair} label="Accessible Parking" value={totals.accessibleStatus ? `${totals.accessibleStatus.occupancyPercent}%` : "N/A"} subtitle={`${totals.accessibleStatus?.available ?? "?"} spaces`} color="text-emerald-400" />
+      <StatCard icon={Accessibility} label="Accessible Parking" value={totals.accessibleStatus ? `${totals.accessibleStatus.occupancyPercent}%` : "N/A"} subtitle={`${totals.accessibleStatus?.available ?? "?"} spaces`} color="text-emerald-400" />
       <StatCard icon={Activity} label="Overflow Status" value={totals.overflowStatus ? `${totals.overflowStatus.occupancyPercent}%` : "N/A"} subtitle={`${totals.overflowStatus?.available ?? "?"} remaining`} color={totals.overflowStatus && totals.overflowStatus.occupancyPercent > 50 ? "text-orange-400" : "text-muted-foreground"} />
     </div>
   );

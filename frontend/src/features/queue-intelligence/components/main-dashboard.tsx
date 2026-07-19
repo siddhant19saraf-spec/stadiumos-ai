@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Timer, AlertTriangle, Activity, LayoutDashboard } from "lucide-react";
+import { Timer, AlertTriangle, Activity, LayoutDashboard, Package, BarChart3 } from "lucide-react";
 import { queueIntelligenceService } from "../services/queue-service";
 import { QueueMap } from "./queue-map";
 import { CommandCenter } from "./command-center";

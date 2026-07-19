@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { TrendingUp, Timer, Gauge, Car, Activity, Zap, Wheelchair, ParkingCircle } from "lucide-react";
+import { TrendingUp, Timer, Gauge, Car, Activity, Zap, Accessibility, ParkingCircle } from "lucide-react";
 import type { ParkingAnalytics } from "../types";
 
 interface AnalyticsPanelProps {
@@ -35,7 +35,7 @@ export function AnalyticsPanel({ analytics, className }: AnalyticsPanelProps) {
           <AnalyticCard icon={Gauge} label="Traffic Delay" value={`${analytics.trafficDelayMin} min`} desc="Average wait" color={analytics.trafficDelayMin > 15 ? "text-red-400" : "text-amber-400"} />
           <AnalyticCard icon={ParkingCircle} label="Queue Health" value={`${analytics.queueHealthIndex}`} desc="Index (0-100)" color={scoreColor(analytics.queueHealthIndex)} />
           <AnalyticCard icon={Zap} label="EV Charger Usage" value={`${analytics.avgEvChargerUsage}%`} desc="Of capacity" color={analytics.avgEvChargerUsage > 75 ? "text-red-400" : "text-cyan-400"} />
-          <AnalyticCard icon={Wheelchair} label="Accessible Util." value={`${analytics.accessibleUtilization}%`} desc="Of capacity" color={analytics.accessibleUtilization > 75 ? "text-amber-400" : "text-emerald-400"} />
+          <AnalyticCard icon={Accessibility} label="Accessible Util." value={`${analytics.accessibleUtilization}%`} desc="Of capacity" color={analytics.accessibleUtilization > 75 ? "text-amber-400" : "text-emerald-400"} />
         </div>
 
         <div className="rounded-md border bg-gradient-to-r from-primary/5 to-transparent p-3">

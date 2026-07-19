@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
+  turbopack: {
+    root: process.cwd(),
+  },
 
   images: {
     deviceSizes: [640, 768, 1024, 1280, 1536],

@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { ZoomIn, ZoomOut, RotateCcw, Car, Zap, Wheelchair, Star, Bus, Bike } from "lucide-react";
+import { ZoomIn, ZoomOut, RotateCcw, Car, Zap, Accessibility, Star, Bus, Bike } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ParkingLot, ParkingLotStatus, TrafficRoad } from "../types";
 
@@ -19,7 +19,7 @@ interface ParkingMapProps {
 }
 
 const typeIcons: Record<string, React.ElementType> = {
-  vip: Star, ev_charging: Zap, accessible: Wheelchair, bus: Bus, rideshare: Bike,
+  vip: Star, ev_charging: Zap, accessible: Accessibility, bus: Bus, rideshare: Bike,
 };
 
 const typeColors: Record<string, string> = {
