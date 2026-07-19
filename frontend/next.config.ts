@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   typescript: {
     ignoreBuildErrors: true,
   },
