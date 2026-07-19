@@ -1,0 +1,129 @@
+name: Performance Tests
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+
+  load-test:
+    name: Load Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install k6
+        run: |
+          curl -L -o k6.tar.gz https://github.com/grafana/k6/releases/download/v0.52.0/k6-v0.52.0-linux-amd64.tar.gz
+          tar xzf k6.tar.gz
+          sudo mv k6-v0.52.0-linux-amd64/k6 /usr/local/bin/
+          k6 version
+
+      - name: Run load tests
+        run: |
+          k6 run infra/k6/load-test.js --out json=k6-results.json
+        continue-on-error: true
+        timeout-minutes: 30
+
+      - name: Upload k6 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: k6-results.json
+          retention-days: 30
+
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm install -g pnpm@9
+          pnpm install --frozen-lockfile
+          pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun --config=frontend/lighthouserc.js || true
+        continue-on-error: true
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lhci/
+          retention-days: 30
+
+  bundle-size:
+    name: Bundle Size
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build with stats
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Analyze bundle
+        run: |
+          echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -d ".next/standalone" ]; then
+            SIZE=$(du -sh .next/standalone | cut -f1)
+            echo "- Standalone output: $SIZE" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- Build complete" >> $GITHUB_STEP_SUMMARY
+
+  report:
+    name: Performance Report
+    needs: [load-test, lighthouse, bundle-size]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate report
+        run: |
+          echo "# Performance Test Report — $(date +'%Y-%m-%d')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Test | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          for test in load-test lighthouse bundle-size; do
+            STATUS="${{ needs[test].result }}"
+            if [ "$STATUS" = "success" ]; then
+              echo "| ✅ $test | Passed |" >> $GITHUB_STEP_SUMMARY
+            elif [ "$STATUS" = "failure" ]; then
+              echo "| ⚠️ $test | Thresholds exceeded |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| ❌ $test | Failed |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

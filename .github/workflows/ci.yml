@@ -1,0 +1,475 @@
+name: CI — Continuous Integration
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "9"
+  PYTHON_VERSION: "3.12"
+  REGISTRY: ghcr.io
+  IMAGE_TAG: ${{ github.sha }}
+  CI: true
+
+jobs:
+
+  # ─── Detect Changes ────────────────────────────
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+      infra: ${{ steps.filter.outputs.infra }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+              - '.github/workflows/ci.yml'
+            backend:
+              - 'backend/**'
+              - '.github/workflows/ci.yml'
+            infra:
+              - 'infra/**'
+              - 'docker-compose.yml'
+              - '.github/workflows/**'
+
+  # ─── Frontend Checks ───────────────────────────
+  frontend:
+    name: Frontend
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type check
+        run: pnpm typecheck
+        timeout-minutes: 5
+
+      - name: Lint (ESLint + Prettier)
+        run: |
+          pnpm lint
+          pnpm format:check
+        timeout-minutes: 5
+
+      - name: Unit tests
+        run: pnpm test:coverage
+        timeout-minutes: 10
+
+      - name: Build
+        run: pnpm build
+        timeout-minutes: 10
+        env:
+          DOCKER_BUILD: "false"
+          NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+          retention-days: 14
+
+  # ─── Backend Checks ────────────────────────────
+  backend:
+    name: Backend
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: stadiumos
+          POSTGRES_PASSWORD: stadiumos
+          POSTGRES_DB: stadiumos_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+        timeout-minutes: 5
+
+      - name: Lint (Ruff)
+        run: ruff check app/ tests/
+        timeout-minutes: 3
+
+      - name: Type check (mypy)
+        run: mypy app/ --strict
+        timeout-minutes: 5
+
+      - name: Format check (Black)
+        run: black --check app/ tests/
+        timeout-minutes: 2
+
+      - name: Import sort check (isort)
+        run: isort --check-only app/ tests/
+        timeout-minutes: 2
+
+      - name: Unit & integration tests
+        run: pytest --cov=app --cov-report=xml --cov-report=term --cov-fail-under=85 -v
+        timeout-minutes: 15
+        env:
+          DATABASE_URL: postgresql+asyncpg://stadiumos:stadiumos@localhost:5432/stadiumos_test
+          DATABASE_URL_SYNC: postgresql://stadiumos:stadiumos@localhost:5432/stadiumos_test
+          REDIS_URL: redis://localhost:6379/0
+          ENVIRONMENT: testing
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/coverage.xml
+          retention-days: 14
+
+  # ─── Security Scanning ─────────────────────────
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python
+          queries: security-and-quality
+
+      - name: Frontend dependency audit
+        working-directory: frontend
+        run: |
+          npm install -g pnpm@${{ env.PNPM_VERSION }}
+          pnpm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Backend dependency audit (Safety)
+        working-directory: backend
+        run: |
+          pip install safety
+          safety check -r requirements.txt --full-report
+        continue-on-error: true
+
+      - name: Static analysis (Bandit)
+        working-directory: backend
+        run: bandit -r app/ -x tests/ -ll
+        continue-on-error: true
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+
+      - name: Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+        continue-on-error: true
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
+          retention-days: 90
+
+      - name: Secret scanning (truffleHog)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+        continue-on-error: true
+
+  # ─── Accessibility Tests ───────────────────────
+  accessibility:
+    name: Accessibility
+    needs: [frontend]
+    if: ${{ always() && needs.frontend.result == 'success' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Run a11y tests
+        run: pnpm test -- --run src/tests/accessibility/
+        timeout-minutes: 10
+
+  # ─── Integration Tests ─────────────────────────
+  integration:
+    name: Integration
+    needs: [frontend, backend]
+    if: ${{ always() && needs.frontend.result == 'success' && needs.backend.result == 'success' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Run integration tests
+        run: pnpm test -- --run src/tests/integration/
+        timeout-minutes: 10
+
+  # ─── Performance Tests ─────────────────────────
+  performance:
+    name: Performance
+    needs: [frontend]
+    if: ${{ always() && needs.frontend.result == 'success' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Run performance tests
+        run: pnpm test -- --run src/tests/performance/
+        timeout-minutes: 10
+        continue-on-error: true
+
+  # ─── E2E Tests ─────────────────────────────────
+  e2e:
+    name: E2E Tests
+    needs: [frontend, backend]
+    if: ${{ always() && needs.frontend.result == 'success' && needs.backend.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Run E2E tests
+        run: npx playwright test
+        timeout-minutes: 20
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 14
+
+  # ─── Bundle Analysis ───────────────────────────
+  bundle-analysis:
+    name: Bundle Analysis
+    needs: [frontend]
+    if: ${{ always() && needs.frontend.result == 'success' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Analyze bundle
+        run: pnpm build
+        env:
+          ANALYZE: "true"
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-report
+          path: frontend/.next/analyze/
+          retention-days: 14
+
+  # ─── Coverage Report ───────────────────────────
+  coverage:
+    name: Coverage Report
+    needs: [frontend, backend]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: frontend-coverage
+          path: coverage/frontend
+      - uses: actions/download-artifact@v4
+        with:
+          name: backend-coverage
+          path: coverage/backend
+      - name: Report coverage
+        run: |
+          echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/frontend/coverage-summary.json ]; then
+            echo "### Frontend Coverage" >> $GITHUB_STEP_SUMMARY
+            cat coverage/frontend/coverage-summary.json >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f coverage/backend/coverage.xml ]; then
+            echo "### Backend Coverage" >> $GITHUB_STEP_SUMMARY
+            python -c "
+import xml.etree.ElementTree as ET
+root = ET.parse('coverage/backend/coverage.xml').getroot()
+for pkg in root.findall('.//package'):
+    name = pkg.get('name')
+    rate = pkg.get('line-rate')
+    if name and rate:
+        print(f'- {name}: {float(rate)*100:.1f}%')
+" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ─── Quality Gate ──────────────────────────────
+  quality-gate:
+    name: Quality Gate
+    needs: [frontend, backend, security, e2e, integration, performance, accessibility]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all required gates
+        run: |
+          echo "# Quality Gate Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Gate | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          PASS=true
+          for job in frontend backend security e2e integration performance accessibility; do
+            STATUS="${{ needs[toJson(job)].result }}"
+            if [ "$STATUS" = "success" ]; then
+              echo "| ✅ $job | Passed |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| ❌ $job | Failed |" >> $GITHUB_STEP_SUMMARY
+              PASS=false
+            fi
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$PASS" = "true" ]; then
+            echo "## ✅ All Quality Gates Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Some Quality Gates Failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi

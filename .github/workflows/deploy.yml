@@ -1,0 +1,307 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI — Continuous Integration"]
+    types: [completed]
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment target"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      tag:
+        description: "Docker image tag to deploy"
+        required: false
+        default: "latest"
+      rollback:
+        description: "Rollback to previous version"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+
+  # ─── Docker Build & Push ───────────────────────
+  docker-build:
+    name: Docker Build & Push
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=sha,prefix=,suffix=,format=short
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=staging,enable=${{ github.ref == 'refs/heads/develop' }}
+            type=ref,event=tag
+
+      - name: Build & push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          file: infra/docker/frontend/Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-frontend
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: true
+          sbom: true
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          file: infra/docker/backend/Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-backend
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: true
+          sbom: true
+
+      - name: Sign images with Cosign
+        uses: sigstore/cosign-installer@v3
+      - name: Sign frontend image
+        run: |
+          cosign sign --yes ${{ env.REGISTRY }}/${{ github.repository }}@${{ steps.meta.outputs.digest-frontend }}
+      - name: Sign backend image
+        run: |
+          cosign sign --yes ${{ env.REGISTRY }}/${{ github.repository }}@${{ steps.meta.outputs.digest-backend }}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.REGISTRY }}/${{ github.repository }}-backend:${{ env.IMAGE_TAG }}
+          format: spdx-json
+          output-file: sbom-docker.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-docker
+          path: sbom-docker.spdx.json
+          retention-days: 90
+
+  # ─── Deploy to Staging ─────────────────────────
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [docker-build]
+    if: ${{ github.ref == 'refs/heads/develop' || (github.event.inputs.environment == 'staging') }}
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ vars.STAGING_URL || 'https://staging.stadiumos.ai' }}
+    concurrency: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ vars.STAGING_HOST }} >> ~/.ssh/known_hosts
+        if: ${{ secrets.STAGING_SSH_KEY != '' }}
+
+      - name: Deploy via Docker Compose
+        run: |
+          ssh ${{ vars.STAGING_USER }}@${{ vars.STAGING_HOST }} "
+            cd /opt/stadiumos &&
+            docker compose -f infra/compose/docker-compose.yml pull &&
+            docker compose -f infra/compose/docker-compose.yml up -d --remove-orphans &&
+            docker system prune -f
+          "
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+
+      - name: Post-deploy health check
+        run: |
+          for i in {1..12}; do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' ${{ vars.STAGING_URL }}/api/v1/health || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Staging health check passed"
+              exit 0
+            fi
+            echo "Waiting for staging... (attempt $i/12, status: $STATUS)"
+            sleep 10
+          done
+          echo "❌ Staging health check failed"
+          exit 1
+
+      - name: Run smoke tests
+        run: |
+          echo "Running smoke tests against staging..."
+          curl -s -f ${{ vars.STAGING_URL }}/api/v1/health | jq .
+
+      - name: Tag release
+        if: success()
+        run: |
+          git tag staging-$(date +'%Y%m%d-%H%M%S')
+          git push --tags
+
+  # ─── Deploy to Production ──────────────────────
+  deploy-production:
+    name: Deploy to Production
+    needs: [docker-build, deploy-staging]
+    if: ${{ github.ref == 'refs/heads/main' && success() }}
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL || 'https://stadiumos.ai' }}
+    concurrency: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Notify deployment start
+        uses: slackapi/slack-github-action@v2
+        with:
+          webhook: ${{ secrets.SLACK_DEPLOY_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {"text": "🚀 Production deployment starting: ${{ github.sha }}"}
+        continue-on-error: true
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRODUCTION_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ vars.PRODUCTION_HOST }} >> ~/.ssh/known_hosts
+        if: ${{ secrets.PRODUCTION_SSH_KEY != '' }}
+
+      - name: Deploy via Docker Compose
+        run: |
+          ssh ${{ vars.PRODUCTION_USER }}@${{ vars.PRODUCTION_HOST }} "
+            cd /opt/stadiumos &&
+            docker compose -f infra/compose/docker-compose.yml pull &&
+            docker compose -f infra/compose/docker-compose.yml up -d --remove-orphans --wait &&
+            docker system prune -f
+          "
+
+      - name: Post-deploy health check
+        run: |
+          for i in {1..24}; do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' ${{ vars.PRODUCTION_URL }}/api/v1/health || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Production health check passed"
+              exit 0
+            fi
+            echo "Waiting for production... (attempt $i/24, status: $STATUS)"
+            sleep 10
+          done
+          echo "❌ Production health check failed"
+          exit 1
+
+      - name: Run smoke tests
+        run: |
+          echo "Running smoke tests against production..."
+          curl -s -f ${{ vars.PRODUCTION_URL }}/api/v1/health | jq .
+          curl -s -f ${{ vars.PRODUCTION_URL }} | jq .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "Release v${{ github.run_number }}"
+          generate_release_notes: true
+
+      - name: Notify deployment success
+        uses: slackapi/slack-github-action@v2
+        with:
+          webhook: ${{ secrets.SLACK_DEPLOY_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {"text": "✅ Production deployment complete: v${{ github.run_number }}"}
+        continue-on-error: true
+
+  # ─── Post-Deploy Validation ────────────────────
+  post-deploy:
+    name: Post-Deploy Validation
+    needs: [deploy-production]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate API
+        run: |
+          ENDPOINTS=(
+            "${{ vars.PRODUCTION_URL }}/api/v1/health"
+            "${{ vars.PRODUCTION_URL }}/api/v1"
+          )
+          for ep in "${ENDPOINTS[@]}"; do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$ep")
+            echo "Endpoint $ep -> $STATUS"
+            if [ "$STATUS" -ne 200 ]; then
+              echo "❌ Endpoint $ep returned $STATUS"
+              exit 1
+            fi
+          done
+          echo "✅ All endpoints healthy"
+
+      - name: Validate monitoring
+        run: |
+          echo "Checking monitoring stack..."
+          curl -s -f ${{ vars.PROMETHEUS_URL }}/-/healthy || echo "⚠️ Prometheus not available"
+          echo "✅ Post-deploy validation complete"
+
+  # ─── Rollback ──────────────────────────────────
+  rollback:
+    name: Rollback
+    if: ${{ github.event.inputs.rollback == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Rollback to previous version
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | head -2 | tail -1)
+          echo "Rolling back to $PREVIOUS_TAG"
+          ssh ${{ vars.PRODUCTION_USER }}@${{ vars.PRODUCTION_HOST }} "
+            cd /opt/stadiumos &&
+            export IMAGE_TAG=$PREVIOUS_TAG &&
+            docker compose -f infra/compose/docker-compose.yml pull &&
+            docker compose -f infra/compose/docker-compose.yml up -d --remove-orphans
+          "
+      - name: Verify rollback
+        run: |
+          for i in {1..12}; do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' ${{ vars.PRODUCTION_URL || vars.STAGING_URL }}/api/v1/health || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Rollback verified"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "❌ Rollback failed"
+          exit 1

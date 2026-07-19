@@ -1,0 +1,135 @@
+# ═══════════════════════════════════════════════════
+# StadiumOS AI — Monitoring Stack
+# Prometheus + Grafana + Loki + Tempo + Alloy
+# ═══════════════════════════════════════════════════
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-restart: &restart-policy
+  restart: unless-stopped
+
+services:
+
+  # ─── Prometheus ────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-30d}"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+    <<: *restart-policy
+    logging: *default-logging
+    networks:
+      - stadiumos-network
+
+  # ─── Grafana ───────────────────────────────────
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-stadiumos}
+      - GF_USERS_DEFAULT_THEME=dark
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      - GF_SERVER_ROOT_URL=http://localhost:3001
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - ../monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ../monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      - prometheus
+    networks:
+      - stadiumos-network
+
+  # ─── Loki ──────────────────────────────────────
+  loki:
+    image: grafana/loki:3.1.0
+    ports:
+      - "${LOKI_PORT:-3100}:3100"
+    volumes:
+      - ../monitoring/loki/loki.yml:/etc/loki/loki.yml:ro
+      - loki_data:/loki
+    command:
+      - "-config.file=/etc/loki/loki.yml"
+      - "-target=all"
+    <<: *restart-policy
+    logging: *default-logging
+    networks:
+      - stadiumos-network
+
+  # ─── Tempo (Distributed Tracing) ───────────────
+  tempo:
+    image: grafana/tempo:2.5.0
+    ports:
+      - "${TEMPO_PORT:-3200}:3200"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ../monitoring/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - tempo_data:/tmp/tempo
+    command:
+      - "-config.file=/etc/tempo/tempo.yml"
+    <<: *restart-policy
+    logging: *default-logging
+    networks:
+      - stadiumos-network
+
+  # ─── Prometheus Exporters ──────────────────────
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    ports:
+      - "${PG_EXPORTER_PORT:-9187}:9187"
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${DB_USER:-stadiumos}:${DB_PASSWORD:-stadiumos}@db:5432/${DB_NAME:-stadiumos}?sslmode=disable
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - stadiumos-network
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.62.0
+    ports:
+      - "${REDIS_EXPORTER_PORT:-9121}:9121"
+    environment:
+      - REDIS_ADDR=redis://redis:6379
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - stadiumos-network
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
+    driver: local
+  tempo_data:
+    driver: local
+
+networks:
+  stadiumos-network:
+    external: true

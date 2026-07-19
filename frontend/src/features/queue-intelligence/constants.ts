@@ -1,0 +1,85 @@
+import type { QueuePoint, MenuItem, SimulationScenario } from "./types";
+
+export const ALERT_THRESHOLDS = {
+  LONG_QUEUE_MIN: 15,
+  CRITICAL_QUEUE_MIN: 25,
+  COUNTER_FAILURE_PCT: 0.5,
+  INVENTORY_SHORTAGE_PCT: 20,
+  STAFF_SHORTAGE_RATIO: 0.3,
+  SATISFACTION_MIN: 3.0,
+  OVERCROWDING_PCT: 85,
+  RESTOCK_LEAD_MIN: 15,
+} as const;
+
+export const QUEUE_POINTS: QueuePoint[] = [
+  { id: "food-1", name: "Food Court A - North", type: "food_counter", totalCounters: 8, coordinates: { x: 5, y: 5, width: 16, height: 10 }, menuItems: ["burger", "hotdog", "fries", "nachos"] },
+  { id: "food-2", name: "Food Court B - South", type: "food_counter", totalCounters: 6, coordinates: { x: 79, y: 5, width: 16, height: 10 }, menuItems: ["pizza", "pasta", "salad", "sandwich"] },
+  { id: "food-3", name: "Food Court C - East", type: "food_counter", totalCounters: 5, coordinates: { x: 5, y: 40, width: 14, height: 9 }, menuItems: ["tacos", "burrito", "rice_bowl", "quesadilla"] },
+  { id: "food-4", name: "Food Court D - West", type: "food_counter", totalCounters: 5, coordinates: { x: 81, y: 40, width: 14, height: 9 }, menuItems: ["sushi", "ramen", "edamame", "gyoza"] },
+  { id: "bev-1", name: "Beverage Station 1", type: "beverage_counter", totalCounters: 4, coordinates: { x: 30, y: 3, width: 10, height: 6 }, menuItems: ["soda", "water", "juice", "beer"] },
+  { id: "bev-2", name: "Beverage Station 2", type: "beverage_counter", totalCounters: 4, coordinates: { x: 60, y: 3, width: 10, height: 6 }, menuItems: ["soda", "water", "juice", "beer"] },
+  { id: "bev-3", name: "Beverage Station 3", type: "beverage_counter", totalCounters: 3, coordinates: { x: 22, y: 66, width: 10, height: 6 }, menuItems: ["soda", "water", "cocktail"] },
+  { id: "bev-4", name: "Beverage Station 4", type: "beverage_counter", totalCounters: 3, coordinates: { x: 68, y: 66, width: 10, height: 6 }, menuItems: ["soda", "water", "cocktail"] },
+  { id: "merch-1", name: "Team Store - Main", type: "merchandise", totalCounters: 6, coordinates: { x: 35, y: 18, width: 14, height: 8 }, menuItems: ["jersey", "hat", "scarf", "flag"] },
+  { id: "merch-2", name: "Team Store - East", type: "merchandise", totalCounters: 4, coordinates: { x: 10, y: 22, width: 10, height: 7 }, menuItems: ["hat", "scarf", "pin"] },
+  { id: "merch-3", name: "Team Store - West", type: "merchandise", totalCounters: 4, coordinates: { x: 80, y: 22, width: 10, height: 7 }, menuItems: ["hat", "scarf", "pin"] },
+  { id: "restroom-1", name: "Restroom - North", type: "restroom", totalCounters: 12, coordinates: { x: 28, y: 38, width: 8, height: 6 } },
+  { id: "restroom-2", name: "Restroom - South", type: "restroom", totalCounters: 12, coordinates: { x: 64, y: 38, width: 8, height: 6 } },
+  { id: "restroom-3", name: "Restroom - East", type: "restroom", totalCounters: 8, coordinates: { x: 38, y: 56, width: 8, height: 6 } },
+  { id: "restroom-4", name: "Restroom - West", type: "restroom", totalCounters: 8, coordinates: { x: 54, y: 56, width: 8, height: 6 } },
+  { id: "security-1", name: "Security Check - North Gate", type: "security", totalCounters: 6, coordinates: { x: 35, y: 0, width: 12, height: 4 } },
+  { id: "security-2", name: "Security Check - South Gate", type: "security", totalCounters: 6, coordinates: { x: 53, y: 0, width: 12, height: 4 } },
+  { id: "entry-1", name: "Entry Gate - Main", type: "entry_gate", totalCounters: 10, coordinates: { x: 35, y: 76, width: 14, height: 5 } },
+  { id: "entry-2", name: "Entry Gate - VIP", type: "entry_gate", totalCounters: 4, coordinates: { x: 55, y: 76, width: 10, height: 5 } },
+  { id: "cs-1", name: "Customer Service Desk", type: "customer_service", totalCounters: 3, coordinates: { x: 45, y: 30, width: 10, height: 5 } },
+  { id: "info-1", name: "Information Booth", type: "information", totalCounters: 2, coordinates: { x: 45, y: 44, width: 10, height: 4 } },
+  { id: "atm-1", name: "ATM Bank - North", type: "atm", totalCounters: 4, coordinates: { x: 25, y: 30, width: 6, height: 4 } },
+  { id: "atm-2", name: "ATM Bank - South", type: "atm", totalCounters: 4, coordinates: { x: 69, y: 30, width: 6, height: 4 } },
+  { id: "ticket-1", name: "Ticket Booth - Main", type: "ticket_booth", totalCounters: 6, coordinates: { x: 38, y: 66, width: 10, height: 6 } },
+  { id: "ticket-2", name: "Ticket Booth - Will Call", type: "ticket_booth", totalCounters: 3, coordinates: { x: 52, y: 66, width: 10, height: 6 } },
+];
+
+export const MENU_ITEMS: MenuItem[] = [
+  { id: "burger", name: "Classic Burger", category: "food", basePrice: 14.99, prepTimeSec: 180, popularity: 0.85 },
+  { id: "hotdog", name: "Footlong Hot Dog", category: "food", basePrice: 9.99, prepTimeSec: 90, popularity: 0.72 },
+  { id: "fries", name: "Loaded Fries", category: "food", basePrice: 8.99, prepTimeSec: 120, popularity: 0.78 },
+  { id: "nachos", name: "Supreme Nachos", category: "food", basePrice: 11.99, prepTimeSec: 150, popularity: 0.65 },
+  { id: "pizza", name: "Slice of Pizza", category: "food", basePrice: 7.99, prepTimeSec: 60, popularity: 0.88 },
+  { id: "pasta", name: "Pasta Bowl", category: "food", basePrice: 12.99, prepTimeSec: 210, popularity: 0.55 },
+  { id: "salad", name: "Garden Salad", category: "food", basePrice: 9.49, prepTimeSec: 90, popularity: 0.45 },
+  { id: "sandwich", name: "Grilled Sandwich", category: "food", basePrice: 10.99, prepTimeSec: 150, popularity: 0.62 },
+  { id: "tacos", name: "Street Tacos (3pc)", category: "food", basePrice: 11.49, prepTimeSec: 120, popularity: 0.75 },
+  { id: "burrito", name: "Loaded Burrito", category: "food", basePrice: 13.99, prepTimeSec: 200, popularity: 0.68 },
+  { id: "rice_bowl", name: "Rice Bowl", category: "food", basePrice: 10.99, prepTimeSec: 140, popularity: 0.52 },
+  { id: "quesadilla", name: "Quesadilla", category: "food", basePrice: 9.99, prepTimeSec: 110, popularity: 0.58 },
+  { id: "sushi", name: "Sushi Roll", category: "food", basePrice: 14.49, prepTimeSec: 160, popularity: 0.48 },
+  { id: "ramen", name: "Ramen Bowl", category: "food", basePrice: 12.99, prepTimeSec: 240, popularity: 0.50 },
+  { id: "edamame", name: "Edamame", category: "food", basePrice: 6.99, prepTimeSec: 60, popularity: 0.38 },
+  { id: "gyoza", name: "Gyoza (6pc)", category: "food", basePrice: 8.99, prepTimeSec: 130, popularity: 0.42 },
+  { id: "soda", name: "Soda (Large)", category: "beverage", basePrice: 5.99, prepTimeSec: 20, popularity: 0.92 },
+  { id: "water", name: "Bottled Water", category: "beverage", basePrice: 4.49, prepTimeSec: 10, popularity: 0.88 },
+  { id: "juice", name: "Fresh Juice", category: "beverage", basePrice: 6.99, prepTimeSec: 45, popularity: 0.55 },
+  { id: "beer", name: "Draft Beer", category: "beverage", basePrice: 8.99, prepTimeSec: 30, popularity: 0.78 },
+  { id: "cocktail", name: "Signature Cocktail", category: "beverage", basePrice: 12.99, prepTimeSec: 90, popularity: 0.60 },
+  { id: "jersey", name: "Team Jersey", category: "merchandise", basePrice: 89.99, prepTimeSec: 30, popularity: 0.70 },
+  { id: "hat", name: "Team Hat", category: "merchandise", basePrice: 29.99, prepTimeSec: 15, popularity: 0.65 },
+  { id: "scarf", name: "Team Scarf", category: "merchandise", basePrice: 24.99, prepTimeSec: 15, popularity: 0.48 },
+  { id: "flag", name: "Team Flag", category: "merchandise", basePrice: 19.99, prepTimeSec: 10, popularity: 0.45 },
+  { id: "pin", name: "Lapel Pin", category: "merchandise", basePrice: 9.99, prepTimeSec: 10, popularity: 0.35 },
+];
+
+export const SCENARIO_CONFIGS: Record<SimulationScenario, { name: string; description: string; details: string; icon: string; color: string; tags: string[] }> = {
+  halftime_rush: { name: "Halftime Rush", description: "Concerted rush to concessions during halftime", details: "All food/beverage counters see 3x demand surge. Queue lengths spike. Service speed drops under pressure.", icon: "utensils-crossed", color: "#f59e0b", tags: ["surge", "concessions", "half-time", "demand"] },
+  rain_delay: { name: "Rain Delay", description: "Weather delay traps crowds indoors", details: "Concourse crowding increases. Restroom queues grow. Merchandise demand rises 40%. Food courts congested.", icon: "cloud-rain", color: "#3b82f6", tags: ["weather", "indoors", "merchandise", "delay"] },
+  vip_event: { name: "VIP Event", description: "Exclusive VIP hospitality service", details: "VIP area counters see priority service. Standard concession demand shifts. Premium menu items ordered.", icon: "star", color: "#a855f7", tags: ["vip", "premium", "exclusive", "catering"] },
+  sold_out_match: { name: "Sold-Out Match", description: "Maximum capacity crowd", details: "All queue points operate near capacity. Extended wait times across stadium. Staff fully deployed.", icon: "trophy", color: "#ef4444", tags: ["sell-out", "capacity", "peak-load", "max-demand"] },
+  counter_failure: { name: "Counter Failure", description: "Critical equipment failure at counter", details: "One or more food counters offline. Remaining counters absorb load. Queue times increase 50% at affected zones.", icon: "x-circle", color: "#dc2626", tags: ["equipment", "breakdown", "reroute", "pressure"] },
+  staff_shortage: { name: "Staff Shortage", description: "Unexpected staff unavailability", details: "Reduced active counters across multiple points. Service speed decreases. Overtime for remaining staff.", icon: "users", color: "#f97316", tags: ["staffing", "overtime", "bottleneck", "efficiency"] },
+  emergency_evacuation: { name: "Emergency Evacuation", description: "Evacuation of all queue areas", details: "All queues halted. Staff redirect to exits. Concessions closed. Inventory securing activated.", icon: "alert-triangle", color: "#dc2626", tags: ["evacuation", "safety", "closure", "emergency"] },
+  merchandise_drop: { name: "Merchandise Drop", description: "New merchandise collection released", details: "Merchandise store queues grow 4x. Limited edition items sell out within 30 minutes. Counter congestion.", icon: "shopping-bag", color: "#ec4899", tags: ["merchandise", "limited-edition", "drop", "hype"] },
+  heat_wave: { name: "Heat Wave", description: "Extreme heat increases beverage demand", details: "Beverage station queues grow 2.5x. Water demand surges. Service speed increases for simple drinks.", icon: "sun", color: "#eab308", tags: ["weather", "beverage", "heat", "hydration"] },
+  post_game_exit: { name: "Post-Game Exit", description: "Mass departure after match ends", details: "Exit gate queues peak. Restroom queues before travel. Merchandise final purchases spike. Service desks busy.", icon: "log-out", color: "#6366f1", tags: ["exit", "departure", "wave", "final"] },
+};
+
+export const INVENTORY_ITEMS = MENU_ITEMS.map((item) => item.id);
+export const REFRESH_INTERVAL_MS = 5000;

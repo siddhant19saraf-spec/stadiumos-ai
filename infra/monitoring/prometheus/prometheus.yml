@@ -1,0 +1,54 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+      scheme: http
+      timeout: 10s
+
+rule_files:
+  - "rules/*.yml"
+
+scrape_configs:
+
+  - job_name: "stadiumos-backend"
+    scrape_interval: 10s
+    metrics_path: /api/v1/metrics
+    static_configs:
+      - targets: ["backend:8000"]
+        labels:
+          service: "backend"
+          environment: "${ENVIRONMENT:-production}"
+
+  - job_name: "stadiumos-frontend"
+    scrape_interval: 15s
+    metrics_path: /api/metrics
+    static_configs:
+      - targets: ["frontend:3000"]
+        labels:
+          service: "frontend"
+          environment: "${ENVIRONMENT:-production}"
+
+  - job_name: "postgres"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+        labels:
+          service: "postgres"
+          environment: "${ENVIRONMENT:-production}"
+
+  - job_name: "redis"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+        labels:
+          service: "redis"
+          environment: "${ENVIRONMENT:-production}"
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

@@ -1,0 +1,237 @@
+name: Quality Gates
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  lint:
+    name: Linting & Type Checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: echo "LINT_STATUS=passed" >> $GITHUB_ENV
+
+  unit-tests:
+    name: Unit Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/unit/ --reporter=verbose
+      - name: Check Threshold
+        run: |
+          npx vitest run tests/unit/ --coverage --reporter=json > coverage.json
+          COVERAGE=$(node -e "console.log(JSON.parse(require('fs').readFileSync('coverage.json','utf8')).total.lines.pct)")
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "FAIL: Line coverage $COVERAGE% < 80% threshold"
+            exit 1
+          fi
+          echo "PASS: Line coverage $COVERAGE%"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-coverage
+          path: coverage/
+
+  integration-tests:
+    name: Integration Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/integration/ --reporter=verbose
+      - name: Check Threshold
+        run: |
+          npx vitest run tests/integration/ --coverage --reporter=json > coverage.json
+          PASS_RATE=$(node -e "
+            const r=JSON.parse(require('fs').readFileSync('coverage.json','utf8'));
+            const p=r.numPassedTests||0; const f=r.numFailedTests||0;
+            console.log(p/(p+f)*100)
+          ")
+          if (( $(echo "$PASS_RATE < 95" | bc -l) )); then
+            echo "FAIL: Pass rate $PASS_RATE% < 95% threshold"
+            exit 1
+          fi
+          echo "PASS: Pass rate $PASS_RATE%"
+
+  security-tests:
+    name: Security Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/security/ --reporter=verbose
+      - name: Security Audit
+        run: |
+          npx vitest run tests/security/ --reporter=json > security.json
+          FAILED=$(node -e "
+            const r=JSON.parse(require('fs').readFileSync('security.json','utf8'));
+            console.log(r.numFailedTests||0)
+          ")
+          if [ "$FAILED" -gt 0 ]; then
+            echo "FAIL: $FAILED security tests failed"
+            exit 1
+          fi
+          echo "PASS: All security tests passed"
+
+  accessibility-tests:
+    name: Accessibility Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/accessibility/ --reporter=verbose
+
+  performance-tests:
+    name: Performance Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/performance/ --reporter=verbose
+
+  api-tests:
+    name: API Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/api/ --reporter=verbose
+
+  ai-validation-tests:
+    name: AI Validation Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/ai-validation/ --reporter=verbose
+
+  e2e-tests:
+    name: E2E Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/e2e/ --reporter=verbose
+
+  error-handling-tests:
+    name: Error Handling Tests
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run tests/error-handling/ --reporter=verbose
+
+  coverage-report:
+    name: Coverage Report
+    needs: [unit-tests, integration-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run --coverage --reporter=json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: full-coverage-report
+          path: coverage/
+      - name: Generate Badge
+        run: |
+          COVERAGE=$(node -e "
+            const r=JSON.parse(require('fs').readFileSync('coverage/coverage-summary.json','utf8'));
+            console.log(Math.round(r.total.lines.pct))
+          ")
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+  quality-gate:
+    name: Quality Gate Check
+    if: always()
+    needs:
+      - lint
+      - unit-tests
+      - integration-tests
+      - security-tests
+      - accessibility-tests
+      - performance-tests
+      - api-tests
+      - ai-validation-tests
+      - e2e-tests
+      - error-handling-tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "## Quality Gate Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.lint.result == 'success' && '| Lint | ✅ |' || '| Lint | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.unit-tests.result == 'success' && '| Unit Tests | ✅ |' || '| Unit Tests | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.integration-tests.result == 'success' && '| Integration | ✅ |' || '| Integration | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.security-tests.result == 'success' && '| Security | ✅ |' || '| Security | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.accessibility-tests.result == 'success' && '| Accessibility | ✅ |' || '| Accessibility | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.performance-tests.result == 'success' && '| Performance | ✅ |' || '| Performance | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.api-tests.result == 'success' && '| API | ✅ |' || '| API | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.ai-validation-tests.result == 'success' && '| AI Validation | ✅ |' || '| AI Validation | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.e2e-tests.result == 'success' && '| E2E | ✅ |' || '| E2E | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ needs.error-handling-tests.result == 'success' && '| Error Handling | ✅ |' || '| Error Handling | ❌ |' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY

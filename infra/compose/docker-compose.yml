@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════
+# StadiumOS AI — Production Docker Compose
+# Targets: production (default), development, monitoring
+# ═══════════════════════════════════════════════════
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-restart: &restart-policy
+  restart: unless-stopped
+
+services:
+
+  # ─── Frontend ──────────────────────────────────
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: ../infra/docker/frontend/Dockerfile
+      target: ${TARGET:-production}
+      args:
+        NODE_VERSION: ${NODE_VERSION:-22-alpine}
+        PNPM_VERSION: ${PNPM_VERSION:-9}
+    image: stadiumos/frontend:${IMAGE_TAG:-latest}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - NEXT_PUBLIC_API_URL=${API_URL:-http://localhost:8000}
+      - NEXT_PUBLIC_APP_URL=${APP_URL:-http://localhost:3000}
+      - NEXT_TELEMETRY_DISABLED=1
+      - DOCKER_BUILD=true
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - stadiumos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+  # ─── Backend ───────────────────────────────────
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: ../infra/docker/backend/Dockerfile
+      target: ${TARGET:-production}
+      args:
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.12-slim}
+    image: stadiumos/backend:${IMAGE_TAG:-latest}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - APP_NAME=StadiumOS AI
+      - API_PREFIX=/api/v1
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - DATABASE_URL=postgresql+asyncpg://${DB_USER:-stadiumos}:${DB_PASSWORD:-stadiumos}@db:5432/${DB_NAME:-stadiumos}
+      - DATABASE_URL_SYNC=postgresql://${DB_USER:-stadiumos}:${DB_PASSWORD:-stadiumos}@db:5432/${DB_NAME:-stadiumos}
+      - DATABASE_POOL_SIZE=${DB_POOL_SIZE:-20}
+      - DATABASE_MAX_OVERFLOW=${DB_MAX_OVERFLOW:-10}
+      - REDIS_URL=redis://redis:6379/0
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
+      - AUTH_SECRET=${AUTH_SECRET:-}
+      - JWT_SECRET=${JWT_SECRET:-}
+      - JWT_ALGORITHM=HS256
+      - JWT_EXPIRY_MINUTES=${JWT_EXPIRY:-15}
+      - JWT_REFRESH_EXPIRY_DAYS=${JWT_REFRESH_EXPIRY:-7}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - AI_PROVIDER_PRIMARY=${AI_PROVIDER_PRIMARY:-openai}
+      - AI_PROVIDER_FALLBACK=${AI_PROVIDER_FALLBACK:-gemini}
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - ENABLE_TELEMETRY=${ENABLE_TELEMETRY:-false}
+      - GUNICORN_WORKERS=${GUNICORN_WORKERS:-4}
+      - STADIUMOS_METRICS_ENABLED=true
+      - STADIUMOS_TRACING_ENABLED=${TRACING_ENABLED:-false}
+      - STADIUMOS_TRACING_ENDPOINT=http://tempo:4318
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - stadiumos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+  # ─── Database ──────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    shm_size: 256mb
+    ports:
+      - "${DB_EXPOSE_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER:-stadiumos}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-stadiumos}
+      - POSTGRES_DB=${DB_NAME:-stadiumos}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../../backend/alembic:/app/alembic
+    <<: *restart-policy
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-stadiumos} -d ${DB_NAME:-stadiumos}"]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 10
+    networks:
+      - stadiumos-network
+
+  # ─── Redis ─────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_EXPOSE_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    <<: *restart-policy
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - stadiumos-network
+    command: redis-server --appendonly yes --save 60 1
+
+  # ─── ARQ Worker ────────────────────────────────
+  worker:
+    build:
+      context: ../../backend
+      dockerfile: ../infra/docker/backend/Dockerfile
+      target: ${TARGET:-production}
+    image: stadiumos/backend:${IMAGE_TAG:-latest}
+    command: ["python", "-m", "arq", "app.workers.settings.WorkerSettings"]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql+asyncpg://${DB_USER:-stadiumos}:${DB_PASSWORD:-stadiumos}@db:5432/${DB_NAME:-stadiumos}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    <<: *restart-policy
+    logging: *default-logging
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - stadiumos-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  stadiumos-network:
+    driver: bridge
